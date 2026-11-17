@@ -1,0 +1,6 @@
+# local dev artifacts
+_tools/shots/
+_tools/server.log
+_tools/server_static.log
+.vercel/
+*.log
