@@ -4,10 +4,13 @@
   "outputDirectory": "public",
   "framework": null,
   "routes": [
-    {
-      "src": "/mirror/(.*)\\.(png|webp|jpg|jpeg|gif|avif)",
-      "dest": "/mirror/$1.$2"
-    }
+    { "src": "/mirror/(.*)", "has": [{ "type": "query", "key": "scale-down-to" }], "dest": "/mirror/$1" },
+    { "src": "/mirror/(.*)", "has": [{ "type": "query", "key": "width" }], "dest": "/mirror/$1" },
+    { "src": "/mirror/(.*)", "has": [{ "type": "query", "key": "height" }], "dest": "/mirror/$1" },
+    { "src": "/mirror/(.*)", "has": [{ "type": "query", "key": "w" }], "dest": "/mirror/$1" },
+    { "src": "/mirror/(.*)", "has": [{ "type": "query", "key": "h" }], "dest": "/mirror/$1" },
+    { "src": "/mirror/(.*)", "has": [{ "type": "query", "key": "fit" }], "dest": "/mirror/$1" },
+    { "src": "/mirror/(.*)", "has": [{ "type": "query", "key": "q" }], "dest": "/mirror/$1" }
   ],
   "headers": [
     {
