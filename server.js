@@ -92,9 +92,10 @@ function serveStatic(res, filePath, root = PUBLIC) {
   fs.readFile(target, (err, data) => {
     if (err) { res.writeHead(404, { "Content-Type": "text/plain" }).end("Not found"); return; }
     const ext = path.extname(target).toLowerCase();
+    const isAdmin = full.startsWith(path.join(ROOT, "admin"));
     res.writeHead(200, {
       "Content-Type": MIME[ext] || "application/octet-stream",
-      "Cache-Control": ext === ".html" ? "no-cache" : "public, max-age=3600",
+      "Cache-Control": isAdmin || ext === ".html" ? "no-store" : "public, max-age=3600",
     });
     res.end(data);
   });
@@ -173,10 +174,12 @@ function apiCreateCouple(res) {
       hashtag: "",
       closing: "Looking forward to see you",
     },
-    event: {
-      name: "Shaadi", day: "Saturday", dateLabel: "", time: "",
-      venueName: "", venueAddress: "", city: "", lat: "", lng: "",
-    },
+    events: [
+      {
+        slot: 1, name: "Shaadi", day: "Saturday", dateLabel: "", time: "",
+        venueName: "", venueAddress: "", city: "", lat: "", lng: "", note: "More details below",
+      }
+    ],
     countdownTarget: "",
     whatsapp: { display: "", intl: "" },
     gallery: [],
@@ -199,7 +202,14 @@ function apiUpdateCouple(req, res, body, rest) {
   if (idx === -1) { res.writeHead(404).end("Not found"); return; }
   let b;
   try { b = JSON.parse(body.toString()); } catch { b = {}; }
-  const merged = { ...db.couples[idx], ...b, id };
+  // enforce unique slugs (case-insensitive)
+  if (typeof b.slug === "string") {
+    const norm = b.slug.trim().toLowerCase();
+    if (!norm || norm === "couple") { res.writeHead(400, { "Content-Type": "application/json" }).end(JSON.stringify({ error: "Slug cannot be empty" })); return; }
+    const clash = db.couples.some((c) => c.id !== id && String(c.slug).toLowerCase() === norm);
+    if (clash) { res.writeHead(409, { "Content-Type": "application/json" }).end(JSON.stringify({ error: "That URL slug is already used by another couple" })); return; }
+  }
+  const merged = { ...db.couples[idx], ...b, id, slug: b.slug !== undefined ? String(b.slug).trim() : db.couples[idx].slug };
   db.couples[idx] = merged;
   saveCouples(db);
   res.writeHead(200, { "Content-Type": "application/json" }).end(JSON.stringify(merged));
@@ -295,7 +305,11 @@ const server = http.createServer(async (req, res) => {
     return apiLogin(req, res, body);
   }
   if (route === "session") {
-    res.writeHead(200, { "Content-Type": "application/json" }).end(JSON.stringify({ ok: isAuthed(req) }));
+    if (!isAuthed(req)) {
+      res.writeHead(401, { "Content-Type": "application/json" }).end(JSON.stringify({ ok: false }));
+      return;
+    }
+    res.writeHead(200, { "Content-Type": "application/json" }).end(JSON.stringify({ ok: true }));
     return;
   }
 

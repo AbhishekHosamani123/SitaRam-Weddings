@@ -23,6 +23,21 @@ site at a URL containing their names, e.g. `https://sitaram-weddings.vercel.app/
 
 > Tip: keep the demo couple as-is — it is your sales demo.
 
+## Common pitfalls (seller runbook)
+
+- **URL slug** must be unique & lowercase (letters, numbers, hyphens). The
+  Dashboard blocks duplicates.
+- **First event = main celebration**: the Google Maps card and the venue
+  details on the page are driven by event #1. Keep its venue/coordinates filled.
+- **Countdown**: set a future date/time in the Timeline tab, or the timer shows
+  zeros.
+- **WhatsApp**: keep both numbers in sync — the site displays `display`, while
+  the RSVP button uses `intl` (country code included).
+- **Before publishing**, check the warnings box on the editor; then Save →
+  Build → Publish. Vercel takes ~1 minute to go live.
+- The six timeline cards are hidden automatically when a couple has fewer than
+  six events — no action needed.
+
 ---
 
 # Original: Ram Mandir Wedding Site — Framer Clone

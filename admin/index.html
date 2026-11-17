@@ -4,12 +4,12 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Wedding Dashboard</title>
-<link rel="stylesheet" href="/admin/style.css">
+<link rel="stylesheet" href="/admin/style.css?v=4">
 </head>
 <body>
 
 <!-- ======================= LOGIN ======================= -->
-<section id="loginView" class="login hidden">
+<section id="loginView" class="login">
   <form id="loginForm" class="login-card">
     <div class="login-logo">🪷</div>
     <h1>Wedding Dashboard</h1>
@@ -61,19 +61,33 @@
           </div>
         </div>
         <div class="editor-actions">
+          <button class="btn" id="previewBtn" title="Open live preview of this couple's page">👁 Preview</button>
           <button class="btn" id="deleteBtn">Delete</button>
           <button class="btn" id="saveBtn">💾 Save</button>
         </div>
       </header>
 
+      <div id="validationBox" class="validation hidden"></div>
+
       <div class="tabs" id="tabs">
         <button class="tab active" data-tab="invite">Invitation</button>
         <button class="tab" data-tab="couple">Bride &amp; Groom</button>
-        <button class="tab" data-tab="event">Event &amp; Venue</button>
+        <button class="tab" data-tab="events">Timeline Events</button>
+        <button class="tab" data-tab="venue">Venue &amp; WhatsApp</button>
         <button class="tab" data-tab="photos">Photos</button>
         <button class="tab" data-tab="story">Story &amp; Details</button>
         <button class="tab" data-tab="seo">URL &amp; SEO</button>
       </div>
+
+      <div id="previewPane" class="preview-pane hidden">
+        <div class="preview-head">
+          <label>Live preview of <strong id="previewSlug">/</strong></label>
+          <button class="btn small" id="previewRefresh">⟳ Refresh</button>
+        </div>
+        <iframe id="previewFrame" title="Wedding page preview"></iframe>
+      </div>
+
+      <div class="affects-line" id="affectsLine"></div>
 
       <div class="tab-panes">
 
@@ -138,38 +152,32 @@
           </div>
         </section>
 
-        <!-- EVENT -->
-        <section class="pane" data-pane="event">
+        <!-- TIMELINE EVENTS -->
+        <section class="pane" data-pane="events">
           <div class="card">
-            <h3>Main celebration</h3>
-            <div class="grid2">
-              <div class="field"><label>Event name</label><input type="text" id="f_evName" placeholder="Shaadi / Wedding Ceremony"></div>
-              <div class="field"><label>Day</label><input type="text" id="f_evDay" placeholder="Friday"></div>
-              <div class="field"><label>Date label</label><input type="text" id="f_evDate" placeholder="29th Aug 2026"></div>
-              <div class="field"><label>Time</label><input type="text" id="f_evTime" placeholder="6 Pm Onwards"></div>
+            <div class="card-head">
+              <h3>Wedding timeline</h3>
+              <span class="quiet">Each event becomes its own card on the site. Up to 6.</span>
             </div>
-            <h3>Venue</h3>
-            <div class="grid2">
-              <div class="field"><label>Venue name</label><input type="text" id="f_evVenue" placeholder="Green Palace Hall"></div>
-              <div class="field"><label>City line</label><input type="text" id="f_evCity" placeholder="Hubli, Karnataka"></div>
-            </div>
-            <div class="field"><label>Address (map card)</label><input type="text" id="f_evAddress" placeholder="Kusugal Road, Vidyanagar"></div>
-            <div class="grid2">
-              <div class="field"><label>Map latitude</label><input type="text" id="f_evLat" placeholder="15.3647"></div>
-              <div class="field"><label>Map longitude</label><input type="text" id="f_evLng" placeholder="75.1239"></div>
-            </div>
-            <div class="field">
+            <div id="eventsRows"></div>
+            <button class="btn small" id="addEventBtn" type="button">+ Add event</button>
+            <div class="field" style="margin-top:18px">
               <label>Countdown target (date &amp; time)</label>
               <input type="datetime-local" id="f_countdown">
-              <small>The countdown timer counts down to this moment. If empty, the displayed date is used.</small>
+              <small>The countdown counts to this moment (use the main celebration time).</small>
             </div>
           </div>
+        </section>
+
+        <!-- VENUE & WHATSAPP -->
+        <section class="pane" data-pane="venue">
           <div class="card">
             <h3>WhatsApp RSVP</h3>
             <div class="row2">
               <div class="field"><label>Phone shown on site</label><input type="text" id="f_waDisplay" placeholder="9819200906"></div>
               <div class="field"><label>International (with country code)</label><input type="text" id="f_waIntl" placeholder="919819200906"></div>
             </div>
+            <small>The RSVP "Send via WhatsApp" button uses the international number. The venue map card uses the first event's venue &amp; location (Timeline Events tab).</small>
           </div>
         </section>
 
@@ -251,6 +259,6 @@
   </div>
 </div>
 
-<script src="/admin/app.js"></script>
+<script src="/admin/app.js?v=4"></script>
 </body>
 </html>
