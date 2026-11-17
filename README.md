@@ -1,4 +1,31 @@
-# Ram Mandir Wedding Site — Framer Clone
+# Wedding Website Platform (multi-couple)
+
+This repo now powers a **sellable multi-couple wedding website product** built on
+top of the original Framer clone. The demo page (public/index.html) stays as the
+showcase (Couple 1: Sita & Ram); each new couple gets their own personalised
+site at a URL containing their names, e.g. `https://sitaram-weddings.vercel.app/rashmi-abhishek`.
+
+## How it works
+
+| Part | What it does |
+|---|---|
+| `data/couples.json` | Source of truth — one object per couple (names, parents, date, venue, WhatsApp, photos, story, hashtag, SEO, slug). |
+| `tools/build.js` | Generates `public/<slug>/index.html` for every active couple from the demo template, patching text, images, countdown target, WhatsApp number, map coordinates and head metadata. Also copies the two data-carrying JS bundles per slug. |
+| `server.js` | Local server: serves the site, hosts the Dashboard at `/admin`, and exposes the local API (auth, couples CRUD, uploads, build, publish). |
+| `admin/` | Dashboard SPA (login-protected). Works as a **local authoring tool**; on the deployed site it shows read-only. |
+
+## Workflow (to sell a site to a couple)
+
+1. Start: `npm run dashboard` → open `http://127.0.0.1:8080/admin`, sign in (default password `admin123` — change it in `data/admin.json`).
+2. **+ New couple** → fill in Invitation, Bride & Groom, Event & Venue (incl. map coordinates & countdown), Photos (uploads), Story & Details, and URL & SEO. The slug (URL) auto-fills from the names and stays editable: `add` → 3. **Save** (writes `data/couples.json` + images under `public/mirror/framerusercontent.com/images/couples/<slug>/`).
+4. **Build** — regenerates the couple's page.
+5. **Publish** — commits and pushes to GitHub; Vercel auto-deploys (~1 min). The couple's link is now live.
+
+> Tip: keep the demo couple as-is — it is your sales demo.
+
+---
+
+# Original: Ram Mandir Wedding Site — Framer Clone
 
 Pixel-faithful local clone of https://rammandir.framer.website/ (a Framer-built
 wedding invitation site). Single page, exact copy of markup, styles, fonts,

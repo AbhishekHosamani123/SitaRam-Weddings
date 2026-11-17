@@ -1,0 +1,256 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Wedding Dashboard</title>
+<link rel="stylesheet" href="/admin/style.css">
+</head>
+<body>
+
+<!-- ======================= LOGIN ======================= -->
+<section id="loginView" class="login hidden">
+  <form id="loginForm" class="login-card">
+    <div class="login-logo">🪷</div>
+    <h1>Wedding Dashboard</h1>
+    <p class="login-sub">Manage couples, build personalised wedding websites.</p>
+    <input type="password" id="loginPassword" placeholder="Password" autocomplete="current-password" required>
+    <button type="submit" class="btn primary block">Sign in</button>
+    <p id="loginError" class="login-error"></p>
+  </form>
+</section>
+
+<!-- ======================= APP ======================= -->
+<section id="appView" class="app hidden">
+
+  <aside class="sidebar">
+    <div class="side-head">
+      <span class="side-logo">🪷</span>
+      <div>
+        <div class="side-title">Wedding Dashboard</div>
+        <div class="side-sub" id="modeBadge">local</div>
+      </div>
+    </div>
+
+    <button class="btn primary block" id="newCoupleBtn">+ New couple</button>
+
+    <div class="side-label">Couples</div>
+    <ul class="couple-list" id="coupleList"></ul>
+
+    <div class="side-actions">
+      <button class="btn" id="buildBtn" title="Regenerate all couple pages">⚙ Build</button>
+      <button class="btn accent" id="publishBtn" title="Commit & push to deploy on Vercel">⬆ Publish</button>
+    </div>
+    <div class="build-log" id="buildLog"></div>
+  </aside>
+
+  <main class="main" id="editorPane">
+    <div class="empty-state" id="emptyState">
+      <div class="empty-icon">💐</div>
+      <p>Select a couple from the list, or create a new one.</p>
+    </div>
+
+    <div id="editor" class="editor hidden">
+      <header class="editor-head">
+        <div>
+          <h2 id="editorTitle">Couple</h2>
+          <div class="editor-meta">
+            <span class="chip" id="demoChip">Demo</span>
+            <span class="chip" id="activeChip">Live</span>
+            <span class="chip link" id="liveLink" title="Open the couple's wedding page"></span>
+          </div>
+        </div>
+        <div class="editor-actions">
+          <button class="btn" id="deleteBtn">Delete</button>
+          <button class="btn" id="saveBtn">💾 Save</button>
+        </div>
+      </header>
+
+      <div class="tabs" id="tabs">
+        <button class="tab active" data-tab="invite">Invitation</button>
+        <button class="tab" data-tab="couple">Bride &amp; Groom</button>
+        <button class="tab" data-tab="event">Event &amp; Venue</button>
+        <button class="tab" data-tab="photos">Photos</button>
+        <button class="tab" data-tab="story">Story &amp; Details</button>
+        <button class="tab" data-tab="seo">URL &amp; SEO</button>
+      </div>
+
+      <div class="tab-panes">
+
+        <!-- INVITATION -->
+        <section class="pane active" data-pane="invite">
+          <div class="field">
+            <label>Couple headline</label>
+            <input type="text" id="f_headline">
+            <small>Shown big on the hero. Use <code>{bride}</code> and <code>{groom}</code> as placeholders.</small>
+          </div>
+          <div class="field">
+            <label>Invitation line</label>
+            <input type="text" id="f_intro">
+          </div>
+          <div class="field">
+            <label>Hashtag</label>
+            <div class="inline">
+              <span class="prefix">#</span>
+              <input type="text" id="f_hashtag" placeholder="abkan">
+            </div>
+          </div>
+          <div class="field">
+            <label>Closing message</label>
+            <input type="text" id="f_closing">
+          </div>
+          <div class="field">
+            <label>Bride &amp; Groom full names (card / SEO)</label>
+            <div class="row2">
+              <input type="text" id="f_brideFull" placeholder="Bride full name">
+              <input type="text" id="f_groomFull" placeholder="Groom full name">
+            </div>
+          </div>
+        </section>
+
+        <!-- COUPLE -->
+        <section class="pane" data-pane="couple">
+          <div class="grid2">
+            <div class="card">
+              <h3>Bride</h3>
+              <div class="field"><label>First name (hero)</label><input type="text" id="f_brideFirst" placeholder="Sita"></div>
+              <div class="field"><label>Parents / family</label><input type="text" id="f_brideParents" placeholder="Shri. & Smt. …"></div>
+              <div class="field"><label>Photo</label>
+                <div class="upload" id="up_bridePhoto" data-slot="bridePhoto">
+                  <img class="upload-preview" id="prv_bridePhoto" alt="">
+                  <input type="file" accept="image/*" class="upload-input">
+                  <span class="upload-hint">Click to upload</span>
+                </div>
+              </div>
+            </div>
+            <div class="card">
+              <h3>Groom</h3>
+              <div class="field"><label>First name (hero)</label><input type="text" id="f_groomFirst" placeholder="Ram"></div>
+              <div class="field"><label>Parents / family</label><input type="text" id="f_groomParents" placeholder="Shri. & Smt. …"></div>
+              <div class="field"><label>Photo</label>
+                <div class="upload" id="up_groomPhoto" data-slot="groomPhoto">
+                  <img class="upload-preview" id="prv_groomPhoto" alt="">
+                  <input type="file" accept="image/*" class="upload-input">
+                  <span class="upload-hint">Click to upload</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- EVENT -->
+        <section class="pane" data-pane="event">
+          <div class="card">
+            <h3>Main celebration</h3>
+            <div class="grid2">
+              <div class="field"><label>Event name</label><input type="text" id="f_evName" placeholder="Shaadi / Wedding Ceremony"></div>
+              <div class="field"><label>Day</label><input type="text" id="f_evDay" placeholder="Friday"></div>
+              <div class="field"><label>Date label</label><input type="text" id="f_evDate" placeholder="29th Aug 2026"></div>
+              <div class="field"><label>Time</label><input type="text" id="f_evTime" placeholder="6 Pm Onwards"></div>
+            </div>
+            <h3>Venue</h3>
+            <div class="grid2">
+              <div class="field"><label>Venue name</label><input type="text" id="f_evVenue" placeholder="Green Palace Hall"></div>
+              <div class="field"><label>City line</label><input type="text" id="f_evCity" placeholder="Hubli, Karnataka"></div>
+            </div>
+            <div class="field"><label>Address (map card)</label><input type="text" id="f_evAddress" placeholder="Kusugal Road, Vidyanagar"></div>
+            <div class="grid2">
+              <div class="field"><label>Map latitude</label><input type="text" id="f_evLat" placeholder="15.3647"></div>
+              <div class="field"><label>Map longitude</label><input type="text" id="f_evLng" placeholder="75.1239"></div>
+            </div>
+            <div class="field">
+              <label>Countdown target (date &amp; time)</label>
+              <input type="datetime-local" id="f_countdown">
+              <small>The countdown timer counts down to this moment. If empty, the displayed date is used.</small>
+            </div>
+          </div>
+          <div class="card">
+            <h3>WhatsApp RSVP</h3>
+            <div class="row2">
+              <div class="field"><label>Phone shown on site</label><input type="text" id="f_waDisplay" placeholder="9819200906"></div>
+              <div class="field"><label>International (with country code)</label><input type="text" id="f_waIntl" placeholder="919819200906"></div>
+            </div>
+          </div>
+        </section>
+
+        <!-- PHOTOS -->
+        <section class="pane" data-pane="photos">
+          <div class="card">
+            <h3>Hero &amp; portraits</h3>
+            <div class="grid3">
+              <div class="field"><label>Hero banner</label>
+                <div class="upload" id="up_hero" data-slot="hero"><img class="upload-preview" id="prv_hero" alt=""><input type="file" accept="image/*" class="upload-input"><span class="upload-hint">Click to upload</span></div>
+              </div>
+              <div class="field"><label>Bride portrait</label>
+                <div class="upload" id="up_bridePhoto2" data-slot="bridePhoto"><img class="upload-preview" id="prv_bridePhoto2" alt=""><input type="file" accept="image/*" class="upload-input"><span class="upload-hint">Click to upload</span></div>
+              </div>
+              <div class="field"><label>Groom portrait</label>
+                <div class="upload" id="up_groomPhoto2" data-slot="groomPhoto"><img class="upload-preview" id="prv_groomPhoto2" alt=""><input type="file" accept="image/*" class="upload-input"><span class="upload-hint">Click to upload</span></div>
+              </div>
+              <div class="field"><label>Portrait (extra)</label>
+                <div class="upload" id="up_portrait" data-slot="portrait"><img class="upload-preview" id="prv_portrait" alt=""><input type="file" accept="image/*" class="upload-input"><span class="upload-hint">Click to upload</span></div>
+              </div>
+            </div>
+          </div>
+          <div class="card">
+            <h3>Gallery</h3>
+            <div class="grid3" id="galleryGrid"></div>
+          </div>
+        </section>
+
+        <!-- STORY -->
+        <section class="pane" data-pane="story">
+          <div class="card">
+            <h3>Your story</h3>
+            <div class="field"><label>Message shown in "Meet the Couple"</label><textarea id="f_story" rows="6" placeholder="Our hearts are full…"></textarea></div>
+          </div>
+          <div class="card">
+            <h3>Things to know</h3>
+            <div class="field"><label>Weather</label><input type="text" id="f_ttk_weather"></div>
+            <div class="field"><label>Staff note</label><input type="text" id="f_ttk_staff"></div>
+            <div class="field"><label>Parking</label><input type="text" id="f_ttk_parking"></div>
+          </div>
+        </section>
+
+        <!-- SEO -->
+        <section class="pane" data-pane="seo">
+          <div class="card">
+            <h3>Personalised URL</h3>
+            <div class="field">
+              <label>Slug <span class="quiet">(appears in the link)</span></label>
+              <div class="inline">
+                <span class="prefix url-prefix">sitaram-weddings.vercel.app/</span>
+                <input type="text" id="f_slug" placeholder="sita-ram">
+              </div>
+            </div>
+            <div class="field"><label>Active / live</label>
+              <label class="switch"><input type="checkbox" id="f_active"><span></span></label>
+            </div>
+          </div>
+          <div class="card">
+            <h3>Search &amp; sharing</h3>
+            <div class="field"><label>Page title</label><input type="text" id="f_title"></div>
+            <div class="field"><label>Meta description</label><textarea id="f_meta" rows="3"></textarea></div>
+          </div>
+        </section>
+
+      </div>
+    </div>
+  </main>
+</section>
+
+<div id="toast" class="toast"></div>
+<div id="confirmOverlay" class="overlay hidden">
+  <div class="modal">
+    <h3 id="confirmTitle">Are you sure?</h3>
+    <p id="confirmText"></p>
+    <div class="modal-actions">
+      <button class="btn" id="confirmCancel">Cancel</button>
+      <button class="btn danger" id="confirmOk">Confirm</button>
+    </div>
+  </div>
+</div>
+
+<script src="/admin/app.js"></script>
+</body>
+</html>

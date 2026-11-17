@@ -1,0 +1,5 @@
+{
+  "salt": "3eccad23a0d4558b7e719b9b6a311dc5",
+  "hash": "bd21c262aa4f096a2b5a8b4bc59e3e2ea4cab590b31016c5fd1c87e71fab0cfe",
+  "note": "Default password: admin123. Change by editing this file (salt + sha256(salt + ':' + password))."
+}

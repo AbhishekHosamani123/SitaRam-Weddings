@@ -1,0 +1,71 @@
+{
+  "couples": [
+    {
+      "id": 1,
+      "slug": "sita-ram",
+      "demo": true,
+      "active": true,
+      "title": "Sita & Ram | Wedding Invitation",
+      "metaDescription": "Join us to celebrate the wedding of Sita & Ram. We can't wait to see you there.",
+      "bride": {
+        "firstName": "Sita",
+        "fullName": "Sita",
+        "parents": "Shri. Rajmani Pathak & Smt. Ambika Pathak",
+        "photo": null
+      },
+      "groom": {
+        "firstName": "Ram",
+        "fullName": "Ram",
+        "parents": "Shri. Rajmani Pathak & Smt. Ambika Pathak",
+        "photo": null
+      },
+      "invitation": {
+        "headline": "{bride} weds {groom}",
+        "intro": "Cordially request the honor of your presence at the wedding celebration of",
+        "story": "Our hearts are full and our smiles wide, we can hardly believe our dreamy eyed teen selves made it here! Weâ€™re ready to make memories that last a lifetime, and theyâ€™ll be incomplete without you by our side. Come celebrate with us and let's fill the air with joy and laughter.",
+        "hashtag": "abkan",
+        "closing": "Looking forward to see you"
+      },
+      "event": {
+        "name": "Shaadi",
+        "day": "Friday",
+        "dateLabel": "29th Aug 2026",
+        "time": "6 Pm Onwards",
+        "venueName": "Venue Name",
+        "venueAddress": "Full street address, city, state, ZIP",
+        "city": "Pune, Maharashtra",
+        "lat": "19.2183",
+        "lng": "72.9781"
+      },
+      "countdownTarget": "2026-09-28T00:00:00.000Z",
+      "whatsapp": {
+        "display": "9819200906",
+        "intl": "919819200906"
+      },
+      "gallery": [],
+      "thingsToKnow": [
+        {
+          "key": "weather",
+          "title": "Weather",
+          "text": "It will be mostly sunny with temperature reaching up to 28 degrees at the venue"
+        },
+        {
+          "key": "staff",
+          "title": "Staff",
+          "text": "We recommend the nearby hotel called Bhola Bhawan near the venue for the staff members"
+        },
+        {
+          "key": "parking",
+          "title": "Parking",
+          "text": "Valet parking for all our guests will be available at the venue"
+        }
+      ],
+      "images": {
+        "hero": null,
+        "bridePhoto": null,
+        "groomPhoto": null,
+        "portrait": null
+      }
+    }
+  ]
+}

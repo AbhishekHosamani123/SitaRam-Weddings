@@ -1,0 +1,12 @@
+{
+  "name": "wedding-site-platform",
+  "private": true,
+  "version": "2.0.0",
+  "description": "Multi-couple wedding website platform: static generator + local Dashboard (dependency-free).",
+  "scripts": {
+    "start": "node server.js",
+    "dashboard": "node server.js",
+    "build": "node tools/build.js",
+    "build:watch": "node -e \"const{spawn}=require('child_process');const chokidar=null;console.log('Use: npm run build after saving changes')\""
+  }
+}

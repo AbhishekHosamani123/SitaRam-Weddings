@@ -4,3 +4,4 @@ _tools/server.log
 _tools/server_static.log
 .vercel/
 *.log
+data/couples.json.tmp
