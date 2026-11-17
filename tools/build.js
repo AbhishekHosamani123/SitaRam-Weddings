@@ -299,7 +299,7 @@ function buildCouplePage(couple, templateHtml, pageBundleSrc, mainBundleSrc, opt
     htmlOut = htmlOut.split(MAIN_BUNDLE).join(mainBundleName);
 
     const escaped = String(c.title || "").replace(/</g, "\\u003c").replace(/"/g, '\\"');
-    htmlOut = htmlOut.replace("</body>", `<script>(()=>{const t=${JSON.stringify(escaped)};const set=()=>document.title=t;set();window.addEventListener("load",set);setTimeout(set,2500)})()</script></body>`);
+    htmlOut = htmlOut.replace("</body>", `<script>(()=>{const t=${JSON.stringify(escaped)};const set=()=>{document.title=t;const tt=document.querySelector("title");if(tt&&tt.textContent!==t)tt.textContent=t};[0,500,1500,3000,5000,8000].forEach(d=>setTimeout(set,d));window.addEventListener("load",set)})()</script></body>`);
   }
 
   return { html: htmlOut, pageBundle: bundleOut, c, warnings };
@@ -318,7 +318,9 @@ function main() {
 
   const demo = couples.find((x) => x.demo);
 
-  // 0) write the shared post-hydration events script once
+  // 0) write the shared post-hydration events script once.
+  // It re-applies the slot→event mapping repeatedly (Framer's hydration may
+  // overwrite our SSR text), watching for mutations until stable.
   write(EVENTS_JS, `(() => {
   const E = (self.__WEDDING_EVENTS__ || []);
   if (!E.length) return;
@@ -329,27 +331,38 @@ function main() {
   function assign() {
     const cards = [...document.querySelectorAll('div[data-framer-name]')].filter((el) =>
       /^[1-6]$/.test(el.getAttribute('data-framer-name')) && el.querySelector('p'));
+    let changed = 0;
     for (const card of cards) {
       const n = +card.getAttribute('data-framer-name');
       const ev = E[n - 1];
-      if (!ev) { card.style.display = 'none'; continue; }
-      card.style.display = '';
+      if (!ev) { if (card.style.display !== 'none') { card.style.display = 'none'; changed++; } continue; }
+      if (card.style.display === 'none') { card.style.display = ''; changed++; }
       const ps = [...card.querySelectorAll('p')];
       for (const p of ps) {
         const t = (p.textContent || '').trim();
         for (const key of Object.keys(LEGACY)) {
           if (!LEGACY[key].includes(t)) continue;
-          p.textContent = ev[key];
+          if (p.textContent !== ev[key]) { p.textContent = ev[key]; changed++; }
           break;
         }
       }
     }
+    return changed;
   }
-  const run = () => { try { assign(); } catch (e) {} };
-  if (document.readyState !== 'loading') run(); else document.addEventListener('DOMContentLoaded', run);
+  function run() { try { assign(); } catch (e) {} }
+  const delays = [0, 400, 1200, 2500, 4000, 6000, 8000, 10000];
+  delays.forEach((d) => setTimeout(run, d));
+  if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', run);
+  else run();
   window.addEventListener('load', run);
-  setTimeout(run, 1500);
-  setTimeout(run, 4000);
+  // keep re-applying while Framer keeps reconciling
+  const stop = Date.now() + 12000;
+  const observer = new MutationObserver(() => {
+    if (Date.now() > stop) { observer.disconnect(); return; }
+    run();
+  });
+  const main = document.getElementById('main') || document.body;
+  if (main) observer.observe(main, { childList: true, subtree: true, characterData: true });
 })();
 `);
 
