@@ -290,7 +290,7 @@ function buildCouplePage(couple, templateHtml, pageBundleSrc, mainBundleSrc, opt
   let htmlOut = html;
   let bundleOut = pageBundle;
 
-  if (!opts.rootOnly && !c.demo) {
+  if (!opts.rootOnly) {
     // 4) per-slug bundle copies + bootloader + title pin
     const pageBundleName = `${c.slug}-page.mjs`;
     const mainBundleName = `${c.slug}-main.mjs`;
