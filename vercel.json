@@ -4,6 +4,9 @@
   "outputDirectory": "public",
   "framework": null,
   "routes": [
+    { "src": "/mirror/images\\.unsplash\\.com/(photo-[^/.]+)", "has": [{ "type": "query", "key": "w" }], "dest": "/mirror/images.unsplash.com/$1.jpg" },
+    { "src": "/mirror/images\\.unsplash\\.com/(photo-[^/.]+)", "has": [{ "type": "query", "key": "h" }], "dest": "/mirror/images.unsplash.com/$1.jpg" },
+    { "src": "/mirror/images\\.unsplash\\.com/(photo-[^/.]+)", "has": [{ "type": "query", "key": "fit" }], "dest": "/mirror/images.unsplash.com/$1.jpg" },
     { "src": "/mirror/(.*)", "has": [{ "type": "query", "key": "scale-down-to" }], "dest": "/mirror/$1" },
     { "src": "/mirror/(.*)", "has": [{ "type": "query", "key": "width" }], "dest": "/mirror/$1" },
     { "src": "/mirror/(.*)", "has": [{ "type": "query", "key": "height" }], "dest": "/mirror/$1" },
