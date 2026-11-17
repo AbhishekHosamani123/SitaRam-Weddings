@@ -99,10 +99,12 @@ async function proxyAndCache(res, target) {
     // Remember the exact origin Content-Type for extension-less files
     const ct = (up.headers.get("content-type") || "").split(";")[0].trim();
     if (ct) fs.writeFileSync(disk + ".mime", ct);
+    const basePath = disk.replace(/__[0-9a-f]{8}$/, "");
+    const isCode = /\.(mjs|js|json)$/.test(basePath);
     res.writeHead(200, {
-      "Content-Type": ct || mimeFor(disk.replace(/__[0-9a-f]{8}$/, "")),
+      "Content-Type": ct || mimeFor(basePath),
       "Content-Length": buf.length,
-      "Cache-Control": "public, max-age=31536000, immutable",
+      "Cache-Control": isCode ? "no-cache" : "public, max-age=31536000, immutable",
     });
     res.end(buf);
     console.log(`cached ${origin} (${buf.length} bytes)`);
@@ -124,10 +126,13 @@ function serveFile(res, file, allowRange) {
         ct = fs.readFileSync(file + ".mime", "utf8").trim() || ct;
       } catch (e) { /* no sidecar */ }
     }
+    // code/data files must not be immutable, so future edits propagate
+    const isCode = /\.(mjs|js|json)$/.test(basePath);
+    const cc = isCode ? "no-cache" : "public, max-age=31536000, immutable";
     const headers = {
       "Content-Type": ct,
       "Content-Length": st.size,
-      "Cache-Control": "public, max-age=31536000, immutable",
+      "Cache-Control": cc,
     };
     if (allowRange) headers["Accept-Ranges"] = "bytes";
     const range = allowRange ? /bytes=(\d*)-(\d*)/.exec(req.headers.range || "") : null;
