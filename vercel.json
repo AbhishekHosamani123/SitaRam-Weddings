@@ -5,7 +5,43 @@
   "framework": null,
   "headers": [
     {
-      "source": "/mirror/(.*)",
+      "source": "/mirror/framerusercontent.com/sites/(.*)",
+      "headers": [
+        {
+          "key": "Cache-Control",
+          "value": "public, max-age=0, must-revalidate"
+        }
+      ]
+    },
+    {
+      "source": "/mirror/framerusercontent.com/images/(.*)",
+      "headers": [
+        {
+          "key": "Cache-Control",
+          "value": "public, max-age=31536000, immutable"
+        }
+      ]
+    },
+    {
+      "source": "/mirror/framerusercontent.com/assets/(.*)",
+      "headers": [
+        {
+          "key": "Cache-Control",
+          "value": "public, max-age=31536000, immutable"
+        }
+      ]
+    },
+    {
+      "source": "/mirror/images.unsplash.com/(.*)",
+      "headers": [
+        {
+          "key": "Cache-Control",
+          "value": "public, max-age=31536000, immutable"
+        }
+      ]
+    },
+    {
+      "source": "/mirror/fonts.gstatic.com/(.*)",
       "headers": [
         {
           "key": "Cache-Control",
