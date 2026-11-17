@@ -284,7 +284,7 @@ function buildCouplePage(couple, templateHtml, pageBundleSrc, mainBundleSrc, opt
     city: e.city, note: e.note,
   }))).replace(/</g, "\\u003c");
   const inline = `<script>window.__WEDDING_EVENTS__=${eventsJson};</script>
-<script src="/mirror/framerusercontent.com/js/wedding-events.js"></script>`;
+<script src="/mirror/framerusercontent.com/js/wedding-events.js?v=2"></script>`;
   html = html.replace("</body>", inline + "\n</body>");
 
   let htmlOut = html;
@@ -363,6 +363,11 @@ function main() {
   });
   const main = document.getElementById('main') || document.body;
   if (main) observer.observe(main, { childList: true, subtree: true, characterData: true });
+  // live-edit hook (Dashboard preview) — update events and re-apply now
+  self.__WD_APPLY__ = function (events) {
+    if (Array.isArray(events)) self.__WEDDING_EVENTS__ = events;
+    return assign();
+  };
 })();
 `);
 

@@ -397,8 +397,324 @@
     if (!state.previewOpen || !state.selected) return;
     const slug = state.selected.slug;
     $("previewSlug").textContent = "/" + (slug || "…") + "/";
-    if (slug) frame.src = `/${slug}/?v=${Date.now()}`;
+    if (slug) {
+      frame.onload = () => installPreviewBridge();
+      frame.src = `/${slug}/?v=${Date.now()}`;
+    }
   }
+
+  // ================================================================
+  // LIVE PREVIEW BRIDGE — form ↔ preview, same-origin (local only)
+  // ================================================================
+  const LIVE_FIELD_META = {
+    f_brideFirst: { kind: "name", side: "bride" },
+    f_groomFirst: { kind: "name", side: "groom" },
+    f_hashtag: { kind: "hashtag" },
+    f_story: { kind: "story" },
+    f_ttk_weather: { kind: "ttk", key: "weather" },
+    f_ttk_staff: { kind: "ttk", key: "staff" },
+    f_ttk_parking: { kind: "ttk", key: "parking" },
+    f_waDisplay: { kind: "phone" },
+    f_title: { kind: "title" },
+  };
+
+  function previewWin() {
+    const frame = $("previewFrame");
+    if (!frame || !frame.contentWindow || !frame.contentDocument) return null;
+    return { win: frame.contentWindow, doc: frame.contentDocument };
+  }
+  function prevBride() { return state.selected.bride.firstName || "Sita"; }
+  function prevGroom() { return state.selected.groom.firstName || "Ram"; }
+  function prevHtag() { return (state.selected.invitation.hashtag || "abkan"); }
+
+  function findByText(doc, txt) {
+    if (!txt) return [];
+    return [...doc.querySelectorAll("p")].filter((p) => (p.textContent || "").trim() === txt);
+  }
+  function findContaining(doc, txt) {
+    if (!txt) return [];
+    return [...doc.querySelectorAll("p")].filter((p) => (p.textContent || "").includes(txt));
+  }
+
+  function flashEl(el) {
+    if (!el) return;
+    el.setAttribute("data-live-flash", "1");
+    setTimeout(() => el.removeAttribute("data-live-flash"), 1400);
+    try { el.scrollIntoView({ behavior: "smooth", block: "center" }); } catch (e) { }
+  }
+
+  function jumpToField(fieldId) {
+    const pv = previewWin();
+    if (!pv) { toast("Open the preview first (👁 Preview)", true); return; }
+    const { doc } = pv;
+    let el = null;
+    const c = state.selected;
+    switch (fieldId) {
+      case "f_brideFirst": el = findByText(doc, prevBride())[0]; break;
+      case "f_groomFirst": el = findByText(doc, prevGroom())[0]; break;
+      case "f_headline": el = findByText(doc, "weds")[0] || findByText(doc, prevBride())[0]; break;
+      case "f_hashtag": el = findContaining(doc, "#" + prevHtag())[0]; break;
+      case "f_story": el = findContaining(doc, (c.invitation.story || "hearts").slice(0, 24))[0]; break;
+      case "f_ttk_weather": el = findContaining(doc, (c.thingsToKnow.find((t) => t.key === "weather") || {}).text || "sunny")[0]; break;
+      case "f_ttk_staff": el = findContaining(doc, (c.thingsToKnow.find((t) => t.key === "staff") || {}).text || "staff")[0]; break;
+      case "f_ttk_parking": el = findContaining(doc, (c.thingsToKnow.find((t) => t.key === "parking") || {}).text || "valet")[0]; break;
+      case "f_waDisplay": el = findContaining(doc, (c.whatsapp.display || "9819200906"))[0]; break;
+      case "f_ev_name": case "f_ev_day": case "f_ev_time": case "f_ev_date":
+      case "f_ev_venue": case "f_ev_city": case "f_ev_address":
+        el = findByText(doc, getActiveEventField(fieldId))[0]; break;
+      default: break;
+    }
+    if (!el) el = findContaining(doc, "Wedding Timeline")[0] || findContaining(doc, "RSVP")[0];
+    flashEl(el);
+    if (el) toast("Double-click the field to jump — editing updates preview live");
+  }
+
+  function getActiveEventField(fieldId) {
+    const ev = (state.selected.events || [])[0] || {};
+    switch (fieldId) {
+      case "f_ev_name": return ev.name || "Shaadi";
+      case "f_ev_day": return ev.day || "Friday";
+      case "f_ev_time": return ev.time || "6 Pm Onwards";
+      case "f_ev_date": return ev.dateLabel || "29th Aug 2026";
+      case "f_ev_venue": return ev.venueName || "Venue Name";
+      case "f_ev_city": return ev.city || "Pune, Maharashtra";
+      case "f_ev_address": return ev.venueAddress || "Full street address, city, state, ZIP";
+      default: return "";
+    }
+  }
+
+  // live DOM updates inside the iframe
+  function liveApplyToPreview(fieldId, value, opts = {}) {
+    const pv = previewWin();
+    if (!pv) return;
+    const { win, doc } = pv;
+    const c = state.selected;
+    const meta = LIVE_FIELD_META[fieldId];
+    try {
+      if (meta && meta.kind === "name") {
+        const oldVal = meta.side === "bride" ? opts.old || prevBride() : opts.old || prevGroom();
+        if (oldVal && value && oldVal !== value) {
+          for (const el of findByText(doc, oldVal)) el.textContent = value;
+        }
+      } else if (meta && meta.kind === "hashtag") {
+        const oldH = opts.old || prevHtag();
+        for (const el of findContaining(doc, "#" + oldH)) {
+          el.textContent = el.textContent.split("#" + oldH).join("#" + value);
+        }
+      } else if (meta && meta.kind === "story") {
+        const anchor = opts.old || (c.invitation.story || "");
+        for (const el of findContaining(doc, anchor.slice(0, 24) || "hearts")) el.textContent = value;
+      } else if (meta && meta.kind === "ttk") {
+        const oldT = opts.old || "";
+        if (oldT) for (const el of findContaining(doc, oldT.slice(0, 24))) el.textContent = value;
+      } else if (meta && meta.kind === "phone") {
+        const oldP = opts.old || "";
+        if (oldP) for (const el of findContaining(doc, oldP)) {
+          el.textContent = el.textContent.split(oldP).join(value);
+        }
+      } else if (meta && meta.kind === "title") {
+        doc.title = value;
+        if (win.__WD_PIN_TITLE__) win.__WD_PIN_TITLE__(value);
+      } else if (fieldId.startsWith("ev:")) {
+        // events are handled via the wedding-events apply hook
+        if (typeof win.__WD_APPLY__ === "function") win.__WD_APPLY__(c.events);
+      }
+    } catch (e) {
+      /* frame may be navigating — ignore */
+    }
+  }
+
+  // event rows: any change re-applies the full event set
+  function eventRowsChanged() {
+    const pv = previewWin();
+    if (!pv) return;
+    try {
+      if (typeof pv.win.__WD_APPLY__ === "function") pv.win.__WD_APPLY__(state.selected.events);
+    } catch (e) { }
+  }
+
+  // install bridge + inline editor into the preview iframe
+  function installPreviewBridge() {
+    const pv = previewWin();
+    if (!pv) return;
+    const { win, doc } = pv;
+    try {
+      if (win.__WD_APPLY__) win.__WD_APPLY__(state.selected.events);
+      const pinTitle = (t) => { doc.title = t; const tt = doc.querySelector("title"); if (tt && tt.textContent !== t) tt.textContent = t; };
+      win.__WD_PIN_TITLE__ = pinTitle;
+      pinTitle(state.selected.title || doc.title);
+
+      // inline editor overlay inside the preview
+      const ensureStyles = () => {
+        if (doc.getElementById("wd-live-styles")) return;
+        const s = doc.createElement("style");
+        s.id = "wd-live-styles";
+        s.textContent = `
+          .wd-live-overlay{position:absolute;z-index:99999;background:#fff;border:2px solid #a04a21;border-radius:8px;padding:2px;box-shadow:0 6px 24px rgba(0,0,0,.25);font:14px system-ui;min-width:160px}
+          .wd-live-overlay input{border:none;outline:none;width:100%;padding:6px 8px;font:inherit;background:transparent;color:#3a2318}
+          [data-live-flash]{outline:3px solid #a04a21 !important;outline-offset:2px;border-radius:6px;transition:outline-color .2s}`;
+        doc.head.appendChild(s);
+      };
+      ensureStyles();
+
+      doc.addEventListener("dblclick", (e) => {
+        const p = e.target.closest ? e.target.closest("p") : null;
+        if (!p) return;
+        const label = (p.textContent || "").trim();
+        let fieldId = null, rowIdx = null, cls = null;
+        const c = state.selected;
+        if (label === prevBride()) fieldId = "f_brideFirst";
+        else if (label === prevGroom()) fieldId = "f_groomFirst";
+        else if (label.includes("#" + prevHtag())) fieldId = "f_hashtag";
+        else if (label.includes(c.invitation.story?.slice(0, 24) || "hearts")) fieldId = "f_story";
+        else if (label.includes(c.whatsapp.display || "9819200906")) fieldId = "f_waDisplay";
+        else {
+          for (const t of (c.thingsToKnow || [])) {
+            if (t.text && label.includes(t.text.slice(0, 24))) { fieldId = "f_ttk_" + t.key; break; }
+          }
+        }
+        if (!fieldId) {
+          // map event-card text to its row input
+          const evs = c.events || [];
+          evs.forEach((ev, i) => {
+            if (label === ev.name) { fieldId = "ev"; rowIdx = i; cls = "ev-name"; }
+            else if (label === ev.day) { fieldId = "ev"; rowIdx = i; cls = "ev-day"; }
+            else if (label === ev.time) { fieldId = "ev"; rowIdx = i; cls = "ev-time"; }
+            else if (label === ev.dateLabel) { fieldId = "ev"; rowIdx = i; cls = "ev-date"; }
+            else if (label === ev.city) { fieldId = "ev"; rowIdx = i; cls = "ev-city"; }
+          });
+          if (!fieldId) return;
+        }
+        // build the overlay input
+        const rect = p.getBoundingClientRect();
+        const overlay = doc.createElement("div");
+        overlay.className = "wd-live-overlay";
+        overlay.style.left = Math.min(rect.left, doc.defaultView.innerWidth - 180) + "px";
+        overlay.style.top = rect.top + "px";
+        const input = doc.createElement("input");
+        let cur = "";
+        if (fieldId === "ev" && rowIdx != null && cls) {
+          cur = (c.events[rowIdx] || {})[EV_KEY_BY_CLASS[cls] || ""] || "";
+        } else {
+          cur = label;
+        }
+        input.value = fieldId === "f_hashtag" ? cur.replace("#", "") : cur;
+        overlay.appendChild(input);
+        doc.body.appendChild(overlay);
+        input.focus();
+        input.select();
+        const commit = () => {
+          const next = input.value.trim();
+          overlay.remove();
+          if (fieldId === "f_hashtag") {
+            $("f_hashtag").value = next;
+            state.selected.invitation.hashtag = next;
+            liveApplyToPreview("f_hashtag", next, { old: prevHtag() });
+            toast("Preview updated ✔");
+            return;
+          }
+          if (fieldId.startsWith("f_")) {
+            const fieldEl = $(fieldId);
+            if (fieldEl) fieldEl.value = next;
+            if (fieldId === "f_story") state.selected.invitation.story = next;
+            if (fieldId === "f_ttk_weather") state.selected.thingsToKnow.find((t) => t.key === "weather").text = next;
+            if (fieldId === "f_ttk_staff") state.selected.thingsToKnow.find((t) => t.key === "staff").text = next;
+            if (fieldId === "f_ttk_parking") state.selected.thingsToKnow.find((t) => t.key === "parking").text = next;
+            if (fieldId === "f_waDisplay") state.selected.whatsapp.display = next;
+            if (fieldId === "f_title") state.selected.title = next;
+            liveApplyToPreview(fieldId, next, { old: cur });
+            toast("Preview updated ✔");
+            return;
+          }
+          if (fieldId === "ev" && rowIdx != null && cls) {
+            const key = EV_KEY_BY_CLASS[cls];
+            const ev = state.selected.events[rowIdx];
+            if (ev && key) ev[key] = next;
+            const inputEl = document.querySelectorAll("#eventsRows .event-row")[rowIdx]?.querySelector("." + cls);
+            if (inputEl) inputEl.value = next;
+            eventRowsChanged();
+            toast("Preview updated ✔");
+          }
+        };
+        input.addEventListener("keydown", (ev) => {
+          if (ev.key === "Enter") { ev.preventDefault(); commit(); }
+          if (ev.key === "Escape") overlay.remove();
+        });
+        input.addEventListener("blur", commit);
+      });
+    } catch (e) {
+      /* cross-frame issues ignored */
+    }
+  }
+
+  // double-click a field in the form → jump to it in the preview
+  $("editor").addEventListener("dblclick", (e) => {
+    const input = e.target.closest("input,textarea");
+    if (!input || !input.id) return;
+    if (input.classList.contains("ev-")) {
+      const row = input.closest(".event-row");
+      if (row) {
+        const idx = [...document.querySelectorAll("#eventsRows .event-row")].indexOf(row);
+        const label = getActiveEventField("f_ev_name");
+        void label;
+        jumpToEventSlot(idx, input.classList[0].replace("ev-", ""));
+        return;
+      }
+    }
+    jumpToField(input.id);
+  });
+
+  const EV_KEY_BY_CLASS = { "ev-name": "name", "ev-day": "day", "ev-time": "time", "ev-date": "dateLabel", "ev-venue": "venueName", "ev-city": "city", "ev-address": "venueAddress", "ev-note": "note", "ev-lat": "lat", "ev-lng": "lng" };
+
+  function jumpToEventSlot(idx, cls) {
+    const pv = previewWin();
+    if (!pv) return;
+    const inputEl = document.querySelectorAll("#eventsRows .event-row")[idx]?.querySelector("." + cls);
+    const label = inputEl ? inputEl.value.trim() : "";
+    if (!label) return;
+    const el = findByText(pv.doc, label)[0] || findContaining(pv.doc, label.slice(0, 24))[0];
+    flashEl(el);
+  }
+
+  // live typing sync (debounced)
+  let liveTimer = null;
+  $("editor").addEventListener("input", (e) => {
+    const input = e.target;
+    if (!input || !input.id) return;
+    clearTimeout(liveTimer);
+    liveTimer = setTimeout(() => {
+      if (!state.previewOpen) return;
+      if (input.classList.contains("ev-")) {
+        eventRowsChanged();
+        return;
+      }
+      const id = input.id;
+      const meta = LIVE_FIELD_META[id];
+      if (!meta) return;
+      const value = input.value;
+      if (meta.kind === "name") {
+        liveApplyToPreview(id, value, { old: (meta.side === "bride" ? state.selected.bride.firstName : state.selected.groom.firstName) });
+        state.selected.bride.firstName = input.id === "f_brideFirst" ? value : state.selected.bride.firstName;
+        state.selected.groom.firstName = input.id === "f_groomFirst" ? value : state.selected.groom.firstName;
+      } else if (meta.kind === "hashtag") {
+        liveApplyToPreview(id, value, { old: state.selected.invitation.hashtag });
+        state.selected.invitation.hashtag = value;
+      } else if (meta.kind === "story") {
+        liveApplyToPreview(id, value, { old: state.selected.invitation.story });
+        state.selected.invitation.story = value;
+      } else if (meta.kind === "ttk") {
+        liveApplyToPreview(id, value, { old: (state.selected.thingsToKnow.find((t) => t.key === meta.key) || {}).text });
+        const t = state.selected.thingsToKnow.find((t) => t.key === meta.key);
+        if (t) t.text = value;
+      } else if (meta.kind === "phone") {
+        liveApplyToPreview(id, value, { old: state.selected.whatsapp.display });
+        state.selected.whatsapp.display = value;
+      } else if (meta.kind === "title") {
+        liveApplyToPreview(id, value, {});
+        state.selected.title = value;
+      }
+    }, 250);
+  });
 
   $("saveBtn").onclick = () => save();
   $("buildBtn").onclick = async () => { if (busy) return; busy = true; await runBuild(); busy = false; };

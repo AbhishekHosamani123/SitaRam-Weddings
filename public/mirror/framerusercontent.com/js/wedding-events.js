@@ -40,4 +40,9 @@
   });
   const main = document.getElementById('main') || document.body;
   if (main) observer.observe(main, { childList: true, subtree: true, characterData: true });
+  // live-edit hook (Dashboard preview) — update events and re-apply now
+  self.__WD_APPLY__ = function (events) {
+    if (Array.isArray(events)) self.__WEDDING_EVENTS__ = events;
+    return assign();
+  };
 })();

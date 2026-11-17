@@ -92,7 +92,7 @@ function serveStatic(res, filePath, root = PUBLIC) {
   fs.readFile(target, (err, data) => {
     if (err) { res.writeHead(404, { "Content-Type": "text/plain" }).end("Not found"); return; }
     const ext = path.extname(target).toLowerCase();
-    const isAdmin = full.startsWith(path.join(ROOT, "admin"));
+    const isAdmin = full.startsWith(path.join(ROOT, "admin")) || full.includes("wedding-events.js");
     res.writeHead(200, {
       "Content-Type": MIME[ext] || "application/octet-stream",
       "Cache-Control": isAdmin || ext === ".html" ? "no-store" : "public, max-age=3600",
