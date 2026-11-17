@@ -3,6 +3,12 @@
   "version": 2,
   "outputDirectory": "public",
   "framework": null,
+  "routes": [
+    {
+      "src": "/mirror/(.*)\\.(png|webp|jpg|jpeg|gif|avif)",
+      "dest": "/mirror/$1.$2"
+    }
+  ],
   "headers": [
     {
       "source": "/mirror/(.*)",
