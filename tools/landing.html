@@ -1,0 +1,602 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>SitaRam Weddings | Wedding Invitation Website Templates</title>
+<meta name="description" content="Elegant wedding invitation websites — pick a design, personalise it in minutes, and share one beautiful link with your guests. Launch offer: ₹999 for the first 10 customers.">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ctext y='.9em' font-size='90'%3E%F0%9F%92%90%3C/text%3E%3C/svg%3E">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,400;12..96,500;12..96,600;12..96,700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+/* ============================================================
+   SitaRam Weddings — landing page (gold/rose identity)
+   Cream-champagne canvas, deep plum ink, rose→gold gradient
+   accents, Bricolage Grotesque display + Inter body.
+   ============================================================ */
+:root{
+  --bg:#fff9f3;
+  --bg-2:#fbeede;
+  --paper:#ffffff;
+  --ink:#3d222a;
+  --ink-soft:#6b4a52;
+  --muted:#9c7a85;
+  --brand:#c2535f;            /* deep rose */
+  --brand-dark:#a83e4c;
+  --gold:#e8b04b;
+  --gold-2:#f2c878;
+  --rose:#d96c7a;
+  --rose-2:#f0a6ae;
+  --grad:linear-gradient(120deg,#d96c7a 0%,#e8b04b 100%);
+  --grad-soft:linear-gradient(135deg,rgba(217,108,122,.14),rgba(232,176,75,.18));
+  --tint:#fdf0e6;
+  --line:#f0ddd3;
+  --shadow:0 18px 44px rgba(122,66,58,.12);
+  --f-display:'Bricolage Grotesque',sans-serif;
+  --f-ui:'Inter',sans-serif;
+}
+*{margin:0;padding:0;box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{font-family:var(--f-ui);color:var(--ink);background:var(--bg);font-size:16px;line-height:1.6;-webkit-font-smoothing:antialiased}
+img{max-width:100%;display:block}
+a{color:inherit}
+.wrap{max-width:1120px;margin:0 auto;padding:0 22px}
+.hidden{display:none!important}
+button{font:inherit;cursor:pointer}
+.grad-text{background:var(--grad);-webkit-background-clip:text;background-clip:text;color:transparent}
+
+/* ---------- header ---------- */
+.site-head{
+  position:sticky;top:0;z-index:50;background:rgba(255,249,243,.88);
+  backdrop-filter:blur(12px);border-bottom:1px solid var(--line);
+}
+.head-inner{display:flex;align-items:center;gap:26px;height:72px}
+.logo{display:flex;align-items:center;gap:10px;text-decoration:none;font-family:var(--f-display);font-weight:600;font-size:21px;letter-spacing:-.01em;color:var(--ink)}
+.logo .mark{width:38px;height:38px;display:grid;place-items:center;border-radius:12px;background:var(--grad);color:#fff;font-family:var(--f-ui);font-size:15px;font-weight:700;box-shadow:0 6px 16px rgba(200,83,95,.35)}
+.nav{display:flex;gap:22px;margin-left:auto;align-items:center}
+.nav a{text-decoration:none;font-size:14.5px;font-weight:500;color:var(--ink-soft);transition:color .2s}
+.nav a:hover{color:var(--brand)}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;text-decoration:none;font-weight:600;font-size:14.5px;padding:12px 22px;border-radius:999px;border:1.5px solid transparent;transition:transform .15s,box-shadow .2s,background .2s;white-space:nowrap}
+.btn:active{transform:translateY(1px)}
+.btn-primary{background:var(--grad);color:#fff;box-shadow:0 8px 20px rgba(200,83,95,.3)}
+.btn-primary:hover{box-shadow:0 12px 28px rgba(200,83,95,.42);transform:translateY(-1px)}
+.btn-ghost{border-color:var(--line);background:var(--paper);color:var(--ink)}
+.btn-ghost:hover{border-color:var(--brand);color:var(--brand)}
+.btn-gold{background:var(--grad);color:#fff;box-shadow:0 8px 20px rgba(200,83,95,.3)}
+.btn-gold:hover{background:linear-gradient(120deg,#c2535f,#e8b04b);box-shadow:0 12px 28px rgba(200,83,95,.42);transform:translateY(-1px)}
+.menu-btn{display:none;background:none;border:1px solid var(--line);border-radius:10px;padding:8px 12px;font-size:18px}
+@media(max-width:860px){
+  .menu-btn{display:block}
+  .nav{position:absolute;top:72px;left:0;right:0;background:var(--bg);flex-direction:column;align-items:stretch;padding:14px 22px 20px;border-bottom:1px solid var(--line);display:none}
+  .nav.open{display:flex}
+  .nav .btn{justify-content:center}
+}
+
+/* ---------- offer strip ---------- */
+.offer{background:linear-gradient(120deg,#3d222a,#7a3a48 55%,#a8543a);color:#fff;padding:13px 0}
+.offer-inner{display:flex;align-items:center;justify-content:center;gap:14px;flex-wrap:wrap;text-align:center}
+.offer-tag{background:var(--grad);border-radius:999px;padding:4px 14px;font-size:12.5px;font-weight:700;letter-spacing:.08em;text-transform:uppercase}
+.offer-text{font-size:15.5px}
+.offer-text s{opacity:.7;margin-right:8px}
+.offer-text b{font-size:18px}
+.offer-hint{font-size:13px;opacity:.85}
+
+/* ---------- hero ---------- */
+.hero{position:relative;overflow:hidden;padding:76px 0 96px}
+.hero::before{content:"";position:absolute;inset:0;background:
+  radial-gradient(820px 420px at 82% -10%, rgba(217,108,122,.16), transparent 62%),
+  radial-gradient(720px 380px at 8% 108%, rgba(232,176,75,.18), transparent 60%)}
+.hero .wrap{position:relative;display:grid;grid-template-columns:1.05fr .95fr;gap:52px;align-items:center}
+.hero-eyebrow{display:inline-flex;align-items:center;gap:8px;font-size:12.5px;letter-spacing:.14em;text-transform:uppercase;font-weight:600;color:#a83e4c;background:var(--tint);border:1px solid #f2d4c2;border-radius:999px;padding:8px 18px}
+.hero h1{font-family:var(--f-display);font-weight:500;font-size:clamp(40px,5.4vw,60px);line-height:1.06;letter-spacing:-.025em;margin:22px 0 18px}
+.hero h1 em{font-style:italic;background:var(--grad);-webkit-background-clip:text;background-clip:text;color:transparent}
+.hero-sub{max-width:52ch;color:var(--ink-soft);font-size:17.5px}
+.hero-ctas{display:flex;gap:14px;margin-top:30px;flex-wrap:wrap}
+.hero-proof{margin-top:20px;color:var(--muted);font-size:14px;display:flex;gap:18px;flex-wrap:wrap;align-items:center}
+.hero-proof .proof-item{display:inline-flex;align-items:center;gap:6px}
+.hero-proof .proof-item b{color:var(--brand)}
+.hero-proof .tick{width:18px;height:18px;border-radius:50%;background:var(--grad);color:#fff;display:inline-grid;place-items:center;font-size:11px;font-weight:700}
+
+/* hero visual — floating template preview + stat chips */
+.hero-visual{position:relative;min-height:420px}
+.hv-card{position:absolute;background:var(--paper);border:1px solid var(--line);border-radius:22px;box-shadow:var(--shadow);overflow:hidden;aspect-ratio:16/11;width:78%}
+.hv-card iframe{width:1280px;height:800px;border:0;transform-origin:0 0;pointer-events:none;display:block}
+.hv-card .hv-label{position:absolute;left:14px;bottom:12px;background:rgba(61,34,42,.78);color:#fff;font-size:12px;font-weight:600;padding:6px 12px;border-radius:999px;backdrop-filter:blur(4px)}
+.hv-card.back{top:18px;right:0;transform:rotate(3deg);opacity:.75;width:64%;z-index:0}
+.hv-card.front{left:0;top:64px;z-index:1}
+.hv-chip{position:absolute;z-index:2;background:var(--paper);border:1px solid var(--line);border-radius:16px;box-shadow:0 14px 34px rgba(122,66,58,.16);padding:12px 16px;display:flex;align-items:center;gap:10px;font-size:13.5px;font-weight:600}
+.hv-chip .ch-ic{width:34px;height:34px;border-radius:10px;background:var(--grad-soft);display:grid;place-items:center;font-size:17px}
+.hv-chip small{display:block;font-weight:500;color:var(--muted);font-size:12px}
+.hv-chip.price{right:2%;top:4px}
+.hv-chip.live{left:4%;bottom:26px}
+@media(max-width:960px){
+  .hero .wrap{grid-template-columns:1fr;gap:40px}
+  .hero-visual{min-height:360px;max-width:520px;margin:0 auto;width:100%}
+}
+
+/* ---------- section head ---------- */
+.sec{padding:88px 0}
+.sec-alt{background:var(--bg-2);border-top:1px solid var(--line);border-bottom:1px solid var(--line)}
+.sec-head{text-align:center;max-width:680px;margin:0 auto 16px}
+.sec-head .kicker{display:inline-flex;font-size:12.5px;letter-spacing:.14em;text-transform:uppercase;font-weight:600;color:#a83e4c;background:var(--tint);border:1px solid #f2d4c2;border-radius:999px;padding:7px 16px}
+.sec-head h2{font-family:var(--f-display);font-weight:500;font-size:clamp(30px,4.4vw,44px);letter-spacing:-.02em;margin-top:14px}
+.sec-head h2 em{font-style:italic}
+.sec-head p{color:var(--ink-soft);margin-top:10px;font-size:17px}
+
+/* ---------- how it works ---------- */
+.steps-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:24px;margin-top:44px}
+.step{background:var(--paper);border:1px solid var(--line);border-radius:20px;padding:28px 26px;text-align:center;transition:transform .25s,box-shadow .25s}
+.step:hover{transform:translateY(-4px);box-shadow:var(--shadow)}
+.step .no{width:56px;height:56px;margin:0 auto 16px;border-radius:50%;background:var(--grad);color:#fff;font-family:var(--f-display);font-size:23px;font-weight:600;display:grid;place-items:center;box-shadow:0 10px 22px rgba(200,83,95,.28)}
+.step h3{font-family:var(--f-display);font-size:21px;font-weight:600;margin-bottom:8px}
+.step p{color:var(--ink-soft);font-size:14.5px}
+
+/* ---------- features ---------- */
+.f-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:22px;margin-top:44px}
+.f-card{background:var(--paper);border:1px solid var(--line);border-radius:20px;padding:26px 24px}
+.f-icon{width:46px;height:46px;border-radius:13px;background:var(--grad-soft);display:grid;place-items:center;color:var(--brand);margin-bottom:16px;font-size:20px}
+.f-card h3{font-family:var(--f-display);font-size:20px;font-weight:600;margin-bottom:7px}
+.f-card p{color:var(--ink-soft);font-size:14.5px}
+.f-card ul{list-style:none;margin-top:14px;display:flex;flex-direction:column;gap:8px}
+.f-card li{font-size:14px;color:var(--ink-soft);display:flex;gap:9px;align-items:flex-start}
+.f-card li::before{content:"✔";color:var(--brand);font-weight:700}
+
+/* ---------- templates ---------- */
+.filters{display:flex;flex-wrap:wrap;gap:10px;justify-content:center;margin:34px 0}
+.f-btn{border:1px solid var(--line);background:var(--paper);border-radius:999px;padding:9px 20px;font-size:14px;font-weight:600;color:var(--ink-soft);transition:.2s}
+.f-btn:hover{border-color:var(--brand);color:var(--brand)}
+.f-btn.active{background:var(--ink);color:#fff;border-color:var(--ink)}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:26px}
+.tpl-card{background:var(--paper);border:1px solid var(--line);border-radius:22px;overflow:hidden;display:flex;flex-direction:column;box-shadow:0 4px 16px rgba(122,66,58,.06);transition:transform .25s,box-shadow .25s}
+.tpl-card:hover{transform:translateY(-4px);box-shadow:var(--shadow)}
+.tpl-preview{position:relative;aspect-ratio:16/10;overflow:hidden;background:linear-gradient(135deg,var(--c1,#fbeede),var(--c2,#f0a6ae));border-bottom:1px solid var(--line)}
+.tpl-preview iframe{width:1280px;height:800px;border:0;transform-origin:0 0;pointer-events:none;display:block}
+.tpl-preview .open-full{position:absolute;right:12px;top:12px;background:rgba(61,34,42,.72);color:#fff;border:0;border-radius:999px;padding:7px 14px;font-size:12.5px;font-weight:700;letter-spacing:.04em;opacity:0;transition:.25s;backdrop-filter:blur(4px)}
+.tpl-card:hover .open-full{opacity:1}
+.tpl-body{padding:20px 22px 22px;display:flex;flex-direction:column;gap:8px;flex:1}
+.tpl-cat{font-size:11px;letter-spacing:.18em;text-transform:uppercase;font-weight:700;color:var(--ac,#c2535f)}
+.tpl-name{font-family:var(--f-display);font-weight:600;font-size:23px;letter-spacing:-.01em}
+.tpl-tag{color:var(--muted);font-size:14px;line-height:1.5;flex:1}
+.price-row{display:flex;align-items:baseline;gap:10px;flex-wrap:wrap;margin-top:4px}
+.price-row s{color:var(--muted);font-size:15px}
+.price-row b{font-size:26px;color:var(--brand);font-family:var(--f-display)}
+.price-row .offer-chip{background:var(--tint);color:var(--brand-dark);font-size:11.5px;font-weight:700;padding:3px 10px;border-radius:999px;letter-spacing:.03em}
+.tpl-actions{display:flex;gap:10px;margin-top:14px}
+.tpl-actions .btn{flex:1;padding:11px 12px;font-size:13.5px}
+
+/* ---------- wedding-ready checklist (stat card) ---------- */
+.check-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:24px;margin-top:44px;align-items:stretch}
+.check-card{background:var(--paper);border:1px solid var(--line);border-radius:22px;padding:28px 26px}
+.check-card h3{font-family:var(--f-display);font-size:21px;font-weight:600;margin-bottom:6px}
+.check-card .sub{color:var(--muted);font-size:14px;margin-bottom:18px}
+.check-list{display:flex;flex-direction:column;gap:12px}
+.check-item{display:flex;align-items:flex-start;gap:12px;font-size:14.5px;color:var(--ink-soft)}
+.check-item .ci-ic{width:30px;height:30px;flex:none;border-radius:9px;background:var(--grad-soft);display:grid;place-items:center;color:var(--brand);font-size:14px}
+.check-item b{color:var(--ink);display:block}
+.check-item span{font-size:13px;color:var(--muted)}
+.report-card{background:linear-gradient(160deg,#3d222a,#7a3a48);color:#fff;border:none}
+.report-card h3{color:#fff}
+.report-card .sub{color:rgba(255,255,255,.75)}
+.report-score{display:flex;align-items:center;gap:18px;margin:18px 0}
+.report-score .big{font-family:var(--f-display);font-size:46px;font-weight:600;background:var(--grad);-webkit-background-clip:text;background-clip:text;color:transparent;line-height:1}
+.report-score .cap{font-size:14px;color:rgba(255,255,255,.85)}
+.report-score .badge{background:var(--grad);border-radius:999px;padding:5px 14px;font-size:12.5px;font-weight:700;letter-spacing:.05em}
+.report-bars{display:flex;flex-direction:column;gap:12px;margin-top:6px}
+.report-bar .rb-label{display:flex;justify-content:space-between;font-size:13px;margin-bottom:5px;color:rgba(255,255,255,.85)}
+.report-bar .rb-label b{color:#fff}
+.report-bar .rb-track{height:8px;border-radius:999px;background:rgba(255,255,255,.16);overflow:hidden}
+.report-bar .rb-fill{height:100%;border-radius:999px;background:var(--grad)}
+
+/* ---------- comparison ---------- */
+.table-wrap{overflow-x:auto;margin-top:46px;border:1px solid var(--line);border-radius:20px;background:var(--paper)}
+table{width:100%;border-collapse:collapse;min-width:720px;font-size:14.5px}
+th,td{padding:16px 18px;text-align:left;border-bottom:1px solid var(--line);vertical-align:top}
+thead th{font-family:var(--f-display);font-size:17px;font-weight:600;background:var(--tint)}
+thead th .sub{display:block;font-family:var(--f-ui);font-size:12px;color:var(--muted);font-weight:400;margin-top:2px}
+tbody tr:last-child th,tbody tr:last-child td{border-bottom:0}
+td:first-child{font-weight:600;color:var(--ink-soft)}
+td .tick{color:var(--brand);font-weight:700}
+td .cross{color:#c0392b}
+.hl-col{background:#fdf0e6}
+.hl-col th{color:var(--brand-dark)}
+
+/* ---------- testimonials ---------- */
+.t-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:24px;margin-top:44px}
+.t-card{background:var(--paper);border:1px solid var(--line);border-radius:20px;padding:26px 26px 22px}
+.stars{color:var(--gold);letter-spacing:2px;font-size:15px}
+.t-text{font-family:var(--f-display);font-weight:500;letter-spacing:-.005em;font-size:18px;margin:12px 0 16px;line-height:1.5}
+.t-who{display:flex;align-items:center;gap:12px}
+.t-ava{width:42px;height:42px;border-radius:50%;background:var(--grad-soft);color:var(--brand-dark);display:grid;place-items:center;font-weight:700}
+.t-who b{display:block;font-size:14.5px}
+.t-who span{font-size:12.5px;color:var(--muted)}
+
+/* ---------- FAQ ---------- */
+.faq-list{max-width:780px;margin:40px auto 0}
+details{background:var(--paper);border:1px solid var(--line);border-radius:16px;margin-bottom:12px;overflow:hidden}
+summary{cursor:pointer;padding:18px 22px;font-weight:600;font-size:15.5px;list-style:none;display:flex;justify-content:space-between;align-items:center;gap:14px}
+summary::after{content:"+";font-size:22px;color:var(--brand);font-weight:400;transition:transform .25s}
+details[open] summary::after{transform:rotate(45deg)}
+.faq-a{padding:0 22px 20px;color:var(--ink-soft);font-size:14.5px}
+.faq-a a{color:var(--brand);font-weight:600}
+
+/* ---------- CTA band ---------- */
+.cta-band{padding:72px 0;text-align:center;background:linear-gradient(120deg,#3d222a,#7a3a48 55%,#a8543a);color:#fff}
+.cta-band h2{font-family:var(--f-display);font-weight:500;font-size:clamp(28px,4vw,40px);letter-spacing:-.015em}
+.cta-band p{opacity:.9;margin:10px auto 26px;max-width:52ch}
+.cta-band .btn{background:var(--grad);color:#fff}
+.cta-band .btn:hover{box-shadow:0 12px 30px rgba(0,0,0,.3)}
+.cta-proof{display:flex;gap:20px;justify-content:center;flex-wrap:wrap;margin-top:22px;font-size:13.5px;color:rgba(255,255,255,.85)}
+.cta-proof span{display:inline-flex;align-items:center;gap:6px}
+
+/* ---------- footer ---------- */
+.site-foot{background:#2e1a20;color:#c9a9b2;padding:56px 0 40px}
+.foot-grid{display:grid;grid-template-columns:1.4fr 1fr 1fr 1.2fr;gap:34px;margin-bottom:34px}
+.foot-grid h4{color:#fff;font-family:var(--f-display);font-size:17px;font-weight:600;margin-bottom:14px}
+.foot-grid a{display:block;color:#c9a9b2;text-decoration:none;font-size:14px;padding:3px 0}
+.foot-grid a:hover{color:#fff}
+.foot-brand{font-family:var(--f-display);font-size:22px;color:#fff;font-weight:600;display:flex;gap:10px;align-items:center;margin-bottom:12px}
+.foot-brand .mark{width:38px;height:38px;border-radius:12px;background:var(--grad);color:#fff;display:grid;place-items:center;font-family:var(--f-ui);font-size:15px}
+.foot-note{font-size:13.5px;max-width:36ch}
+.foot-copy{border-top:1px solid rgba(255,255,255,.12);padding-top:24px;font-size:13px;display:flex;justify-content:space-between;gap:14px;flex-wrap:wrap}
+@media(max-width:860px){.foot-grid{grid-template-columns:1fr 1fr}}
+@media(max-width:520px){.foot-grid{grid-template-columns:1fr}}
+
+/* reveal */
+.rv{opacity:0;transform:translateY(22px);transition:opacity .8s ease,transform .8s cubic-bezier(.22,.8,.36,1)}
+.rv.in-view{opacity:1;transform:none}
+@media (prefers-reduced-motion: reduce){.rv{opacity:1;transform:none;transition:none}*{scroll-behavior:auto}}
+</style>
+</head>
+<body>
+
+<!-- ==================== HEADER ==================== -->
+<header class="site-head">
+  <div class="wrap head-inner">
+    <a class="logo" href="/"><span class="mark">SR</span> SitaRam Weddings</a>
+    <button class="menu-btn" id="menuBtn" aria-label="Menu">☰</button>
+    <nav class="nav" id="nav">
+      <a href="#how">How it works</a>
+      <a href="#features">Why us</a>
+      <a href="#templates">Templates</a>
+      <a href="#faq">FAQ</a>
+      <a class="btn btn-primary" href="#templates">Choose a template</a>
+    </nav>
+  </div>
+</header>
+
+<!-- ==================== OFFER ==================== -->
+<div class="offer">
+  <div class="wrap offer-inner">
+    <span class="offer-tag">LIMITED OFFER</span>
+    <span class="offer-text"><s>₹3,999</s> <b>₹999</b> for the first 10 customers</span>
+    <span class="offer-hint">(then ₹3,999 per template)</span>
+  </div>
+</div>
+
+<!-- ==================== HERO ==================== -->
+<section class="hero">
+  <div class="wrap">
+    <div>
+      <span class="hero-eyebrow">💐 Wedding Invitation Websites</span>
+      <h1>Your wedding, <em>one beautiful link</em> away</h1>
+      <p class="hero-sub">Pick a design, personalise it with your names, dates and photos — and share an elegant, animated wedding website with every guest. No app required, edits anytime, works on every phone.</p>
+      <div class="hero-ctas">
+        <a class="btn btn-gold" href="#templates">Choose a template</a>
+        <a class="btn btn-ghost" href="#how">See how it works</a>
+      </div>
+      <div class="hero-proof">
+        <span class="proof-item"><span class="tick">✔</span> Live in <b>seconds</b></span>
+        <span class="proof-item"><span class="tick">✔</span> ₹999 for the <b>first 10 customers</b></span>
+        <span class="proof-item"><span class="tick">✔</span> Secure payments by Razorpay</span>
+      </div>
+    </div>
+    <div class="hero-visual">
+      <div class="hv-card back">
+        <iframe src="/templates/ram-mandir/" loading="lazy" title="Template preview"></iframe>
+        <span class="hv-label">Ram Mandir · Hindu</span>
+      </div>
+      <div class="hv-card front">
+        <iframe src="/templates/ram-mandir/" loading="lazy" title="Template preview"></iframe>
+        <span class="hv-label">Ram Mandir · Hindu</span>
+      </div>
+      <div class="hv-chip price">
+        <span class="ch-ic">💰</span>
+        <span><b>₹999</b><small>instead of ₹3,999</small></span>
+      </div>
+      <div class="hv-chip live">
+        <span class="ch-ic">✅</span>
+        <span>Your link, live instantly<small>with maps + RSVP</small></span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ==================== HOW IT WORKS ==================== -->
+<section class="sec" id="how">
+  <div class="wrap">
+    <div class="sec-head">
+      <span class="kicker">Simple by design</span>
+      <h2>Three steps. <em>One unforgettable link.</em></h2>
+      <p>Getting your wedding website live is easier than ordering cards.</p>
+    </div>
+    <div class="steps-grid">
+      <div class="step rv"><span class="no">1</span><h3>Choose a template</h3><p>Browse the designs and open the live preview of any one you like — see it exactly as your guests will.</p></div>
+      <div class="step rv" style="--d:.1s"><span class="no">2</span><h3>Personalise &amp; preview</h3><p>Fill in your names, dates, venues and photos. Watch your invitation update live as you type.</p></div>
+      <div class="step rv" style="--d:.2s"><span class="no">3</span><h3>Publish &amp; share</h3><p>Get your own public link. Put it in the invites, on WhatsApp — one link that has everything.</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- ==================== FEATURES ==================== -->
+<section class="sec sec-alt" id="features">
+  <div class="wrap">
+    <div class="sec-head">
+      <span class="kicker">The wedding invite, reinvented</span>
+      <h2>Why <em>SitaRam Weddings</em></h2>
+    </div>
+    <div class="f-grid">
+      <div class="f-card rv"><div class="f-icon">💰</div><h3>Truly affordable</h3><p>A complete animated wedding website for less than a printed card set — and infinitely more memorable.</p><ul><li>₹999 launch price, one-time payment</li><li>No recurring charges, ever</li><li>Updates included free</li></ul></div>
+      <div class="f-card rv" style="--d:.05s"><div class="f-icon">👵</div><h3>Elder-friendly</h3><p>Big text, simple screens and huge tap targets — your grandparents can use it as easily as your friends.</p><ul><li>Works on every phone &amp; computer</li><li>No app to install</li><li>Simple, legible layouts</li></ul></div>
+      <div class="f-card rv" style="--d:.1s"><div class="f-icon">📅</div><h3>Pre-wedding highlights</h3><p>Timeline for every function — haldi, mehendi, sangeet, ceremony and reception, with venues and maps.</p><ul><li>Up to 6 event cards</li><li>Google Maps pin auto-fill</li><li>Countdown to the big day</li></ul></div>
+      <div class="f-card rv" style="--d:.15s"><div class="f-icon">⚡</div><h3>Instant edits</h3><p>Forgot the gate number? Update anything and your link reflects it immediately. No reprints, ever.</p><ul><li>Live preview while you type</li><li>Edit anytime after publishing</li><li>Same link, always current</li></ul></div>
+      <div class="f-card rv" style="--d:.2s"><div class="f-icon">🪔</div><h3>Ritual-ready designs</h3><p>Themes crafted for Hindu, South-Indian, Sikh, Muslim and destination celebrations — with sacred touches where they matter.</p><ul><li>Ayodhya, Meenaya, Laavan &amp; more</li><li>Sacred motifs &amp; colors</li><li>New designs added regularly</li></ul></div>
+      <div class="f-card rv" style="--d:.25s"><div class="f-icon">🔒</div><h3>Private event pages</h3><p>Share with whoever you choose. No public listings, no strangers — your link is yours alone.</p><ul><li>WhatsApp RSVP built in</li><li>Your phone number stays private</li><li>Secure payments by Razorpay</li></ul></div>
+    </div>
+  </div>
+</section>
+
+<!-- ==================== TEMPLATES ==================== -->
+<section class="sec" id="templates">
+  <div class="wrap">
+    <div class="sec-head">
+      <span class="kicker">Our collection</span>
+      <h2>Wedding Invitation Website Templates</h2>
+      <p>Seven distinct designs — Hindu, South-Indian, Sikh, Muslim and destination themes. Every template is fully customisable.</p>
+    </div>
+
+    <div class="filters" id="filters">
+      <button class="f-btn active" data-f="all">All</button>
+      <button class="f-btn" data-f="Hindu">Hindu</button>
+      <button class="f-btn" data-f="South-Indian">South-Indian</button>
+      <button class="f-btn" data-f="Sikh">Sikh</button>
+      <button class="f-btn" data-f="Muslim">Muslim</button>
+      <button class="f-btn" data-f="Destination">Destination</button>
+    </div>
+
+    <div class="grid" id="tplGrid">
+      {{TEMPLATE_CARDS}}
+    </div>
+  </div>
+</section>
+
+<!-- ==================== WEDDING-READY CHECKLIST ==================== -->
+<section class="sec sec-alt">
+  <div class="wrap">
+    <div class="sec-head">
+      <span class="kicker">Everything included</span>
+      <h2>Your wedding, <em>ready in minutes</em></h2>
+      <p>Every website ships with the complete set — nothing to configure, nothing extra to pay for.</p>
+    </div>
+    <div class="check-grid">
+      <div class="check-card rv">
+        <h3>What you get</h3>
+        <p class="sub">Every couple's website includes</p>
+        <div class="check-list">
+          <div class="check-item"><span class="ci-ic">💕</span><div><b>Names &amp; invitation</b><span>Your headline, message and hashtag</span></div></div>
+          <div class="check-item"><span class="ci-ic">📅</span><div><b>Wedding timeline</b><span>Up to 6 event cards with venues</span></div></div>
+          <div class="check-item"><span class="ci-ic">🗺️</span><div><b>Map card</b><span>Auto pin from your venue address</span></div></div>
+          <div class="check-item"><span class="ci-ic">⏳</span><div><b>Countdown</b><span>To the main celebration</span></div></div>
+          <div class="check-item"><span class="ci-ic">📷</span><div><b>Photos &amp; gallery</b><span>Hero banner, portraits, gallery</span></div></div>
+          <div class="check-item"><span class="ci-ic">💬</span><div><b>WhatsApp RSVP</b><span>One-tap confirmations</span></div></div>
+        </div>
+      </div>
+      <div class="check-card report-card rv" style="--d:.1s">
+        <h3>Wedding-ready score</h3>
+        <p class="sub">A typical couple's site, checklist-style</p>
+        <div class="report-score">
+          <span class="big">100%</span>
+          <span class="badge">READY 🎉</span>
+        </div>
+        <div class="report-bars">
+          <div class="report-bar"><div class="rb-label"><span>Names &amp; invitation</span><b>100%</b></div><div class="rb-track"><div class="rb-fill" style="width:100%"></div></div></div>
+          <div class="report-bar"><div class="rb-label"><span>Events &amp; venues</span><b>100%</b></div><div class="rb-track"><div class="rb-fill" style="width:100%"></div></div></div>
+          <div class="report-bar"><div class="rb-label"><span>Photos &amp; gallery</span><b>100%</b></div><div class="rb-track"><div class="rb-fill" style="width:100%"></div></div></div>
+          <div class="report-bar"><div class="rb-label"><span>Map &amp; RSVP</span><b>100%</b></div><div class="rb-track"><div class="rb-fill" style="width:100%"></div></div></div>
+          <div class="report-bar"><div class="rb-label"><span>Countdown</span><b>100%</b></div><div class="rb-track"><div class="rb-fill" style="width:100%"></div></div></div>
+        </div>
+        <p class="sub" style="margin-top:20px;margin-bottom:0">Missing piece? You can update anytime — your link stays the same.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ==================== COMPARISON ==================== -->
+<section class="sec">
+  <div class="wrap">
+    <div class="sec-head">
+      <span class="kicker">See the difference</span>
+      <h2>Digital invite vs. <em>the old ways</em></h2>
+    </div>
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr>
+            <th></th>
+            <th class="hl-col">SitaRam Weddings<span class="sub">animated website</span></th>
+            <th>Printed cards<span class="sub">traditional</span></th>
+            <th>WhatsApp video<span class="sub">static share</span></th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr><td>Cost per invite</td><td class="hl-col"><b>₹999</b> launch <span class="tick">✔</span></td><td>₹60–₹150 per card</td><td>Free (design tools ₹)</td></tr>
+          <tr><td>Updates &amp; edits</td><td class="hl-col">Any time, instantly <span class="tick">✔</span></td><td>Re-print &amp; re-order</td><td>Re-record / re-edit</td></tr>
+          <tr><td>Everything in one link</td><td class="hl-col">Dates, venues, maps, RSVP <span class="tick">✔</span></td><td>Scattered inserts</td><td>One video only</td></tr>
+          <tr><td>Ritual-ready sections</td><td class="hl-col">Each event, its own card <span class="tick">✔</span></td><td>Fixed print layout</td><td>Not possible</td></tr>
+          <tr><td>Works on every phone</td><td class="hl-col">Fully responsive <span class="tick">✔</span></td><td>—</td><td>Plays anywhere</td></tr>
+          <tr><td>Interactive RSVP &amp; WhatsApp</td><td class="hl-col">Built-in <span class="tick">✔</span></td><td>Call/type manually</td><td>Manual only</td></tr>
+          <tr><td>Refreshed visuals &amp; animations</td><td class="hl-col">Scroll reveals, countdown <span class="tick">✔</span></td><td>Static print</td><td>Static frames</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</section>
+
+<!-- ==================== TESTIMONIALS ==================== -->
+<section class="sec sec-alt">
+  <div class="wrap">
+    <div class="sec-head">
+      <span class="kicker">Loved by couples</span>
+      <h2>One link. <em>Endless compliments.</em></h2>
+    </div>
+    <div class="t-grid">
+      <div class="t-card rv">
+        <div class="stars">★★★★★</div>
+        <p class="t-text">“Our guests kept saying they had never seen an invite like this. The countdown to our big day became a family thing!”</p>
+        <div class="t-who"><div class="t-ava">SM</div><div><b>Sita &amp; Ram</b><span>Hindu wedding, Ayodhya theme</span></div></div>
+      </div>
+      <div class="t-card rv" style="--d:.1s">
+        <div class="stars">★★★★★</div>
+        <p class="t-text">“We updated the venue details three times — every time it was just a quick edit and our link was up to date. So easy.”</p>
+        <div class="t-who"><div class="t-ava">AN</div><div><b>Ananya &amp; Vivaan</b><span>South-Indian wedding, Meenaya theme</span></div></div>
+      </div>
+      <div class="t-card rv" style="--d:.2s">
+        <div class="stars">★★★★★</div>
+        <p class="t-text">“The WhatsApp RSVP button was a lifesaver — we got every confirmation in one thread. Felt premium from day one.”</p>
+        <div class="t-who"><div class="t-ava">RJ</div><div><b>Riya &amp; Arjun</b><span>Destination wedding, Beach theme</span></div></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ==================== FAQ ==================== -->
+<section class="sec" id="faq">
+  <div class="wrap">
+    <div class="sec-head">
+      <span class="kicker">Questions</span>
+      <h2>Frequently asked</h2>
+    </div>
+    <div class="faq-list">
+      <details>
+        <summary>How much does a wedding website cost?</summary>
+        <div class="faq-a">Today’s launch offer is <b>₹999</b> for the first 10 customers (regularly ₹3,999). You pay once — updates, edits and the public link are included, with no recurring charges.</div>
+      </details>
+      <details>
+        <summary>How fast will my website be ready?</summary>
+        <div class="faq-a">Instantly. As soon as you finish personalising your template and publish, you get your own public link right away. You can keep editing anytime after that.</div>
+      </details>
+      <details>
+        <summary>Can I change the template after publishing?</summary>
+        <div class="faq-a">Yes — you can preview and switch designs any time. Your details are kept; the page is rebuilt in the new style.</div>
+      </details>
+      <details>
+        <summary>What can I customise?</summary>
+        <div class="faq-a">Names, parents, invitation text, your story, hashtag, up to six wedding events (with venues, map pins and timings), a countdown, photos, gallery, and the WhatsApp number guests use for RSVP. Everything reflects live as you type.</div>
+      </details>
+      <details>
+        <summary>Do my guests need an app to see it?</summary>
+        <div class="faq-a">No. The invite opens in any phone or computer browser — it looks beautiful on all of them.</div>
+      </details>
+      <details>
+        <summary>How do I get support?</summary>
+        <div class="faq-a">Message us on WhatsApp at <a href="https://wa.me/918431406956" target="_blank" rel="noopener">84314 06956</a> — we are happy to help with anything.</div>
+      </details>
+    </div>
+  </div>
+</section>
+
+<!-- ==================== CTA ==================== -->
+<section class="cta-band">
+  <div class="wrap">
+    <h2>Ready to create yours?</h2>
+    <p>Pick a design, make it yours, and share one unforgettable link.</p>
+    <a class="btn" href="#templates">Choose a template</a>
+    <div class="cta-proof">
+      <span>💳 Secure payments by Razorpay</span>
+      <span>⚡ Live in seconds</span>
+      <span>💌 One link for every guest</span>
+    </div>
+  </div>
+</section>
+
+<!-- ==================== FOOTER ==================== -->
+<footer class="site-foot">
+  <div class="wrap">
+    <div class="foot-grid">
+      <div>
+        <div class="foot-brand"><span class="mark">SR</span> SitaRam Weddings</div>
+        <p class="foot-note">Elegant, animated wedding invitation websites — created with love for couples who want their invitation to be as special as the day itself.</p>
+      </div>
+      <div>
+        <h4>Explore</h4>
+        <a href="#how">How it works</a>
+        <a href="#features">Why us</a>
+        <a href="#templates">Templates</a>
+        <a href="#faq">FAQ</a>
+      </div>
+      <div>
+        <h4>Templates</h4>
+        <a href="/templates/ayodhya/">Ayodhya</a>
+        <a href="/templates/meenaya/">Meenaya</a>
+        <a href="/templates/laavan/">Laavan</a>
+        <a href="/templates/raabta/">Raabta</a>
+        <a href="/templates/beach/">Beach</a>
+      </div>
+      <div>
+        <h4>Contact</h4>
+        <a href="https://wa.me/918431406956" target="_blank" rel="noopener">WhatsApp: 84314 06956</a>
+        <a href="mailto:hello@sitaramweddings.com">hello@sitaramweddings.com</a>
+      </div>
+    </div>
+    <div class="foot-copy">
+      <span>© <span id="year"></span> SitaRam Weddings · All rights reserved.</span>
+      <span>Secure payments by Razorpay</span>
+    </div>
+  </div>
+</footer>
+
+<script>
+(function () {
+  "use strict";
+  var yearEl = document.getElementById("year");
+  if (yearEl) yearEl.textContent = new Date().getFullYear();
+
+  /* mobile nav */
+  var menuBtn = document.getElementById("menuBtn");
+  var nav = document.getElementById("nav");
+  if (menuBtn && nav) {
+    menuBtn.addEventListener("click", function () { nav.classList.toggle("open"); });
+    nav.addEventListener("click", function (e) {
+      if (e.target.closest("a")) nav.classList.remove("open");
+    });
+  }
+
+  /* template filters */
+  var grid = document.getElementById("tplGrid");
+  var filterBtns = document.querySelectorAll(".f-btn");
+  filterBtns.forEach(function (btn) {
+    btn.addEventListener("click", function () {
+      filterBtns.forEach(function (b) { b.classList.remove("active"); });
+      btn.classList.add("active");
+      var f = btn.dataset.f;
+      grid.querySelectorAll(".tpl-card").forEach(function (card) {
+        card.classList.toggle("hidden", f !== "all" && card.dataset.cat !== f);
+      });
+    });
+  });
+
+  /* reveal on scroll */
+  var io = ("IntersectionObserver" in window)
+    ? new IntersectionObserver(function (entries) {
+        entries.forEach(function (e) {
+          if (e.isIntersecting) { e.target.classList.add("in-view"); io.unobserve(e.target); }
+        });
+      }, { threshold: 0.12 })
+    : null;
+  document.querySelectorAll(".rv").forEach(function (el) {
+    if (io) io.observe(el); else el.classList.add("in-view");
+  });
+})();
+</script>
+</body>
+</html>

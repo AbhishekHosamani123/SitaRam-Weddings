@@ -3,6 +3,33 @@
   "version": 2,
   "outputDirectory": "public",
   "framework": null,
+  "functions": {
+    "api/*.js": {
+      "includeFiles": "{templates/**,tools/**,lib/**,public/mirror/framerusercontent.com/sites/**,public/create/**,public/templates/**,public/couples/**,public/tpl/**}"
+    }
+  },
+  "rewrites": [
+    {
+      "source": "/mirror/framerusercontent.com/sites/(.*)",
+      "destination": "/api/couple-bundle?path=$1"
+    },
+    {
+      "source": "/api/razorpay/order",
+      "destination": "/api/razorpay-order"
+    },
+    {
+      "source": "/api/razorpay/verify",
+      "destination": "/api/razorpay-verify"
+    },
+    {
+      "source": "/:slug",
+      "destination": "/api/serve-couple?slug=:slug"
+    },
+    {
+      "source": "/:slug/",
+      "destination": "/api/serve-couple?slug=:slug"
+    }
+  ],
   "headers": [
     {
       "source": "/mirror/framerusercontent.com/sites/(.*)",

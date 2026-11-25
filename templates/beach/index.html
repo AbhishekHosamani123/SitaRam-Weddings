@@ -1,0 +1,1240 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>{{PAGE_TITLE}}</title>
+<meta name="description" content="{{META_DESCRIPTION}}">
+<meta name="theme-color" content="#1f8a8f">
+<link rel="canonical" href="{{PAGE_URL}}">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ccircle cx='50' cy='34' r='20' fill='%23f2b75c'/%3E%3Cpath d='M4 66q11-12 23 0t23 0 23 0 23 0v22H4z' fill='%231f8a8f'/%3E%3C/svg%3E">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Gilda+Display&family=Great+Vibes&family=Quicksand:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+/* ============================================================
+   BEACH — a sun, sand & sea destination-wedding invitation
+   Original design: sunset gradient sky, drifting layered waves,
+   seashell arches, airmail postcards, polaroid gallery.
+   ============================================================ */
+:root{
+  --sand:#f7ead7;
+  --sand-deep:#f2dfc0;
+  --white:#fffdf8;
+  --seafoam:#e9f4f1;
+  --teal:#1f8a8f;
+  --teal-deep:#146065;
+  --teal-ink:#0e4a4e;
+  --coral:#ef7b5e;
+  --coral-deep:#d95f42;
+  --gold:#f2b75c;
+  --ink:#2c4446;
+  --ink-soft:#5f7473;
+  --rope:#c99b5f;
+  --f-display:'Gilda Display',serif;
+  --f-body:'Quicksand',sans-serif;
+  --f-script:'Great Vibes',cursive;
+  --shadow-soft:0 20px 46px rgba(120,72,20,.14);
+  --shadow-deep:0 26px 60px rgba(9,45,48,.28);
+}
+*{margin:0;padding:0;box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{
+  font-family:var(--f-body);
+  color:var(--ink);
+  background:var(--sand);
+  font-size:17px;
+  line-height:1.65;
+  overflow-x:hidden;
+  -webkit-font-smoothing:antialiased;
+}
+img{max-width:100%;display:block}
+p{margin:0}
+.hidden{display:none!important}
+::selection{background:rgba(239,123,94,.35)}
+:focus-visible{outline:3px solid var(--gold);outline-offset:3px;border-radius:6px}
+
+/* ---- shared layout ---- */
+.wrap{max-width:1060px;margin:0 auto;padding:0 22px;position:relative}
+.sec{
+  --seam:var(--sand);
+  --seam2:rgba(255,255,255,.55);
+  position:relative;
+  padding:92px 0 118px;
+}
+.sec--white{--seam:var(--white);--seam2:rgba(239,123,94,.16);background:var(--white)}
+.sec--sand{--seam:var(--sand);--seam2:rgba(255,255,255,.55);background:var(--sand)}
+.sec--seafoam{--seam:var(--seafoam);--seam2:rgba(255,255,255,.65);background:var(--seafoam)}
+.sec--teal{
+  --seam:var(--teal-deep);--seam2:rgba(255,255,255,.4);
+  background:linear-gradient(180deg,var(--teal-deep),#0e4a4e);
+}
+.sec--deepsand{--seam:var(--sand-deep);--seam2:rgba(255,255,255,.5);background:linear-gradient(180deg,var(--sand-deep),#ecd09f)}
+
+/* ---- the signature: layered drifting wave seams ---- */
+.seam{
+  position:absolute;top:-1px;left:0;right:0;height:90px;
+  transform:translateY(-100%);z-index:3;pointer-events:none;
+}
+.seam svg{width:100%;height:100%;display:block}
+.seam .w1{fill:var(--seam);animation:waveL 16s linear infinite}
+.seam .w2{fill:var(--seam2);animation:waveR 26s linear infinite}
+@keyframes waveL{to{transform:translateX(-720px)}}
+@keyframes waveR{to{transform:translateX(720px)}}
+
+/* ---- type helpers ---- */
+.eyebrow{
+  font-size:12.5px;font-weight:700;letter-spacing:.34em;text-transform:uppercase;
+  color:var(--coral-deep);text-align:center;
+}
+.eyebrow-light{color:var(--gold)}
+.sec-title{
+  font-family:var(--f-display);font-weight:400;
+  font-size:clamp(30px,4.6vw,46px);text-align:center;
+  color:var(--teal-ink);margin:12px 0 6px;
+}
+.title-light{color:var(--white)}
+.sec-sub{text-align:center;color:var(--ink-soft);font-size:16.5px;max-width:52ch;margin:0 auto}
+.sub-light{color:rgba(255,253,248,.75)}
+.squig{display:block;margin:18px auto 0;color:var(--coral)}
+.sunmark{display:block;margin:0 auto 18px;color:var(--coral)}
+
+/* ---- reveal ---- */
+.reveal{opacity:0;transform:translateY(26px);transition:opacity .9s ease,transform .9s cubic-bezier(.22,.8,.36,1);transition-delay:var(--d,0s)}
+.reveal.in-view{opacity:1;transform:none}
+.pc.reveal{opacity:0;transform:rotate(var(--tilt,0deg)) translateY(30px)}
+.pc.reveal.in-view{opacity:1;transform:rotate(var(--tilt,0deg))}
+.pol.reveal{opacity:0;transform:rotate(var(--r,0deg)) translateY(30px)}
+.pol.reveal.in-view{opacity:1;transform:rotate(var(--r,0deg))}
+
+/* ============================================================
+   HERO — sunset sky, drifting clouds, palms, boarding pass
+   ============================================================ */
+.hero{
+  position:relative;min-height:100svh;overflow:hidden;
+  display:grid;place-items:center;text-align:center;
+  padding:70px 20px 170px;
+  background:linear-gradient(180deg,#f7d998 0%,#f2b75c 24%,#ef7b5e 55%,#1f8a8f 100%);
+}
+.hero-photo{
+  position:absolute;inset:0;z-index:0;width:100%;height:100%;
+  object-fit:cover;opacity:.36;transform:scale(1.06);
+  filter:saturate(1.05);
+}
+.hero-tint{
+  position:absolute;inset:0;z-index:1;
+  background:
+    radial-gradient(640px 320px at 50% 40%,rgba(255,236,190,.5),transparent 70%),
+    linear-gradient(180deg,rgba(247,222,178,.42) 0%,rgba(242,183,92,.28) 24%,rgba(239,123,94,.34) 55%,rgba(31,138,143,.55) 100%);
+}
+.sun-disc{position:absolute;z-index:2;top:9%;left:50%;transform:translateX(-50%);width:min(200px,44vw);display:none}
+.no-photo .sun-disc{display:block}
+.sun-disc .core{animation:sunPulse 6s ease-in-out infinite;transform-origin:110px 110px}
+@keyframes sunPulse{0%,100%{transform:scale(1)}50%{transform:scale(1.05)}}
+.cloud{position:absolute;z-index:2;pointer-events:none;animation:cloudDrift linear infinite}
+.cloud svg{fill:rgba(255,255,255,.85)}
+@keyframes cloudDrift{from{transform:translateX(-280px)}to{transform:translateX(calc(100vw + 280px))}}
+.palm{position:absolute;z-index:2;color:var(--teal-ink);opacity:.3;pointer-events:none}
+.palm-l{bottom:-14px;left:-26px;width:240px;height:auto;transform-origin:50% 100%;animation:sway 9s ease-in-out infinite}
+.palm-r{--fx:-1;bottom:-18px;right:-30px;width:210px;height:auto;transform-origin:50% 100%;animation:sway 11s ease-in-out infinite reverse}
+@keyframes sway{0%,100%{transform:rotate(1.2deg) scaleX(var(--fx,1))}50%{transform:rotate(-1.2deg) scaleX(var(--fx,1))}}
+
+.hero-content{position:relative;z-index:5;max-width:860px}
+.hero-kicker{
+  font-size:12px;font-weight:700;letter-spacing:.44em;text-transform:uppercase;
+  color:rgba(255,253,248,.9);
+}
+.hero-names{display:flex;flex-wrap:wrap;justify-content:center;align-items:center;gap:0 16px;margin:14px 0 6px}
+.hero-names .name{
+  font-family:var(--f-script);
+  font-size:clamp(58px,10vw,112px);line-height:1.05;
+  color:var(--white);text-shadow:0 3px 26px rgba(122,60,20,.35);
+}
+.hero-names .amp{font-family:var(--f-script);font-size:clamp(34px,5.6vw,60px);color:var(--gold);transform:translateY(6px)}
+.hero-headline{
+  color:rgba(255,253,248,.94);font-size:clamp(16px,2.2vw,20px);font-weight:500;
+  max-width:46ch;margin:6px auto 0;
+}
+
+/* boarding-pass ticket */
+.ticket{
+  display:grid;grid-template-columns:auto 1fr auto;align-items:stretch;
+  max-width:800px;margin:36px auto 0;text-align:left;
+  background:rgba(255,253,248,.96);border-radius:18px;overflow:hidden;
+  box-shadow:0 28px 64px rgba(105,42,16,.3);
+}
+.ticket>div{padding:18px 24px}
+.tk-a{border-right:1.5px dashed rgba(31,138,143,.4);display:flex;flex-direction:column;justify-content:center;gap:6px}
+.tk-label{font-family:var(--f-display);font-size:15px;letter-spacing:.28em;text-transform:uppercase;color:var(--teal)}
+.tk-air{font-size:10.5px;font-weight:700;letter-spacing:.16em;text-transform:uppercase;color:var(--coral-deep)}
+.tk-a .squig{margin:2px 0 0;color:var(--gold)}
+.tk-b{display:flex;flex-direction:column;justify-content:center;gap:4px}
+.tk-event{font-family:var(--f-display);font-size:clamp(20px,2.6vw,26px);color:var(--teal-ink);line-height:1.25}
+.tk-when{font-size:13px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--coral-deep)}
+.tk-time{font-size:15px;font-weight:600;color:var(--ink-soft);display:flex;align-items:center;gap:7px}
+.tk-city{font-size:15px;font-weight:600;color:var(--ink-soft);display:flex;align-items:center;gap:7px}
+.tk-b .ic{width:15px;height:15px;color:var(--teal);flex:none}
+.tk-c{border-left:1.5px dashed rgba(31,138,143,.4);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:8px;min-width:132px}
+.tk-code{font-family:var(--f-display);font-size:30px;color:var(--teal);letter-spacing:.1em}
+.tk-c .barcode{color:var(--teal-ink)}
+.tk-meta{font-size:10px;font-weight:700;letter-spacing:.18em;text-transform:uppercase;color:var(--ink-soft)}
+
+.scroll-cue{
+  position:absolute;z-index:5;bottom:26px;left:50%;transform:translateX(-50%);
+  display:flex;flex-direction:column;align-items:center;gap:4px;
+  color:rgba(255,253,248,.9);font-size:10.5px;font-weight:700;letter-spacing:.3em;text-transform:uppercase;
+}
+.scroll-cue svg{animation:bob 2.4s ease-in-out infinite}
+@keyframes bob{0%,100%{transform:translateY(0) rotate(var(--bob-r,0deg))}50%{transform:translateY(7px) rotate(var(--bob-r,0deg))}}
+
+/* ============================================================
+   COUNTDOWN — hanging beach signboard
+   ============================================================ */
+.sign{position:relative;max-width:660px;margin:0 auto;transform-origin:50% 0;animation:signSwing 8s ease-in-out infinite}
+@keyframes signSwing{0%,100%{transform:rotate(.5deg)}50%{transform:rotate(-.5deg)}}
+.rope{display:block;margin:0 auto -12px;width:220px;height:auto;color:var(--rope)}
+.sign-card{
+  position:relative;background:var(--white);border-radius:26px;
+  padding:32px 28px 28px;box-shadow:var(--shadow-soft);
+}
+.sign-card::before{
+  content:"";position:absolute;inset:8px;border:2px dashed rgba(31,138,143,.35);
+  border-radius:18px;pointer-events:none;
+}
+.sign-title{
+  font-family:var(--f-display);font-size:14.5px;letter-spacing:.3em;text-transform:uppercase;
+  color:var(--teal);text-align:center;margin-bottom:20px;
+}
+.cd-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;position:relative;z-index:1}
+.cd-cell{background:var(--seafoam);border-radius:16px;padding:16px 6px 12px;text-align:center}
+.cd-num{
+  font-family:var(--f-display);font-size:clamp(30px,5.6vw,44px);
+  color:var(--teal-ink);font-variant-numeric:tabular-nums;line-height:1.1;
+}
+.cd-lab{font-size:10.5px;font-weight:700;letter-spacing:.22em;text-transform:uppercase;color:var(--coral-deep);margin-top:6px}
+
+/* ============================================================
+   INVITATION
+   ============================================================ */
+.invite{
+  max-width:740px;margin:0 auto;text-align:center;
+  background:linear-gradient(180deg,var(--white),#fdf4e3);
+  border:1.5px dashed rgba(31,138,143,.4);border-radius:30px;
+  padding:54px 44px;box-shadow:var(--shadow-soft);
+}
+.invite-intro{font-size:clamp(19px,2.4vw,23px);font-weight:500;color:var(--ink-soft);max-width:54ch;margin:0 auto}
+.invite-names{
+  font-family:var(--f-script);font-size:clamp(40px,6vw,58px);
+  line-height:1.15;margin:20px 0 4px;
+}
+.invite-names .in-bride{color:var(--coral-deep)}
+.invite-names .in-groom{color:var(--teal)}
+.invite-names .amp2{color:var(--gold);padding:0 10px}
+.invite-closing{color:var(--ink-soft);font-size:17.5px;font-weight:500;max-width:48ch;margin:0 auto}
+
+/* ============================================================
+   COUPLE — seashell arch frames
+   ============================================================ */
+.couple-grid{
+  display:grid;grid-template-columns:1fr auto 1fr;align-items:center;
+  gap:28px;margin-top:52px;max-width:880px;margin-left:auto;margin-right:auto;
+}
+.person{text-align:center}
+.shell-frame{
+  position:relative;width:min(100%,320px);aspect-ratio:3/4;margin:0 auto;
+}
+.shell-frame img,.shell-frame .ph{
+  position:absolute;inset:0;width:100%;height:100%;object-fit:cover;
+  border-radius:170px 170px 26px 26px;
+}
+.shell-frame::before{
+  content:"";position:absolute;inset:-13px;border-radius:190px 190px 40px 40px;
+  border:2px solid var(--ring,var(--coral));pointer-events:none;
+}
+.shell-frame::after{
+  content:"";position:absolute;inset:-24px;border-radius:210px 210px 52px 52px;
+  border:1.5px dashed var(--ring-soft,rgba(239,123,94,.5));pointer-events:none;
+}
+.person--bride{--ring:var(--coral);--ring-soft:rgba(239,123,94,.5)}
+.person--groom{--ring:var(--teal);--ring-soft:rgba(31,138,143,.5)}
+.shell-frame .ph{
+  display:grid;place-items:center;
+  font-family:var(--f-display);font-size:64px;color:var(--teal);
+  background:linear-gradient(160deg,var(--seafoam),var(--sand));
+}
+.orb{position:absolute;color:var(--gold);animation:bob 7s ease-in-out infinite}
+.orb--shell{--bob-r:-14deg;top:-30px;left:-6px;width:44px;height:44px}
+.orb--star{--bob-r:16deg;bottom:-16px;right:-8px;width:40px;height:40px;color:var(--teal);animation-delay:1.2s}
+.cg-role{
+  display:inline-block;margin-top:26px;padding:6px 18px;border-radius:999px;
+  font-size:11px;font-weight:700;letter-spacing:.3em;text-transform:uppercase;
+  background:rgba(255,255,255,.75);color:var(--teal);
+}
+.person--bride .cg-role{background:rgba(239,123,94,.14);color:var(--coral-deep)}
+.cg-name{font-family:var(--f-script);font-size:clamp(34px,4vw,44px);line-height:1.1;margin-top:12px}
+.person--bride .cg-name{color:var(--coral-deep)}
+.person--groom .cg-name{color:var(--teal)}
+.cg-full{font-family:var(--f-display);font-size:18px;color:var(--teal-ink);margin-top:4px}
+.cg-parents{color:var(--ink-soft);font-size:16px;font-weight:500;margin:10px auto 0;max-width:30ch}
+.amp-medal{
+  width:76px;height:76px;border-radius:50%;display:grid;place-items:center;
+  background:var(--white);border:2px dashed var(--coral);
+  font-family:var(--f-script);font-size:38px;color:var(--coral);
+  box-shadow:var(--shadow-soft);animation:bob 6s ease-in-out infinite;
+}
+
+/* ============================================================
+   STORY — polaroid on the sand
+   ============================================================ */
+.story-grid{
+  display:grid;grid-template-columns:1.05fr .95fr;gap:52px;align-items:center;
+  max-width:920px;margin:46px auto 0;
+}
+.story-copy::before{
+  content:"\201C";display:block;
+  font-family:var(--f-script);font-size:86px;line-height:.5;
+  color:rgba(239,123,94,.55);
+}
+.story-copy .squig{margin:22px 0 0;color:var(--teal)}
+.story-text{font-size:18.5px;font-weight:500;color:var(--ink-soft);line-height:1.9;margin-top:22px}
+.polaroid{
+  position:relative;background:var(--white);border-radius:10px;
+  padding:12px 12px 14px;box-shadow:var(--shadow-soft);
+  transform:rotate(var(--r,0deg));
+}
+.tape{position:absolute;width:92px;height:24px;background:rgba(239,123,94,.42);border-radius:2px}
+.tape.t1{top:-11px;left:-26px;transform:rotate(-9deg)}
+.tape.t2{top:-11px;right:-26px;transform:rotate(7deg)}
+.pol-frame{position:relative;overflow:hidden;border-radius:6px;aspect-ratio:4/5}
+.pol-frame img,.pol-frame .ph{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
+.pol-frame .ph{
+  display:grid;place-items:center;font-family:var(--f-display);font-size:56px;color:var(--teal);
+  background:linear-gradient(160deg,var(--seafoam),var(--sand));
+}
+.cap{font-family:var(--f-script);font-size:22px;color:var(--teal-ink);text-align:center;padding-top:10px}
+
+/* ============================================================
+   EVENTS — airmail postcards
+   ============================================================ */
+.postcards{
+  display:grid;grid-template-columns:repeat(2,1fr);gap:34px 38px;
+  max-width:920px;margin:52px auto 0;
+}
+.pc{
+  background:repeating-linear-gradient(-45deg,var(--coral) 0 14px,var(--white) 14px 26px,var(--teal) 26px 40px,var(--white) 40px 54px);
+  padding:10px;border-radius:16px;box-shadow:var(--shadow-soft);
+  transform:rotate(var(--tilt,0deg));
+  transition:opacity .8s ease,transform .55s cubic-bezier(.22,.8,.36,1);
+}
+.pc.in-view:hover{transform:rotate(0deg) translateY(-4px)}
+.pc-in{
+  position:relative;background:var(--white);border-radius:10px;
+  border:1.5px dashed rgba(31,138,143,.35);padding:24px 24px 20px;
+}
+.pc-name{font-family:var(--f-display);font-size:23px;color:var(--teal-ink);padding-right:118px}
+.pc-when{font-size:13px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--coral-deep);margin-top:8px}
+.pc-line{display:flex;align-items:center;gap:8px;color:var(--ink-soft);font-size:15.5px;font-weight:500;margin-top:5px}
+.pc-line .ic{width:15px;height:15px;color:var(--teal);flex:none}
+.pc-note{
+  margin-top:12px;padding-top:12px;border-top:1.5px dashed rgba(31,138,143,.25);
+  color:var(--ink-soft);font-size:15px;font-weight:500;
+}
+.stamp{
+  position:absolute;top:14px;right:16px;width:44px;height:52px;
+  display:grid;place-items:center;transform:rotate(3deg);
+  background:var(--coral);color:var(--white);
+  font-family:var(--f-display);font-size:22px;
+  border:2px dashed rgba(255,255,255,.85);border-radius:3px;
+  box-shadow:0 4px 10px rgba(105,42,16,.22);
+}
+.postmark{
+  position:absolute;top:8px;right:62px;width:60px;height:60px;border-radius:50%;
+  display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px;
+  border:1.5px dashed rgba(31,138,143,.5);color:var(--teal);
+  transform:rotate(-12deg);pointer-events:none;
+}
+.postmark i{font-style:normal;font-size:6.5px;font-weight:700;letter-spacing:.18em;text-transform:uppercase}
+.postmark svg{color:var(--teal)}
+
+/* ============================================================
+   VENUE — white board on the sand
+   ============================================================ */
+.venue-card{
+  max-width:920px;margin:48px auto 0;display:grid;grid-template-columns:1fr 1.1fr;
+  background:var(--white);border-radius:24px;overflow:hidden;box-shadow:var(--shadow-soft);
+}
+.venue-info{padding:44px 38px;display:flex;flex-direction:column;justify-content:center;align-items:flex-start;gap:6px}
+.venue-info .sunmark{margin:0 0 8px}
+.venue-label{font-size:11px;font-weight:700;letter-spacing:.3em;text-transform:uppercase;color:var(--coral-deep)}
+.venue-name{font-family:var(--f-display);font-size:clamp(23px,2.8vw,28px);color:var(--teal-ink);margin-top:4px}
+.venue-addr,.venue-city{color:var(--ink-soft);font-size:16.5px;font-weight:500}
+.venue-when{
+  display:inline-block;margin-top:14px;padding:8px 16px;border-radius:999px;
+  background:var(--seafoam);color:var(--teal);font-size:13px;font-weight:700;
+}
+.btn{
+  display:inline-flex;align-items:center;gap:10px;margin-top:22px;padding:13px 26px;
+  border-radius:999px;text-decoration:none;font-weight:700;font-size:13.5px;
+  letter-spacing:.14em;text-transform:uppercase;transition:.25s;
+}
+.btn-coral{color:var(--white);background:linear-gradient(160deg,var(--coral),var(--coral-deep))}
+.btn-coral:hover{transform:translateY(-2px);box-shadow:0 12px 28px rgba(217,95,66,.35)}
+.map-wrap{position:relative;min-height:340px;background:var(--seafoam)}
+.map-wrap iframe{position:absolute;inset:0;width:100%;height:100%;border:0}
+
+/* ============================================================
+   GALLERY — polaroid wall on deep water
+   ============================================================ */
+.pol-grid{
+  display:grid;grid-template-columns:repeat(3,1fr);gap:36px 28px;
+  max-width:960px;margin:54px auto 0;
+}
+.pol{
+  background:var(--white);border-radius:8px;padding:10px 10px 12px;
+  box-shadow:var(--shadow-deep);transform:rotate(var(--r,0deg));
+  transition:opacity .8s ease,transform .55s cubic-bezier(.22,.8,.36,1);
+  position:relative;
+}
+.pol.in-view:hover{transform:rotate(0deg) translateY(-6px) scale(1.03);z-index:5}
+.pol-hit{display:block;width:100%;background:none;border:0;padding:0;cursor:zoom-in}
+.pol-media{position:relative;display:block;overflow:hidden;border-radius:4px;aspect-ratio:1}
+.pol-media img{width:100%;height:100%;object-fit:cover;transition:transform .6s ease}
+.pol-hit:hover .pol-media img{transform:scale(1.06)}
+.pol .ph{
+  position:absolute;inset:0;display:grid;place-items:center;gap:2px;align-content:center;
+  background:linear-gradient(160deg,var(--seafoam),var(--sand));
+  color:var(--teal);font-family:var(--f-display);font-size:34px;
+}
+.pol .ph svg{width:34px;height:34px;color:var(--coral)}
+.pol .cap{font-size:20px;padding-top:8px}
+
+/* lightbox */
+.lightbox{
+  position:fixed;inset:0;z-index:90;background:rgba(9,45,48,.92);
+  display:grid;place-items:center;padding:5vh 5vw;
+  opacity:0;pointer-events:none;transition:opacity .3s;
+}
+.lightbox.open{opacity:1;pointer-events:auto}
+.lb-frame{background:var(--white);border-radius:10px;padding:14px 14px 18px;box-shadow:var(--shadow-deep);max-width:92vw}
+.lb-frame img{display:block;max-width:min(86vw,860px);max-height:70vh;object-fit:contain;border-radius:4px}
+.lb-cap{font-family:var(--f-script);font-size:24px;color:var(--teal-ink);text-align:center;padding-top:12px}
+.lb-btn{
+  position:absolute;top:50%;transform:translateY(-50%);width:48px;height:48px;border-radius:50%;
+  border:2px solid rgba(255,255,255,.55);background:rgba(255,255,255,.08);color:var(--white);
+  font-size:20px;cursor:pointer;display:grid;place-items:center;transition:.25s;
+}
+.lb-btn:hover{background:rgba(255,255,255,.2)}
+.lb-prev{left:16px}
+.lb-next{right:16px}
+.lb-close{
+  position:absolute;top:14px;right:16px;width:44px;height:44px;border-radius:50%;
+  border:2px solid rgba(255,255,255,.55);background:none;color:var(--white);
+  font-size:22px;cursor:pointer;display:grid;place-items:center;transition:.25s;
+}
+.lb-close:hover{background:rgba(255,255,255,.2)}
+
+/* ============================================================
+   RSVP
+   ============================================================ */
+.rsvp-card{
+  max-width:680px;margin:0 auto;text-align:center;
+  background:var(--white);border:1.5px dashed rgba(239,123,94,.5);border-radius:30px;
+  padding:52px 42px;box-shadow:var(--shadow-soft);
+}
+.rsvp-text{color:var(--ink-soft);font-size:17.5px;font-weight:500;max-width:48ch;margin:8px auto 26px}
+.wa-btn{
+  display:inline-flex;align-items:center;gap:12px;padding:15px 32px;border-radius:999px;
+  text-decoration:none;color:var(--white);font-weight:700;font-size:13.5px;
+  letter-spacing:.14em;text-transform:uppercase;
+  background:linear-gradient(160deg,var(--teal),#166e73);transition:.25s;
+}
+.wa-btn:hover{transform:translateY(-2px);box-shadow:0 12px 28px rgba(20,96,101,.35)}
+.rsvp-phone{margin-top:18px;color:var(--ink-soft);font-size:15px;font-weight:500}
+.rsvp-phone .tel{color:var(--coral-deep);font-weight:700;text-decoration:underline dotted}
+
+/* ============================================================
+   THINGS TO KNOW
+   ============================================================ */
+.ttk-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:18px;max-width:920px;margin:46px auto 0}
+.ttk-card{background:#f2f9f7;border-radius:20px;padding:30px 26px;text-align:center}
+.ttk-icon{width:46px;height:46px;margin:0 auto 14px;color:var(--teal)}
+.ttk-title{font-size:12.5px;font-weight:700;letter-spacing:.26em;text-transform:uppercase;color:var(--teal-ink)}
+.ttk-body{color:var(--ink-soft);font-size:15.5px;font-weight:500;margin-top:8px}
+
+/* ============================================================
+   FOOTER — footprints on the sand
+   ============================================================ */
+footer{position:relative;padding:64px 0 56px;text-align:center}
+.footprints{display:block;margin:0 auto 14px;width:min(320px,82%);height:auto;color:var(--teal-deep);opacity:.55}
+.monogram{position:relative;width:136px;height:136px;margin:0 auto 16px}
+.monogram svg{position:absolute;inset:0;width:100%;height:100%}
+.mono-ini{
+  position:absolute;inset:0;display:grid;place-items:center;
+  font-family:var(--f-script);font-size:44px;color:var(--teal-deep);
+}
+.foot-names{font-family:var(--f-script);font-size:clamp(30px,4vw,38px);color:var(--teal-deep)}
+.foot-names .amp{color:var(--coral);padding:0 8px}
+.footer-hash{font-family:var(--f-script);font-size:26px;color:var(--coral-deep);margin-top:8px}
+.foot-line{
+  margin-top:20px;font-size:12.5px;font-weight:600;letter-spacing:.1em;
+  text-transform:uppercase;color:rgba(44,68,70,.6);
+}
+
+/* ============================================================
+   RESPONSIVE
+   ============================================================ */
+@media(min-width:901px){
+  .pc:nth-child(odd){margin-top:28px}
+}
+@media(max-width:900px){
+  .couple-grid{grid-template-columns:1fr;gap:34px}
+  .amp-medal{margin:0 auto}
+  .story-grid{grid-template-columns:1fr;gap:40px}
+  .story-copy{max-width:56ch;margin:0 auto}
+  .polaroid{max-width:400px;margin:0 auto}
+  .postcards{grid-template-columns:1fr;gap:26px}
+  .pc-name{padding-right:96px}
+  .venue-card{grid-template-columns:1fr}
+  .map-wrap{min-height:300px}
+  .pol-grid{grid-template-columns:repeat(2,1fr);gap:24px 18px}
+  .ttk-grid{grid-template-columns:1fr;max-width:520px}
+}
+@media(max-width:640px){
+  body{font-size:16px}
+  .seam{height:52px}
+  .sec{padding:72px 0 84px}
+  .hero{padding:60px 14px 150px}
+  .palm-l{width:160px;left:-40px;opacity:.24}
+  .palm-r{width:140px;right:-44px;opacity:.24}
+  .ticket{grid-template-columns:1fr;max-width:420px}
+  .tk-a{border-right:0;border-bottom:1.5px dashed rgba(31,138,143,.4);align-items:center;text-align:center}
+  .tk-c{border-left:0;border-top:1.5px dashed rgba(31,138,143,.4);flex-direction:row;justify-content:space-between;padding:14px 24px}
+  .tk-c .barcode{order:2}
+  .tk-meta{order:3}
+  .cd-grid{gap:8px}
+  .cd-cell{padding:12px 4px 10px;border-radius:12px}
+  .invite{padding:44px 24px}
+  .venue-info{padding:34px 26px}
+  .pol-grid{gap:18px 12px}
+  .pol{padding:7px 7px 9px}
+  .pol .cap{font-size:17px}
+  .pc-name{padding-right:0}
+  .stamp{top:auto;bottom:14px;right:auto;left:16px;width:36px;height:44px;font-size:18px}
+  .postmark{display:none}
+  .rsvp-card{padding:42px 24px}
+}
+@media(max-width:400px){
+  .cd-num{font-size:26px}
+  .hero-names{gap:0 10px}
+  .ttk-card{padding:26px 18px}
+}
+
+/* ============================================================
+   REDUCED MOTION
+   ============================================================ */
+@media(prefers-reduced-motion:reduce){
+  html{scroll-behavior:auto}
+  *,*::before,*::after{animation:none!important;transition:none!important}
+  .reveal,.pc.reveal,.pol.reveal{opacity:1;transform:none}
+  .pc{transform:none}
+  .pol{transform:none}
+}
+</style>
+</head>
+<body>
+
+<!-- shared SVG shapes (waves, sun mark, shells, starfish, cloud, palm) -->
+<svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false">
+  <defs>
+    <path id="waveShape" d="M-720,45 C-600,12 -480,12 -360,45 C-240,78 -120,78 0,45 C120,12 240,12 360,45 C480,78 600,78 720,45 C840,12 960,12 1080,45 C1200,78 1320,78 1440,45 C1560,12 1680,12 1800,45 C1920,78 2040,78 2160,45 L2160,90 L-720,90 Z"/>
+    <path id="squiggle" d="M0,7 Q10,1 20,7 T40,7 T60,7 T80,7 T100,7 T120,7" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"/>
+    <g id="sunMark" stroke="currentColor" fill="none" stroke-linecap="round">
+      <circle cx="36" cy="16" r="7" fill="currentColor" stroke="none"/>
+      <g stroke-width="1.8">
+        <line x1="36" y1="5" x2="36" y2="1"/>
+        <line x1="44" y1="8" x2="47" y2="5.6"/>
+        <line x1="49" y1="16" x2="53" y2="16"/>
+        <line x1="28" y1="8" x2="25" y2="5.6"/>
+        <line x1="23" y1="16" x2="19" y2="16"/>
+      </g>
+      <path d="M10,32 q4,-5 8,0 t8,0 t8,0 t8,0 t8,0 t8,0 t8,0 t8,0" stroke-width="2"/>
+      <path d="M18,39 q4,-5 8,0 t8,0 t8,0 t8,0 t8,0 t8,0" stroke-width="2" opacity=".55"/>
+    </g>
+    <g id="scallop" stroke-linecap="round">
+      <path fill="currentColor" d="M32,58 C16,50 7,34 11,14 C19,24 26,23 32,8 C38,23 45,24 53,14 C57,34 48,50 32,58 Z"/>
+      <path fill="none" stroke="currentColor" stroke-width="1.6" opacity=".45" d="M32,56 L15,17 M32,56 L32,10 M32,56 L49,17"/>
+    </g>
+    <path id="starfish" fill="currentColor" stroke="currentColor" stroke-width="5" stroke-linejoin="round" d="M32,6 L40,24 L59,26 L45,39 L50,58 L32,47 L14,58 L19,39 L5,26 L24,24 Z"/>
+    <g id="cloud">
+      <ellipse cx="46" cy="34" rx="34" ry="12"/>
+      <circle cx="30" cy="26" r="12"/>
+      <circle cx="56" cy="19" r="15"/>
+      <circle cx="76" cy="29" r="10"/>
+    </g>
+    <g id="palm">
+      <path fill="currentColor" d="M46,42 C44,24 48,12 58,4 C56,18 54,30 50,44 Z"/>
+      <path fill="currentColor" d="M46,42 C58,28 72,20 90,20 C74,30 62,38 50,46 Z"/>
+      <path fill="currentColor" d="M46,42 C62,42 78,48 92,60 C74,58 58,54 46,52 Z"/>
+      <path fill="currentColor" d="M46,42 C34,26 22,18 4,18 C20,28 32,36 44,46 Z"/>
+      <path fill="currentColor" d="M46,42 C30,44 14,52 2,64 C20,60 36,54 48,50 Z"/>
+      <path fill="none" stroke="currentColor" stroke-width="6" stroke-linecap="round" d="M46,46 C50,72 54,104 58,160"/>
+    </g>
+  </defs>
+</svg>
+
+<!-- ==================== HERO ==================== -->
+<header class="hero" id="top">
+  <img class="hero-photo" src="{{HERO_IMG}}" alt="" data-hero-photo>
+  <div class="hero-tint" aria-hidden="true"></div>
+
+  <!-- fallback sun (shown only when no hero photo loads) -->
+  <svg class="sun-disc" viewBox="0 0 220 220" aria-hidden="true">
+    <g class="core">
+      <circle cx="110" cy="110" r="72" fill="rgba(242,183,92,.25)"/>
+      <circle cx="110" cy="110" r="52" fill="#f2b75c"/>
+      <circle cx="110" cy="110" r="44" fill="#f7d998"/>
+      <g stroke="#f2b75c" stroke-width="5" stroke-linecap="round">
+        <line x1="110" y1="42" x2="110" y2="16"/>
+        <line x1="110" y1="42" x2="110" y2="16" transform="rotate(30 110 110)"/>
+        <line x1="110" y1="42" x2="110" y2="16" transform="rotate(60 110 110)"/>
+        <line x1="110" y1="42" x2="110" y2="16" transform="rotate(90 110 110)"/>
+        <line x1="110" y1="42" x2="110" y2="16" transform="rotate(120 110 110)"/>
+        <line x1="110" y1="42" x2="110" y2="16" transform="rotate(150 110 110)"/>
+        <line x1="110" y1="42" x2="110" y2="16" transform="rotate(180 110 110)"/>
+        <line x1="110" y1="42" x2="110" y2="16" transform="rotate(210 110 110)"/>
+        <line x1="110" y1="42" x2="110" y2="16" transform="rotate(240 110 110)"/>
+        <line x1="110" y1="42" x2="110" y2="16" transform="rotate(270 110 110)"/>
+        <line x1="110" y1="42" x2="110" y2="16" transform="rotate(300 110 110)"/>
+        <line x1="110" y1="42" x2="110" y2="16" transform="rotate(330 110 110)"/>
+      </g>
+    </g>
+  </svg>
+
+  <!-- drifting clouds -->
+  <div class="cloud" style="top:11%;animation-duration:95s;animation-delay:-32s" aria-hidden="true">
+    <svg width="130" height="68" viewBox="0 0 92 48"><use href="#cloud"/></svg>
+  </div>
+  <div class="cloud" style="top:24%;animation-duration:70s;animation-delay:-55s;opacity:.7" aria-hidden="true">
+    <svg width="92" height="48" viewBox="0 0 92 48"><use href="#cloud"/></svg>
+  </div>
+  <div class="cloud" style="top:6%;animation-duration:120s;animation-delay:-88s;opacity:.5" aria-hidden="true">
+    <svg width="66" height="34" viewBox="0 0 92 48"><use href="#cloud"/></svg>
+  </div>
+
+  <!-- palm silhouettes -->
+  <svg class="palm palm-l" viewBox="0 0 96 168" aria-hidden="true"><use href="#palm"/></svg>
+  <svg class="palm palm-r" viewBox="0 0 96 168" aria-hidden="true"><use href="#palm"/></svg>
+
+  <div class="hero-content">
+    <p class="hero-kicker">A destination celebration</p>
+    <div class="hero-names" role="heading" aria-level="1">
+      <p class="name">{{BRIDE_FIRST}}</p>
+      <span class="amp" aria-hidden="true">&amp;</span>
+      <p class="name">{{GROOM_FIRST}}</p>
+    </div>
+    <p class="hero-headline">{{HEADLINE}}</p>
+
+    <div class="ticket" role="group" aria-label="Wedding date boarding pass">
+      <div class="tk-a">
+        <p class="tk-label">Boarding pass</p>
+        <p class="tk-air">love airlines &middot; one way to forever</p>
+        <svg class="squig" width="120" height="10" viewBox="0 0 120 10" aria-hidden="true"><use href="#squiggle"/></svg>
+      </div>
+      <div class="tk-b">
+        <p class="tk-event">{{MAIN_EVENT_NAME}}</p>
+        <p class="tk-when">{{MAIN_EVENT_DAY}} &middot; {{MAIN_EVENT_DATE}}</p>
+        <p class="tk-time">
+          <svg class="ic" viewBox="0 0 16 16" aria-hidden="true"><circle cx="8" cy="8" r="6.2" fill="none" stroke="currentColor" stroke-width="1.4"/><path d="M8 4.6V8l2.4 1.6" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"/></svg>
+          {{MAIN_EVENT_TIME}}
+        </p>
+        <p class="tk-city">
+          <svg class="ic" viewBox="0 0 16 16" aria-hidden="true"><path d="M8 1.8C5.4 1.8 3.4 3.8 3.4 6.3c0 3.5 4.6 8.1 4.6 8.1s4.6-4.6 4.6-8.1C12.6 3.8 10.6 1.8 8 1.8z" fill="none" stroke="currentColor" stroke-width="1.4"/><circle cx="8" cy="6.2" r="1.8" fill="none" stroke="currentColor" stroke-width="1.3"/></svg>
+          {{MAIN_CITY}}
+        </p>
+      </div>
+      <div class="tk-c">
+        <p class="tk-code" id="tkCode">SEA</p>
+        <svg class="barcode" width="104" height="30" viewBox="0 0 120 36" aria-hidden="true">
+          <g fill="currentColor">
+            <rect x="0" width="4" height="36"/><rect x="7" width="2" height="36"/><rect x="12" width="5" height="36"/>
+            <rect x="20" width="2" height="36"/><rect x="25" width="3" height="36"/><rect x="31" width="6" height="36"/>
+            <rect x="40" width="2" height="36"/><rect x="45" width="4" height="36"/><rect x="52" width="2" height="36"/>
+            <rect x="57" width="5" height="36"/><rect x="65" width="3" height="36"/><rect x="71" width="2" height="36"/>
+            <rect x="76" width="6" height="36"/><rect x="85" width="2" height="36"/><rect x="90" width="4" height="36"/>
+            <rect x="97" width="2" height="36"/><rect x="102" width="5" height="36"/><rect x="110" width="3" height="36"/>
+            <rect x="116" width="2" height="36"/>
+          </g>
+        </svg>
+        <p class="tk-meta">gate &infin; &middot; seat 1A</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="scroll-cue" aria-hidden="true">
+    <span>scroll for the good part</span>
+    <svg width="26" height="18" viewBox="0 0 26 18" fill="none"><path d="M2,3 C6,8 10,1 13,6 C16,11 20,4 24,9" stroke="currentColor" stroke-width="2" stroke-linecap="round"/><path d="M19,6 L24,9 L21,14" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" fill="none"/></svg>
+  </div>
+</header>
+
+<!-- ==================== COUNTDOWN ==================== -->
+<section class="sec sec--sand" id="countdown" data-target="{{COUNTDOWN_ISO}}" aria-label="Countdown to the wedding">
+  <div class="seam" aria-hidden="true">
+    <svg viewBox="0 0 1440 90" preserveAspectRatio="none">
+      <g class="w2"><use href="#waveShape"/></g>
+      <g class="w1"><use href="#waveShape"/></g>
+    </svg>
+  </div>
+  <div class="wrap">
+    <div class="sign reveal">
+      <svg class="rope" viewBox="0 0 240 64" aria-hidden="true">
+        <circle cx="120" cy="8" r="5" fill="currentColor"/>
+        <path d="M120,10 C84,16 40,30 18,62 M120,10 C156,16 200,30 222,62" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"/>
+      </svg>
+      <div class="sign-card">
+        <p class="sign-title">Counting sunsets until &ldquo;I do&rdquo;</p>
+        <div class="cd-grid">
+          <div class="cd-cell"><div class="cd-num" id="cd-days">&mdash;</div><div class="cd-lab">Days</div></div>
+          <div class="cd-cell"><div class="cd-num" id="cd-hours">&mdash;</div><div class="cd-lab">Hours</div></div>
+          <div class="cd-cell"><div class="cd-num" id="cd-mins">&mdash;</div><div class="cd-lab">Minutes</div></div>
+          <div class="cd-cell"><div class="cd-num" id="cd-secs">&mdash;</div><div class="cd-lab">Seconds</div></div>
+        </div>
+        <svg class="squig" width="120" height="10" viewBox="0 0 120 10" style="color:var(--teal)" aria-hidden="true"><use href="#squiggle"/></svg>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ==================== INVITATION ==================== -->
+<section class="sec sec--white">
+  <div class="seam" aria-hidden="true">
+    <svg viewBox="0 0 1440 90" preserveAspectRatio="none">
+      <g class="w2"><use href="#waveShape"/></g>
+      <g class="w1"><use href="#waveShape"/></g>
+    </svg>
+  </div>
+  <div class="wrap">
+    <div class="invite reveal">
+      <svg class="sunmark" width="84" height="44" viewBox="0 0 84 44" aria-hidden="true"><use href="#sunMark"/></svg>
+      <p class="invite-intro">{{INTRO}}</p>
+      <p class="invite-names"><span class="in-bride">{{BRIDE_FIRST}}</span><span class="amp2" aria-hidden="true">&amp;</span><span class="in-groom">{{GROOM_FIRST}}</span></p>
+      <svg class="squig" width="120" height="10" viewBox="0 0 120 10" style="color:var(--teal)" aria-hidden="true"><use href="#squiggle"/></svg>
+      <p class="invite-closing" style="margin-top:18px">{{CLOSING}}</p>
+    </div>
+  </div>
+</section>
+
+<!-- ==================== COUPLE ==================== -->
+<section class="sec sec--seafoam" id="couple">
+  <div class="seam" aria-hidden="true">
+    <svg viewBox="0 0 1440 90" preserveAspectRatio="none">
+      <g class="w2"><use href="#waveShape"/></g>
+      <g class="w1"><use href="#waveShape"/></g>
+    </svg>
+  </div>
+  <div class="wrap">
+    <p class="eyebrow reveal">Two hearts, one horizon</p>
+    <h2 class="sec-title reveal" style="--d:.08s">Meet the couple</h2>
+    <div class="couple-grid">
+      <article class="person person--bride reveal">
+        <div class="shell-frame photo-wrap" data-initials-from="#cgBrideName">
+          <img src="{{BRIDE_IMG}}" alt="{{BRIDE_FULL}}" loading="lazy">
+          <div class="ph hidden" data-ph></div>
+          <svg class="orb orb--shell" viewBox="0 0 64 64" aria-hidden="true"><use href="#scallop"/></svg>
+          <svg class="orb orb--star" viewBox="0 0 64 64" aria-hidden="true"><use href="#starfish"/></svg>
+        </div>
+        <p class="cg-role">The Bride</p>
+        <p class="cg-name" id="cgBrideName">{{BRIDE_FIRST}}</p>
+        <p class="cg-full">{{BRIDE_FULL}}</p>
+        <p class="cg-parents">Daughter of {{BRIDE_PARENTS}}</p>
+      </article>
+      <div class="amp-medal reveal" style="--d:.16s" aria-hidden="true">&amp;</div>
+      <article class="person person--groom reveal" style="--d:.1s">
+        <div class="shell-frame photo-wrap" data-initials-from="#cgGroomName">
+          <img src="{{GROOM_IMG}}" alt="{{GROOM_FULL}}" loading="lazy">
+          <div class="ph hidden" data-ph></div>
+          <svg class="orb orb--shell" viewBox="0 0 64 64" aria-hidden="true"><use href="#scallop"/></svg>
+          <svg class="orb orb--star" viewBox="0 0 64 64" aria-hidden="true"><use href="#starfish"/></svg>
+        </div>
+        <p class="cg-role">The Groom</p>
+        <p class="cg-name" id="cgGroomName">{{GROOM_FIRST}}</p>
+        <p class="cg-full">{{GROOM_FULL}}</p>
+        <p class="cg-parents">Son of {{GROOM_PARENTS}}</p>
+      </article>
+    </div>
+  </div>
+</section>
+
+<!-- ==================== STORY ==================== -->
+<section class="sec sec--sand" id="story">
+  <div class="seam" aria-hidden="true">
+    <svg viewBox="0 0 1440 90" preserveAspectRatio="none">
+      <g class="w2"><use href="#waveShape"/></g>
+      <g class="w1"><use href="#waveShape"/></g>
+    </svg>
+  </div>
+  <div class="wrap">
+    <p class="eyebrow reveal">How it happened</p>
+    <h2 class="sec-title reveal" style="--d:.08s">Our story so far</h2>
+    <div class="story-grid">
+      <div class="story-copy reveal">
+        <p class="story-text">{{STORY}}</p>
+        <svg class="squig" width="120" height="10" viewBox="0 0 120 10" aria-hidden="true"><use href="#squiggle"/></svg>
+      </div>
+      <figure class="polaroid reveal" style="--r:2deg;--d:.12s">
+        <span class="tape t1" aria-hidden="true"></span>
+        <span class="tape t2" aria-hidden="true"></span>
+        <div class="pol-frame photo-wrap" data-initials-from=".hero-names .name" data-initials-join>
+          <img src="{{PORTRAIT_IMG}}" alt="{{BRIDE_FIRST}} &amp; {{GROOM_FIRST}}" loading="lazy">
+          <div class="ph hidden" data-ph></div>
+        </div>
+        <figcaption class="cap">just the two of us</figcaption>
+      </figure>
+    </div>
+  </div>
+</section>
+
+<!-- ==================== EVENTS ==================== -->
+<section class="sec sec--white" id="events">
+  <div class="seam" aria-hidden="true">
+    <svg viewBox="0 0 1440 90" preserveAspectRatio="none">
+      <g class="w2"><use href="#waveShape"/></g>
+      <g class="w1"><use href="#waveShape"/></g>
+    </svg>
+  </div>
+  <div class="wrap">
+    <p class="eyebrow reveal">Postcards from the week</p>
+    <h2 class="sec-title reveal" style="--d:.08s">The celebration calendar</h2>
+    <p class="sec-sub reveal" style="--d:.14s">Sun, salt &amp; celebrations &mdash; pick your days, or stay for all of them.</p>
+    <div class="postcards" id="postcards"></div>
+  </div>
+</section>
+
+<!-- ==================== VENUE ==================== -->
+<section class="sec sec--sand" id="venue">
+  <div class="seam" aria-hidden="true">
+    <svg viewBox="0 0 1440 90" preserveAspectRatio="none">
+      <g class="w2"><use href="#waveShape"/></g>
+      <g class="w1"><use href="#waveShape"/></g>
+    </svg>
+  </div>
+  <div class="wrap">
+    <p class="eyebrow reveal">Getting there</p>
+    <h2 class="sec-title reveal" style="--d:.08s">Where we say &ldquo;I do&rdquo;</h2>
+    <div class="venue-card reveal" style="--d:.12s">
+      <div class="venue-info">
+        <svg class="sunmark" width="84" height="44" viewBox="0 0 84 44" aria-hidden="true" style="color:var(--gold)"><use href="#sunMark"/></svg>
+        <p class="venue-label">The main event</p>
+        <p class="venue-name">{{MAIN_VENUE}}</p>
+        <p class="venue-addr">{{MAIN_ADDRESS}}</p>
+        <p class="venue-city">{{MAIN_CITY}}</p>
+        <p class="venue-when">{{MAIN_EVENT_DAY}} &middot; {{MAIN_EVENT_DATE}} &middot; {{MAIN_EVENT_TIME}}</p>
+        <a class="btn btn-coral" id="mapsBtn" href="{{MAPS_LINK}}" target="_blank" rel="noopener">
+          Get directions
+          <svg width="15" height="15" viewBox="0 0 16 16" aria-hidden="true"><path d="M8 1.8C5.4 1.8 3.4 3.8 3.4 6.3c0 3.5 4.6 8.1 4.6 8.1s4.6-4.6 4.6-8.1C12.6 3.8 10.6 1.8 8 1.8z" fill="none" stroke="currentColor" stroke-width="1.4"/><circle cx="8" cy="6.2" r="1.8" fill="none" stroke="currentColor" stroke-width="1.3"/></svg>
+        </a>
+      </div>
+      <div class="map-wrap" id="mapWrap">
+        <iframe id="mapFrame" title="Venue map" loading="lazy" data-src="{{MAPS_EMBED}}" referrerpolicy="no-referrer-when-downgrade"></iframe>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ==================== GALLERY ==================== -->
+<section class="sec sec--teal" id="gallery">
+  <div class="seam" aria-hidden="true">
+    <svg viewBox="0 0 1440 90" preserveAspectRatio="none">
+      <g class="w2"><use href="#waveShape"/></g>
+      <g class="w1"><use href="#waveShape"/></g>
+    </svg>
+  </div>
+  <div class="wrap">
+    <p class="eyebrow eyebrow-light reveal">Snapshots</p>
+    <h2 class="sec-title title-light reveal" style="--d:.08s">Polaroids &amp; salty air</h2>
+    <p class="sec-sub sub-light reveal" style="--d:.14s">Shake it, hang it, pin it to the fridge.</p>
+    <div class="pol-grid" id="polGrid"></div>
+  </div>
+</section>
+
+<!-- ==================== RSVP ==================== -->
+<section class="sec sec--sand" id="rsvp">
+  <div class="seam" aria-hidden="true">
+    <svg viewBox="0 0 1440 90" preserveAspectRatio="none">
+      <g class="w2"><use href="#waveShape"/></g>
+      <g class="w1"><use href="#waveShape"/></g>
+    </svg>
+  </div>
+  <div class="wrap">
+    <div class="rsvp-card reveal">
+      <svg class="sunmark" width="84" height="44" viewBox="0 0 84 44" aria-hidden="true" style="color:var(--gold)"><use href="#sunMark"/></svg>
+      <p class="eyebrow">R&eacute;pondez s&rsquo;il vous pla&icirc;t</p>
+      <h2 class="sec-title" style="font-size:clamp(28px,3.6vw,38px)">Will you join us by the sea?</h2>
+      <p class="rsvp-text">Waves at golden hour, barefoot dances, your favourite people &mdash; all that&rsquo;s missing is you. Send us a quick hello.</p>
+      <a class="wa-btn" id="waBtn" href="{{WHATSAPP_LINK}}" target="_blank" rel="noopener">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 2a10 10 0 0 0-8.6 15.1L2 22l5.1-1.3A10 10 0 1 0 12 2zm0 2a8 8 0 1 1-4.1 14.9l-.3-.2-2.9.8.8-2.8-.2-.3A8 8 0 0 1 12 4zm-3.1 4.2c-.2 0-.5.1-.7.3-.7.7-1 1.7-.6 2.9.5 1.6 1.9 3.4 3.7 4.6 1.5 1 3 1.4 3.9 1 .5-.2.9-.7 1.1-1.2.1-.4.1-.7 0-.8l-1.5-.8c-.2-.1-.4-.1-.6.1l-.6.8c-.1.1-.3.2-.5.1-.6-.3-1.4-.8-2-1.5-.5-.6-.9-1.3-1-1.6-.1-.2 0-.3.1-.4l.5-.6c.2-.2.2-.4.1-.6l-.7-1.6c-.1-.3-.3-.4-.6-.4h-.6z"/></svg>
+        RSVP on WhatsApp
+      </a>
+      <p class="rsvp-phone">Prefer a call? <a class="tel" href="tel:{{WA_INTL}}">{{WA_DISPLAY}}</a></p>
+    </div>
+  </div>
+</section>
+
+<!-- ==================== THINGS TO KNOW ==================== -->
+<section class="sec sec--white" id="ttk">
+  <div class="seam" aria-hidden="true">
+    <svg viewBox="0 0 1440 90" preserveAspectRatio="none">
+      <g class="w2"><use href="#waveShape"/></g>
+      <g class="w1"><use href="#waveShape"/></g>
+    </svg>
+  </div>
+  <div class="wrap">
+    <p class="eyebrow reveal">Before you pack</p>
+    <h2 class="sec-title reveal" style="--d:.08s">Good things to know</h2>
+    <div class="ttk-grid">
+      <div class="ttk-card reveal" id="ttk-weather">
+        <svg class="ttk-icon" viewBox="0 0 48 48" fill="none" aria-hidden="true">
+          <circle cx="24" cy="20" r="8" stroke="currentColor" stroke-width="2"/>
+          <g stroke="currentColor" stroke-width="2" stroke-linecap="round">
+            <line x1="24" y1="6" x2="24" y2="10"/>
+            <line x1="24" y1="6" x2="24" y2="10" transform="rotate(45 24 20)"/>
+            <line x1="24" y1="6" x2="24" y2="10" transform="rotate(90 24 20)"/>
+            <line x1="24" y1="6" x2="24" y2="10" transform="rotate(135 24 20)"/>
+            <line x1="24" y1="6" x2="24" y2="10" transform="rotate(180 24 20)"/>
+            <line x1="24" y1="6" x2="24" y2="10" transform="rotate(225 24 20)"/>
+            <line x1="24" y1="6" x2="24" y2="10" transform="rotate(270 24 20)"/>
+            <line x1="24" y1="6" x2="24" y2="10" transform="rotate(315 24 20)"/>
+          </g>
+          <path d="M8,40 q4,-4 8,0 t8,0 t8,0 t8,0" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+        </svg>
+        <p class="ttk-title">Weather</p>
+        <p class="ttk-body">{{TTK_WEATHER}}</p>
+      </div>
+      <div class="ttk-card reveal" id="ttk-staff" style="--d:.1s">
+        <svg class="ttk-icon" viewBox="0 0 48 48" fill="none" aria-hidden="true">
+          <path d="M27,14 C20,7 11,6 4,10 C12,14 20,17 27,19 Z" fill="currentColor"/>
+          <path d="M27,14 C34,7 42,6 44,10 C38,14 32,17 27,19 Z" fill="currentColor"/>
+          <path d="M27,14 C24,6 18,2 12,2 C18,7 23,11 27,17 Z" fill="currentColor"/>
+          <path d="M27,14 C30,6 36,2 42,2 C36,7 31,11 27,17 Z" fill="currentColor"/>
+          <path d="M27,14 C26,24 25,32 24,40" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"/>
+          <path d="M14,42 h20 M18,40 q6,-4 12,0" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+        </svg>
+        <p class="ttk-title">Stay</p>
+        <p class="ttk-body">{{TTK_STAFF}}</p>
+      </div>
+      <div class="ttk-card reveal" id="ttk-parking" style="--d:.2s">
+        <svg class="ttk-icon" viewBox="0 0 48 48" fill="none" aria-hidden="true">
+          <rect x="6" y="24" width="36" height="10" rx="3.5" stroke="currentColor" stroke-width="2"/>
+          <path d="M12,24 L16,15 C16.7,13.8 17.9,13 19.3,13 h9.4 C30.1,13 31.3,13.8 32,15 l4,9" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+          <circle cx="14" cy="37" r="3.6" stroke="currentColor" stroke-width="2"/>
+          <circle cx="32" cy="37" r="3.6" stroke="currentColor" stroke-width="2"/>
+        </svg>
+        <p class="ttk-title">Parking</p>
+        <p class="ttk-body">{{TTK_PARKING}}</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ==================== FOOTER ==================== -->
+<footer class="sec--deepsand">
+  <div class="seam" aria-hidden="true">
+    <svg viewBox="0 0 1440 90" preserveAspectRatio="none">
+      <g class="w2"><use href="#waveShape"/></g>
+      <g class="w1"><use href="#waveShape"/></g>
+    </svg>
+  </div>
+  <div class="wrap">
+    <svg class="footprints" viewBox="0 0 340 44" aria-hidden="true">
+      <g fill="currentColor">
+        <ellipse cx="18" cy="28" rx="4.4" ry="7.6" transform="rotate(-18 18 28)" opacity=".3"/><circle cx="19" cy="38" r="1.4" opacity=".3"/>
+        <ellipse cx="46" cy="18" rx="4.4" ry="7.6" transform="rotate(10 46 18)" opacity=".35"/><circle cx="45" cy="9" r="1.4" opacity=".35"/>
+        <ellipse cx="76" cy="28" rx="4.4" ry="7.6" transform="rotate(-14 76 28)" opacity=".4"/><circle cx="77" cy="38" r="1.4" opacity=".4"/>
+        <ellipse cx="104" cy="18" rx="4.4" ry="7.6" transform="rotate(8 104 18)" opacity=".44"/><circle cx="103" cy="9" r="1.4" opacity=".44"/>
+        <ellipse cx="134" cy="28" rx="4.4" ry="7.6" transform="rotate(-10 134 28)" opacity=".48"/><circle cx="135" cy="38" r="1.4" opacity=".48"/>
+        <ellipse cx="162" cy="18" rx="4.4" ry="7.6" transform="rotate(6 162 18)" opacity=".52"/><circle cx="161" cy="9" r="1.4" opacity=".52"/>
+        <ellipse cx="192" cy="28" rx="4.4" ry="7.6" transform="rotate(-8 192 28)" opacity=".56"/><circle cx="193" cy="38" r="1.4" opacity=".56"/>
+        <ellipse cx="220" cy="18" rx="4.4" ry="7.6" transform="rotate(6 220 18)" opacity=".6"/><circle cx="219" cy="9" r="1.4" opacity=".6"/>
+        <ellipse cx="250" cy="28" rx="4.4" ry="7.6" transform="rotate(-6 250 28)" opacity=".64"/><circle cx="251" cy="38" r="1.4" opacity=".64"/>
+        <ellipse cx="278" cy="18" rx="4.4" ry="7.6" transform="rotate(4 278 18)" opacity=".68"/><circle cx="277" cy="9" r="1.4" opacity=".68"/>
+        <ellipse cx="306" cy="26" rx="4.4" ry="7.6" transform="rotate(-4 306 26)" opacity=".72"/><circle cx="307" cy="36" r="1.4" opacity=".72"/>
+      </g>
+    </svg>
+    <div class="monogram reveal">
+      <svg viewBox="0 0 140 140" fill="none" aria-hidden="true">
+        <circle cx="70" cy="70" r="66" stroke="var(--teal)" stroke-width="2"/>
+        <circle cx="70" cy="70" r="55" stroke="var(--coral)" stroke-width="1.5" stroke-dasharray="2 7" stroke-linecap="round"/>
+        <circle cx="70" cy="34" r="9" fill="var(--gold)"/>
+        <g stroke="var(--gold)" stroke-width="2" stroke-linecap="round">
+          <line x1="70" y1="20" x2="70" y2="15"/>
+          <line x1="57" y1="25" x2="53" y2="21"/>
+          <line x1="83" y1="25" x2="87" y2="21"/>
+        </g>
+        <path d="M28,102 q6,-7 12,0 t12,0 t12,0 t12,0 t12,0 t12,0 t12,0" stroke="var(--teal)" stroke-width="2" stroke-linecap="round"/>
+        <path d="M38,112 q6,-7 12,0 t12,0 t12,0 t12,0 t12,0 t12,0" stroke="var(--teal)" stroke-width="2" stroke-linecap="round" opacity=".55"/>
+      </svg>
+      <span class="mono-ini" id="monoText">{{BRIDE_FIRST}}{{GROOM_FIRST}}</span>
+    </div>
+    <p class="foot-names reveal" style="--d:.08s">{{BRIDE_FIRST}} <span class="amp" aria-hidden="true">&amp;</span> {{GROOM_FIRST}}</p>
+    <p class="footer-hash reveal" style="--d:.14s">#{{HASHTAG}}</p>
+    <p class="foot-line reveal" style="--d:.2s">See you at the shore &middot; made with salt air &amp; love &middot; <span id="year"></span></p>
+  </div>
+</footer>
+
+<!-- ==================== LIGHTBOX ==================== -->
+<div class="lightbox" id="lightbox" role="dialog" aria-modal="true" aria-label="Photo viewer">
+  <button class="lb-close" id="lbClose" type="button" aria-label="Close photo viewer">&times;</button>
+  <button class="lb-btn lb-prev" id="lbPrev" type="button" aria-label="Previous photo">&#10094;</button>
+  <div class="lb-frame">
+    <img id="lbImg" alt="Enlarged gallery photo">
+    <p class="lb-cap" id="lbCap"></p>
+  </div>
+  <button class="lb-btn lb-next" id="lbNext" type="button" aria-label="Next photo">&#10095;</button>
+</div>
+
+<script>
+(function () {
+  "use strict";
+
+  /* ---------- data (generator injects valid JSON) ---------- */
+  let EVENTS = {{EVENTS_JSON}};
+  const GALLERY = {{GALLERY_JSON}};
+
+  const esc = (s) => String(s == null ? "" : s)
+    .replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;");
+
+  /* ---------- title pin (dashboard live preview) ---------- */
+  window.__WD_PIN_TITLE__ = function (t) {
+    if (!t) return;
+    document.title = String(t);
+  };
+
+  /* ---------- scroll reveal ---------- */
+  const REDUCED = window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+  const io = ("IntersectionObserver" in window && !REDUCED)
+    ? new IntersectionObserver((entries) => {
+        for (const e of entries) {
+          if (e.isIntersecting) { e.target.classList.add("in-view"); io.unobserve(e.target); }
+        }
+      }, { threshold: 0.15, rootMargin: "0px 0px -40px 0px" })
+    : null;
+  function observeReveals(root) {
+    const scope = root || document;
+    scope.querySelectorAll(".reveal:not(.in-view)").forEach((el) => {
+      if (io) io.observe(el); else el.classList.add("in-view");
+    });
+  }
+  observeReveals();
+
+  /* ---------- countdown (target lives in data-target) ---------- */
+  const cdSec = document.getElementById("countdown");
+  const cdTarget = ((cdSec && cdSec.dataset.target) || "").trim();
+  const parsed = cdTarget ? new Date(cdTarget) : null;
+  const cdOK = parsed && !isNaN(parsed.getTime()) && parsed.getTime() > Date.now();
+  if (cdSec && !cdOK) {
+    cdSec.classList.add("hidden");
+  } else if (cdSec) {
+    const els = {
+      d: document.getElementById("cd-days"),
+      h: document.getElementById("cd-hours"),
+      m: document.getElementById("cd-mins"),
+      s: document.getElementById("cd-secs")
+    };
+    const pad = (n) => String(n).padStart(2, "0");
+    const tick = () => {
+      const diff = parsed.getTime() - Date.now();
+      if (diff <= 0) { cdSec.classList.add("hidden"); return; }
+      if (els.d) els.d.textContent = pad(Math.floor(diff / 864e5));
+      if (els.h) els.h.textContent = pad(Math.floor(diff % 864e5 / 36e5));
+      if (els.m) els.m.textContent = pad(Math.floor(diff % 36e5 / 6e4));
+      if (els.s) els.s.textContent = pad(Math.floor(diff % 6e4 / 1e3));
+    };
+    tick();
+    setInterval(tick, 1000);
+  }
+
+  /* ---------- hero photo fallback (pure gradient + sun) ---------- */
+  const hero = document.querySelector(".hero");
+  const heroImg = document.querySelector("[data-hero-photo]");
+  if (hero && heroImg) {
+    const fail = () => hero.classList.add("no-photo");
+    const src = (heroImg.getAttribute("src") || "").trim();
+    if (!src) fail(); else heroImg.addEventListener("error", fail);
+  }
+
+  /* ---------- initials, computed from DOM text ---------- */
+  const firstInitial = (txt) => {
+    const s = (txt || "").trim();
+    return s ? s.charAt(0).toUpperCase() : "";
+  };
+  const nameInitials = Array.from(document.querySelectorAll(".hero-names .name"))
+    .map((p) => firstInitial(p.textContent))
+    .filter(Boolean);
+  const coupleIni = nameInitials.join("") || "&";
+
+  document.querySelectorAll(".photo-wrap").forEach((wrap) => {
+    const img = wrap.querySelector("img");
+    const ph = wrap.querySelector("[data-ph]");
+    if (!img || !ph) return;
+    let ini = coupleIni;
+    if (wrap.dataset.initialsFrom) {
+      const sources = Array.from(document.querySelectorAll(wrap.dataset.initialsFrom));
+      ini = wrap.hasAttribute("data-initials-join")
+        ? sources.map((el) => firstInitial(el.textContent)).join("")
+        : (sources.length ? firstInitial(sources[0].textContent) : "") || coupleIni;
+    }
+    ph.textContent = ini || coupleIni;
+    const showPh = () => { img.classList.add("hidden"); ph.classList.remove("hidden"); };
+    const src = (img.getAttribute("src") || "").trim();
+    if (!src) showPh(); else img.addEventListener("error", showPh);
+  });
+
+  /* ---------- events timeline (airmail postcards) ---------- */
+  const eventsSec = document.getElementById("events");
+  const postWrap = document.getElementById("postcards");
+  const clockIc = '<svg class="ic" viewBox="0 0 16 16" aria-hidden="true"><circle cx="8" cy="8" r="6.2" fill="none" stroke="currentColor" stroke-width="1.4"/><path d="M8 4.6V8l2.4 1.6" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"/></svg>';
+  const pinIc = '<svg class="ic" viewBox="0 0 16 16" aria-hidden="true"><path d="M8 1.8C5.4 1.8 3.4 3.8 3.4 6.3c0 3.5 4.6 8.1 4.6 8.1s4.6-4.6 4.6-8.1C12.6 3.8 10.6 1.8 8 1.8z" fill="none" stroke="currentColor" stroke-width="1.4"/><circle cx="8" cy="6.2" r="1.8" fill="none" stroke="currentColor" stroke-width="1.3"/></svg>';
+  const waveIc = '<svg width="26" height="8" viewBox="0 0 26 8" fill="none" aria-hidden="true"><path d="M1,4 Q4,0 7,4 T13,4 T19,4 T25,4" stroke="currentColor" stroke-width="1.2" stroke-linecap="round"/></svg>';
+
+  function renderEvents() {
+    if (!postWrap) return;
+    const list = (EVENTS || []).slice(0, 6).filter((e) => e && e.name);
+    if (!list.length) {
+      if (eventsSec) eventsSec.classList.add("hidden");
+      postWrap.innerHTML = "";
+      return;
+    }
+    if (eventsSec) eventsSec.classList.remove("hidden");
+    postWrap.innerHTML = list.map((ev, i) => {
+      const stamp = esc((ev.name || "?").trim().charAt(0).toUpperCase() || "?");
+      const when = [ev.day, ev.dateLabel].filter(Boolean).join(" \u00b7 ");
+      return `
+      <article class="pc reveal" style="--tilt:${i % 2 ? "1deg" : "-1deg"};--d:${(i % 2) * 0.08}s">
+        <div class="pc-in">
+          <span class="postmark" aria-hidden="true"><i>Par avion</i>${waveIc}</span>
+          <span class="stamp" aria-hidden="true">${stamp}</span>
+          <p class="pc-name">${esc(ev.name)}</p>
+          ${when ? `<p class="pc-when">${esc(when)}</p>` : ""}
+          ${ev.time ? `<p class="pc-line">${clockIc}${esc(ev.time)}</p>` : ""}
+          ${ev.city ? `<p class="pc-line">${pinIc}${esc(ev.city)}</p>` : ""}
+          ${ev.note ? `<p class="pc-note">${esc(ev.note)}</p>` : ""}
+        </div>
+      </article>`;
+    }).join("");
+    observeReveals(postWrap);
+  }
+  renderEvents();
+  window.__WD_APPLY__ = function (events) {
+    if (Array.isArray(events)) { EVENTS = events; renderEvents(); }
+    return (EVENTS || []).slice(0, 6).filter((e) => e && e.name).length;
+  };
+
+  /* ---------- venue map ---------- */
+  const mapFrame = document.getElementById("mapFrame");
+  const mapWrap = document.getElementById("mapWrap");
+  if (mapFrame && mapWrap) {
+    const src = (mapFrame.dataset.src || "").trim();
+    if (src) { mapFrame.src = src; } else { mapWrap.classList.add("hidden"); }
+  }
+  const mapsBtn = document.getElementById("mapsBtn");
+  if (mapsBtn && mapsBtn.getAttribute("href") === "#") mapsBtn.classList.add("hidden");
+
+  /* ---------- gallery (polaroids + lightbox) ---------- */
+  const CAPS = ["golden hour", "salty hair", "just the two of us", "sea breeze", "shore thing", "forever tide"];
+  const TILTS = [-2.4, 1.8, -1.2, 2.6, -1.8, 2.2];
+  const grid = document.getElementById("polGrid");
+  const gallerySec = document.getElementById("gallery");
+  const items = (GALLERY || []).filter((u) => typeof u === "string" && u.trim());
+
+  if (!items.length) {
+    if (gallerySec) gallerySec.classList.add("hidden");
+  } else if (grid) {
+    items.forEach((url, i) => {
+      const fig = document.createElement("figure");
+      fig.className = "pol reveal";
+      fig.style.setProperty("--r", TILTS[i % TILTS.length] + "deg");
+      fig.style.setProperty("--d", (i % 3) * 0.08 + "s");
+      fig.innerHTML = `
+        <button type="button" class="pol-hit" aria-label="Open photo ${i + 1} of ${items.length}">
+          <span class="pol-media">
+            <img src="${esc(url)}" alt="Gallery photo ${i + 1}" loading="lazy">
+            <span class="ph hidden" data-gph>
+              <svg viewBox="0 0 64 64" aria-hidden="true"><use href="#starfish"/></svg>
+              <b>${esc(coupleIni)}</b>
+            </span>
+          </span>
+        </button>
+        <figcaption class="cap">${esc(CAPS[i % CAPS.length])}</figcaption>`;
+      const img = fig.querySelector("img");
+      const ph = fig.querySelector("[data-gph]");
+      const showPh = () => { img.classList.add("hidden"); ph.classList.remove("hidden"); };
+      if (!(img.getAttribute("src") || "").trim()) showPh();
+      else img.addEventListener("error", showPh);
+      fig.querySelector(".pol-hit").addEventListener("click", () => openLb(i));
+      grid.appendChild(fig);
+    });
+    observeReveals(grid);
+  }
+
+  const lb = document.getElementById("lightbox");
+  const lbImg = document.getElementById("lbImg");
+  const lbCap = document.getElementById("lbCap");
+  let lbIdx = 0;
+  function paintLb() {
+    lbImg.src = items[lbIdx];
+    lbCap.textContent = CAPS[lbIdx % CAPS.length];
+  }
+  function openLb(i) { lbIdx = i; paintLb(); lb.classList.add("open"); }
+  function moveLb(step) { lbIdx = (lbIdx + step + items.length) % items.length; paintLb(); }
+  function closeLb() { lb.classList.remove("open"); }
+  if (lb && items.length) {
+    document.getElementById("lbPrev").addEventListener("click", () => moveLb(-1));
+    document.getElementById("lbNext").addEventListener("click", () => moveLb(1));
+    document.getElementById("lbClose").addEventListener("click", closeLb);
+    lb.addEventListener("click", (e) => { if (e.target === lb) closeLb(); });
+    document.addEventListener("keydown", (e) => {
+      if (!lb.classList.contains("open")) return;
+      if (e.key === "Escape") closeLb();
+      if (e.key === "ArrowLeft") moveLb(-1);
+      if (e.key === "ArrowRight") moveLb(1);
+    });
+  }
+
+  /* ---------- RSVP ---------- */
+  const waBtn = document.getElementById("waBtn");
+  if (waBtn && waBtn.getAttribute("href") === "#") waBtn.classList.add("hidden");
+
+  /* ---------- things to know ---------- */
+  ["weather", "staff", "parking"].forEach((key) => {
+    const card = document.getElementById("ttk-" + key);
+    if (!card) return;
+    const body = card.querySelector(".ttk-body");
+    const text = body ? body.textContent : "";
+    if (!text.trim()) card.classList.add("hidden");
+  });
+  const ttkSec = document.getElementById("ttk");
+  if (ttkSec && !ttkSec.querySelectorAll(".ttk-card:not(.hidden)").length) {
+    ttkSec.classList.add("hidden");
+  }
+
+  /* ---------- story hides when empty ---------- */
+  const storyText = document.querySelector(".story-text");
+  if (storyText && !storyText.textContent.trim()) {
+    const sec = storyText.closest("section");
+    if (sec) sec.classList.add("hidden");
+  }
+
+  /* ---------- footer + boarding-pass city code ---------- */
+  const yearEl = document.getElementById("year");
+  if (yearEl) yearEl.textContent = new Date().getFullYear();
+  const mono = document.getElementById("monoText");
+  if (mono && nameInitials.length >= 2) mono.textContent = nameInitials.slice(0, 2).join(" & ");
+  const cityEl = document.querySelector(".tk-city");
+  const codeEl = document.getElementById("tkCode");
+  if (cityEl && codeEl) {
+    const code = (cityEl.textContent || "").replace(/[^A-Za-z]/g, "").slice(0, 3).toUpperCase();
+    codeEl.textContent = code || "SEA";
+  }
+})();
+</script>
+</body>
+</html>

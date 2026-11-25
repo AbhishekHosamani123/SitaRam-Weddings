@@ -1,0 +1,15 @@
+{
+  "id": "ayodhya",
+  "name": "Ayodhya",
+  "category": "Hindu",
+  "tagline": "Majestic temple grandeur — saffron skies, mandala ornaments & diya glow",
+  "accent": "#e8862a",
+  "colors": [
+    "#4a1214",
+    "#e8862a",
+    "#d4af37"
+  ],
+  "engine": "placeholder",
+  "order": 2,
+  "disabled": true
+}

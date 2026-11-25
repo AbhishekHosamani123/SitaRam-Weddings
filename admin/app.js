@@ -4,7 +4,7 @@
 
   const SITE_URL = "https://sitaram-weddings.vercel.app";
   const $ = (id) => document.getElementById(id);
-  const state = { token: localStorage.getItem("wd_token") || "", couples: [], selected: null, readonly: false, previewOpen: false };
+  const state = { token: localStorage.getItem("wd_token") || "", couples: [], templates: [], selected: null, readonly: false, previewOpen: false };
 
   // ---------------------------------------------------------------- api
   async function api(path, opts = {}) {
@@ -59,12 +59,25 @@
   }
 
   // ---------------------------------------------------------------- startup
+  async function loadTemplates() {
+    try {
+      const data = await apiJson("/api/templates");
+      state.templates = data.templates || [];
+    } catch { state.templates = []; }
+    // the couples list and editor chip show template names — refresh them
+    renderList();
+    if (state.selected) {
+      const tpl = state.templates.find((t) => t.id === state.selected.template);
+      $("templateChip").textContent = tpl ? tpl.name : (state.selected.template || "Ram Mandir");
+    }
+  }
+
   async function init() {
     const session = await apiJson("/api/session").catch(() => null);
     if (session && session.ok) {
       $("loginView").classList.add("hidden");
       $("appView").classList.remove("hidden");
-      await loadCouples();
+      await Promise.all([loadCouples(), loadTemplates()]);
     } else {
       $("appView").classList.add("hidden");
       $("loginView").classList.remove("hidden");
@@ -84,7 +97,7 @@
       localStorage.setItem("wd_token", data.token);
       $("loginView").classList.add("hidden");
       $("appView").classList.remove("hidden");
-      await loadCouples();
+      await Promise.all([loadCouples(), loadTemplates()]);
     } catch (err) {
       $("loginError").textContent = err.message || "Sign-in failed";
     }
@@ -108,11 +121,40 @@
       const li = document.createElement("li");
       li.className = c.id === (state.selected && state.selected.id) ? "active" : "";
       li.dataset.id = c.id;
+      const tpl = state.templates.find((t) => t.id === (c.template || "ram-mandir"));
       li.innerHTML = `
         <div class="couple-name">${esc(c.bride.firstName || "?")} & ${esc(c.groom.firstName || "?")}</div>
-        <div class="couple-sub"><span class="dot ${c.active ? "live" : ""}"></span>${esc(c.slug || "no slug")}${c.demo ? " · demo" : ""}</div>`;
+        <div class="couple-sub"><span class="dot ${c.active ? "live" : ""}"></span>${esc(c.slug || "no slug")}${c.demo ? " · demo" : ""}${tpl ? " · " + esc(tpl.name) : ""}${c.source === "public" ? " · self-serve" : ""}</div>`;
       li.onclick = () => selectCouple(c.id);
       ul.appendChild(li);
+    }
+    renderCustomers();
+  }
+
+  // ---------------------------------------------------------------- customers
+  function renderCustomers() {
+    const tbody = document.querySelector("#custTable tbody");
+    if (!tbody) return;
+    const list = [...state.couples].sort((a, b) => (b.createdAt || 0) - (a.createdAt || 0));
+    $("customerCount").textContent = list.length + " total · " + list.filter((c) => c.source === "public").length + " self-serve";
+    tbody.innerHTML = "";
+    for (const c of list) {
+      const tpl = state.templates.find((t) => t.id === (c.template || "ram-mandir"));
+      const names = `${c.bride.firstName || "?"} & ${c.groom.firstName || "?"}`;
+      const contact = esc(c.contact || "—");
+      const created = c.createdAt ? new Date(c.createdAt).toLocaleDateString() : "—";
+      const status = c.demo ? "Demo" : c.paymentStatus === "paid" ? "Paid" : c.source === "public" ? "Unpaid · live" : "Draft";
+      const link = c.slug ? `<a href="/${esc(c.slug)}/" target="_blank" rel="noopener">/${esc(c.slug)}/</a>` : "—";
+      const tr = document.createElement("tr");
+      tr.innerHTML = `
+        <td><strong>${esc(names)}</strong></td>
+        <td>${contact}</td>
+        <td>${esc(tpl ? tpl.name : (c.template || "Ram Mandir"))}</td>
+        <td>${c.source === "public" ? "Self-serve" : "Admin"}</td>
+        <td>${status}</td>
+        <td>${created}</td>
+        <td>${link}</td>`;
+      tbody.appendChild(tr);
     }
   }
 
@@ -132,6 +174,7 @@
     photos: "Affects: hero banner · couple portraits · photo gallery",
     story: "Affects: story message · weather/staff/parking cards",
     seo: "Affects: browser tab title · share links · URL (slug)",
+    customers: "All registrations — contact numbers, templates, status, links",
   };
 
   function setVal(id, v) {
@@ -210,6 +253,8 @@
     $("editorTitle").textContent = `${c.bride.firstName || "?"} & ${c.groom.firstName || "?"}`;
     $("demoChip").classList.toggle("hidden", !c.demo);
     $("activeChip").classList.toggle("hidden", !c.active);
+    const tpl = state.templates.find((t) => t.id === (c.template || "ram-mandir"));
+    $("templateChip").textContent = tpl ? tpl.name : (c.template || "Ram Mandir");
     const live = $("liveLink");
     if (c.slug) {
       live.textContent = `/${c.slug}/`;
@@ -328,8 +373,8 @@
       });
       Object.assign(state.selected, saved);
       renderList();
-      if (!quiet) toast("Saved ✔");
-      if (state.previewOpen) await rebuildAndRefreshPreview(true);
+      if (!quiet) toast("Saved — website is live ✔");
+      if (state.previewOpen) await refreshPreview();
       return true;
     } catch (e) { toast("Save failed: " + e.message, true); return false; }
   }
@@ -368,28 +413,11 @@
     return c;
   }
 
-  async function runBuild() {
-    const btn = $("buildBtn"); const old = btn.textContent;
-    btn.disabled = true; btn.textContent = "Building…";
-    $("buildLog").textContent = "Building…";
-    try {
-      const r = await apiJson("/api/build", { method: "POST" });
-      $("buildLog").textContent = (r.output || "").slice(-1200);
-      if (!r.ok) { toast("Build reported issues — see log", true); return false; }
-      return true;
-    } catch (e) {
-      $("buildLog").textContent = e.message;
-      toast("Build failed: " + e.message, true);
-      return false;
-    } finally {
-      btn.disabled = false; btn.textContent = old;
-    }
-  }
-
-  async function rebuildAndRefreshPreview(quietBuild = false) {
-    const ok = await runBuild();
-    if (ok) updatePreview();
-    return ok;
+  async function refreshPreview() {
+    // couple pages are rendered dynamically from Supabase — refreshing the
+    // preview is a simple reload (no build step).
+    updatePreview();
+    return true;
   }
 
   function updatePreview() {
@@ -717,19 +745,10 @@
   });
 
   $("saveBtn").onclick = () => save();
-  $("buildBtn").onclick = async () => { if (busy) return; busy = true; await runBuild(); busy = false; };
+  $("buildBtn").onclick = async () => { if (busy) return; busy = true; await refreshPreview(); busy = false; };
   $("publishBtn").onclick = async () => {
     if (busy) return; busy = true;
-    await save(true);
-    const btn = $("publishBtn"); const old = btn.textContent;
-    btn.disabled = true; btn.textContent = "Publishing…";
-    $("buildLog").textContent = "Committing & pushing…";
-    try {
-      const r = await apiJson("/api/publish", { method: "POST" });
-      $("buildLog").textContent = (r.steps || []).join("\n").slice(-1200);
-      if (r.ok) toast("Published — Vercel deploys in ~1 min 🚀"); else toast("Publish had issues — see log", true);
-    } catch (e) { $("buildLog").textContent = e.message; toast("Publish failed: " + e.message, true); }
-    finally { busy = false; btn.disabled = false; btn.textContent = old; }
+    try { await save(false); } finally { busy = false; }
   };
 
   // ---------------------------------------------------------------- preview
@@ -739,7 +758,7 @@
     $("previewBtn").classList.toggle("active", state.previewOpen);
     updatePreview();
   };
-  $("previewRefresh").onclick = () => rebuildAndRefreshPreview();
+  $("previewRefresh").onclick = () => refreshPreview();
 
   // ---------------------------------------------------------------- uploads
   document.addEventListener("change", async (e) => {
@@ -825,22 +844,110 @@
     }
   });
 
+  // ---------------------------------------------------------------- templates
+  let tplMode = "create";
+  function openTemplateChooser(mode) {
+    tplMode = mode;
+    $("tplTitle").textContent = mode === "create" ? "Choose a template" : "Change template";
+    $("tplSub").textContent = mode === "create"
+      ? "Pick the design for this couple's website — you can change it later."
+      : "Pick a new design — this couple's details are kept, the page is rebuilt in the new style.";
+    const grid = $("tplGrid");
+    grid.innerHTML = "";
+    const stamp = Date.now();
+    for (const t of state.templates) {
+      const card = document.createElement("button");
+      card.type = "button";
+      card.className = "tpl-card";
+      const c1 = (t.colors && t.colors[0]) || t.accent;
+      const c2 = (t.colors && t.colors[1]) || t.accent;
+      card.innerHTML = `
+        <span class="tpl-preview" style="background:linear-gradient(135deg,${c1},${c2})">
+          <iframe src="/templates/${t.id}/?v=${stamp}" loading="lazy" tabindex="-1" title="${esc(t.name)} preview"></iframe>
+        </span>
+        <span class="tpl-meta">
+          <span class="tpl-cat" style="color:${t.accent}">${esc(t.category || "Wedding")}</span>
+          <span class="tpl-name">${esc(t.name)}</span>
+          <span class="tpl-tag">${esc(t.tagline || "")}</span>
+        </span>`;
+      card.onclick = () => chooseTemplate(t);
+      grid.appendChild(card);
+    }
+    $("tplOverlay").classList.remove("hidden");
+    // scale the desktop-sized demo iframes into the card boxes
+    requestAnimationFrame(() => {
+      grid.querySelectorAll(".tpl-preview").forEach((pv) => {
+        const f = pv.querySelector("iframe");
+        if (f && pv.clientWidth) f.style.transform = `scale(${pv.clientWidth / 1280})`;
+      });
+    });
+  }
+  function closeTemplateChooser() { $("tplOverlay").classList.add("hidden"); }
+  $("tplClose").onclick = closeTemplateChooser;
+  $("tplOverlay").addEventListener("click", (e) => { if (e.target === $("tplOverlay")) closeTemplateChooser(); });
+  document.addEventListener("keydown", (e) => { if (e.key === "Escape") closeTemplateChooser(); });
+
+  async function chooseTemplate(t) {
+    closeTemplateChooser();
+    if (tplMode === "create") {
+      try {
+        const created = await apiJson("/api/couples", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ template: t.id }),
+        });
+        state.couples.push(created);
+        selectCouple(created.id);
+        $("editor").scrollIntoView({ behavior: "smooth" });
+        toast(`New couple created on "${t.name}" — fill in the details`);
+      } catch (e) { toast("Failed to create: " + e.message, true); }
+      return;
+    }
+    const c = state.selected;
+    if (!c) return;
+    if ((c.template || "ram-mandir") === t.id) { toast(`Already using ${t.name}`); return; }
+    confirmBox(`Switch to "${t.name}"?`,
+      `${c.bride.firstName || "?"} & ${c.groom.firstName || "?"}'s page will be rebuilt in the new design. All details, photos and events are kept.`,
+      async () => {
+        try {
+          await save(true);
+          const saved = await apiJson(`/api/couples/${c.id}`, {
+            method: "PUT", headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ template: t.id }),
+          });
+          Object.assign(state.selected, saved);
+          renderList();
+          renderEditor();
+          await refreshPreview();
+          toast(`Template changed to ${t.name} ✔`);
+        } catch (e) { toast("Template change failed: " + e.message, true); }
+      });
+  }
+
+  $("templateChip").onclick = () => openTemplateChooser("change");
+
   // ---------------------------------------------------------------- new / delete
-  $("newCoupleBtn").onclick = async () => {
-    try {
-      const created = await apiJson("/api/couples", { method: "POST" });
-      state.couples.push(created);
-      selectCouple(created.id);
-      $("editor").scrollIntoView({ behavior: "smooth" });
-      toast("New couple created — fill in the details");
-    } catch (e) { toast("Failed to create: " + e.message, true); }
+  $("newCoupleBtn").onclick = () => {
+    if (!state.templates.length) {
+      // registry unavailable — fall back to default creation
+      apiJson("/api/couples", { method: "POST" })
+        .then((created) => {
+          state.couples.push(created);
+          selectCouple(created.id);
+          $("editor").scrollIntoView({ behavior: "smooth" });
+          toast("New couple created — fill in the details");
+        })
+        .catch((e) => toast("Failed to create: " + e.message, true));
+      return;
+    }
+    openTemplateChooser("create");
   };
 
   $("deleteBtn").onclick = () => {
     const c = state.selected;
     if (!c) return;
     confirmBox(`Delete ${c.bride.firstName || "?"} & ${c.groom.firstName || "?"}?`,
-      `This removes the couple from the Dashboard. Their generated page stays until the next build.`,
+      `This removes the couple from the Dashboard. Their website link stops working immediately.`,
       async () => {
         try {
           await apiJson(`/api/couples/${c.id}`, { method: "DELETE" });

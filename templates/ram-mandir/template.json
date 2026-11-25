@@ -1,0 +1,10 @@
+{
+  "id": "ram-mandir",
+  "name": "Ram Mandir",
+  "category": "Hindu",
+  "tagline": "A divine temple-inspired invitation with ornate gold detailing",
+  "accent": "#b3541e",
+  "colors": ["#7b2d26", "#d9a441"],
+  "engine": "legacy-framer",
+  "order": 1
+}

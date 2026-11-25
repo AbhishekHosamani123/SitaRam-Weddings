@@ -1,42 +1,86 @@
-# Wedding Website Platform (multi-couple)
+# Wedding Website Platform (multi-couple, multi-template, self-service)
 
-This repo now powers a **sellable multi-couple wedding website product** built on
-top of the original Framer clone. The demo page (public/index.html) stays as the
-showcase (Couple 1: Sita & Ram); each new couple gets their own personalised
-site at a URL containing their names, e.g. `https://sitaram-weddings.vercel.app/rashmi-abhishek`.
+This repo powers a **sellable multi-couple, multi-template wedding website
+product**. Each couple gets their own personalised site at a URL containing
+their names, e.g. `https://sitaram-weddings.vercel.app/rashmi-abhishek`, built
+on the template of their choice — either by the seller (Dashboard) or by the
+couple themselves (public self-service builder, no login).
+
+## Public site (what customers see)
+
+| Route | What it is |
+|---|---|
+| `/` | **Landing page** in the ZONO-inspired identity (warm cream `#faf7ef`, deep teal ink `#0b282e`, accent teal `#1e7280`, Bricolage Grotesque display + Inter body): hero → launch-offer strip (₹3,999 struck → ₹999 for first 50 couples) → template grid with **Preview** (opens full live demo) and **Customise** buttons → features → how-it-works → comparison table → testimonials → FAQ → footer (WhatsApp 84314 06956). |
+| `/templates/` | Simple template gallery (live demos). |
+| `/templates/<id>/` | Live demo of the template (sample content). |
+| `/create?template=<id>` | **Self-service builder** — no login. User edits names, invites, up to 6 events, venue/map, WhatsApp, photos (client-side resized). Everything autosaves to their browser (`localStorage`). Live preview updates as they type — placeholder templates render client-side from `/tpl/<id>/` raw sources; the Ram Mandir (legacy Framer) template uses `POST /api/preview` which renders through the real generation pipeline server-side. On mobile a floating "Preview" button toggles the preview panel. "Get my website link" posts to `/api/public-website`, which stores minimal data server-side, builds the static page, and returns the public link. |
+| `/<slug>/` | Each couple's personalised website. |
+
+> **Only the Ram Mandir template is active right now.** The other six template
+> folders (Ayodhya, Meenaya, Meenaya 2, Laavan, Raabta, Beach) remain on disk
+> with `"disabled": true` in their `template.json` — they are hidden from the
+> landing, builder, dashboard and gallery. Remove the flag to re-enable them
+> later.
+
+Pricing shown is launch marketing (₹999 offer, ₹3,999 struck-through) — no
+discount logic implemented. Razorpay payments are planned later; publishing is
+currently free.
+
+## Templates
+
+```
+templates/
+├── ram-mandir/    the original Framer design (engine: legacy-framer)
+├── ayodhya/       Hindu temple theme — arches, diyas, mandala gold
+├── meenaya/       South-Indian classic — kasavu cream & gold, toran
+├── meenaya-2/     South-Indian editorial — peacock jewel tones, bold type
+├── laavan/        Sikh — ivory & gold domed arches, Gurmukhi accents
+├── raabta/        Muslim nikkah — emerald & navy, geometric stars
+└── beach/         destination — sunset, waves, boarding-pass ticket
+```
+
+Each folder holds `index.html` (self-contained page using `{{TOKEN}}`
+placeholders) + `template.json` (name, category, tagline, accent colours,
+engine). Templates are **auto-discovered** — drop a new folder in and it
+appears everywhere (dashboard, landing, builder, gallery).
 
 ## How it works
 
 | Part | What it does |
 |---|---|
-| `data/couples.json` | Source of truth — one object per couple (names, parents, date, venue, WhatsApp, photos, story, hashtag, SEO, slug). |
-| `tools/build.js` | Generates `public/<slug>/index.html` for every active couple from the demo template, patching text, images, countdown target, WhatsApp number, map coordinates and head metadata. Also copies the two data-carrying JS bundles per slug. |
-| `server.js` | Local server: serves the site, hosts the Dashboard at `/admin`, and exposes the local API (auth, couples CRUD, uploads, build, publish). |
-| `admin/` | Dashboard SPA (login-protected). Works as a **local authoring tool**; on the deployed site it shows read-only. |
+| `templates/` | Template registry (auto-discovered). Two engines: `legacy-framer` (Ram Mandir — string-patch + slot engine) and `placeholder` (clean `{{TOKEN}}` replacement; events & gallery injected as JSON). |
+| `data/couples.json` | Source of truth — one object per couple (names, parents, events, venue, WhatsApp, photos, story, hashtag, SEO, slug, `template`, `source`: dashboard/`). |
+| `tools/build.js` | Generates `public/<slug>/index.html` per couple using that couple's template engine, plus: the landing page (`public/index.html`), the builder page (`public/create/index.html`, with template registry injected), the raw template sources (`public/tpl/<id>/`), per-template demos (`public/templates/<id>/`), and the couple showcase. |
+| `server.js` | Local server: serves the site, hosts the Dashboard at `/admin`, exposes the local API (auth, couples CRUD incl. template on create, `/api/templates`, uploads, build, publish) **and the public APIs** `POST /api/public-website` (no auth, per-IP rate limit, unique slugs, data-URL image saving, runs build, returns the couple's URL) and `POST /api/preview` (no auth, renders a personal preview through the real pipeline without writing anything — used by the builder's live preview). |
+| `admin/` | Dashboard SPA (login-protected). "+ New couple" opens a **template chooser** with live previews; the template chip in the editor switches templates; couples list shows template names. |
 
-## Workflow (to sell a site to a couple)
+## Workflow (seller flow)
 
 1. Start: `npm run dashboard` → open `http://127.0.0.1:8080/admin`, sign in (default password `admin123` — change it in `data/admin.json`).
-2. **+ New couple** → fill in Invitation, Bride & Groom, Event & Venue (incl. map coordinates & countdown), Photos (uploads), Story & Details, and URL & SEO. The slug (URL) auto-fills from the names and stays editable: `add` → 3. **Save** (writes `data/couples.json` + images under `public/mirror/framerusercontent.com/images/couples/<slug>/`).
-4. **Build** — regenerates the couple's page.
-5. **Publish** — commits and pushes to GitHub; Vercel auto-deploys (~1 min). The couple's link is now live.
+2. **+ New couple** → **pick a template** (live previews of every design) → fill in details.
+3. **Save** → **Build** → **Publish** (git commit + push → Vercel auto-deploys, ~1 min).
 
-> Tip: keep the demo couple as-is — it is your sales demo.
+## Workflow (customer self-service)
+
+1. Customer opens `/` → browses templates → **Preview** to see a full live demo → **Customise**.
+2. Customer edits the builder; everything autosaves in their browser; live preview syncs as they type.
+3. Customer clicks **Get my website link** → the site builds their page and shows their public link (+ copy / WhatsApp share).
+
+> Note for deployment: the landing page, builder and demos are fully static and
+> deploy with Vercel. The `POST /api/public-website` endpoint runs on the local
+> server; to enable live creation on the deployed site, deploy that endpoint as
+> a Vercel serverless function backed by a datastore (e.g. Vercel KV) — the
+> local flow is the reference implementation.
 
 ## Common pitfalls (seller runbook)
 
-- **URL slug** must be unique & lowercase (letters, numbers, hyphens). The
-  Dashboard blocks duplicates.
-- **First event = main celebration**: the Google Maps card and the venue
-  details on the page are driven by event #1. Keep its venue/coordinates filled.
-- **Countdown**: set a future date/time in the Timeline tab, or the timer shows
-  zeros.
-- **WhatsApp**: keep both numbers in sync — the site displays `display`, while
-  the RSVP button uses `intl` (country code included).
-- **Before publishing**, check the warnings box on the editor; then Save →
-  Build → Publish. Vercel takes ~1 minute to go live.
-- The six timeline cards are hidden automatically when a couple has fewer than
-  six events — no action needed.
+- **URL slug** must be unique & lowercase (letters, numbers, hyphens). Public submissions auto-append `-2`, `-3`… when taken.
+- **First event = main celebration**: the Google Maps card and the venue details are driven by event #1. Keep its venue/coordinates filled.
+- **Countdown**: set a future date/time in the Timeline tab, or the timer hides.
+- **WhatsApp**: keep both numbers in sync — the site displays `display`, while the RSVP button uses `intl` (country code included).
+- **Changing a template later**: click the template chip next to the couple's name, pick a new design, and Build.
+- **Before publishing**, check the warnings box on the editor; then Save → Build → Publish.
+- Timeline cards hide automatically when a couple has fewer than six events.
 
 ---
 

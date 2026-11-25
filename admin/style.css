@@ -250,3 +250,40 @@ code { background: #f3e9dc; padding: 1px 6px; border-radius: 6px; font-size: 12p
   .grid2, .grid3, .row2 { grid-template-columns: 1fr; }
   .main { padding: 18px 16px; }
 }
+
+/* ---------- template chooser ---------- */
+.chip.tpl { cursor: pointer; background: #efe0cb; color: #7b4a2b; font-weight: 600; }
+.chip.tpl:hover { background: #e6d2b6; }
+.tpl-modal { max-width: 1020px; width: min(94vw, 1020px); max-height: 88vh; overflow: auto; }
+.tpl-modal-head { display: flex; justify-content: space-between; align-items: center; gap: 12px; }
+.tpl-modal-head h3 { margin: 0; font-family: Georgia, serif; }
+.tpl-modal-sub { color: var(--muted); font-size: 13.5px; margin: 8px 0 18px; }
+.tpl-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 16px; }
+.tpl-card {
+  display: flex; flex-direction: column; padding: 0; margin: 0;
+  border: 1px solid var(--line); border-radius: 14px; background: #fff;
+  cursor: pointer; overflow: hidden; text-align: left;
+  transition: box-shadow .18s, transform .18s, border-color .18s;
+}
+.tpl-card:hover { box-shadow: var(--shadow); transform: translateY(-2px); border-color: #d8c3a5; }
+.tpl-card:focus-visible { outline: 2px solid var(--brand); outline-offset: 2px; }
+.tpl-preview {
+  position: relative; display: block; width: 100%; aspect-ratio: 16 / 10;
+  overflow: hidden; pointer-events: none;
+}
+.tpl-preview iframe {
+  width: 1280px; height: 800px; border: 0;
+  transform-origin: 0 0; display: block;
+}
+.tpl-meta { display: flex; flex-direction: column; gap: 3px; padding: 12px 14px 14px; }
+.tpl-cat { font-size: 10.5px; letter-spacing: .2em; text-transform: uppercase; font-weight: 700; }
+.tpl-name { font-weight: 700; font-size: 16.5px; font-family: Georgia, serif; color: var(--ink); }
+.tpl-tag { font-size: 12.5px; color: var(--muted); font-style: italic; line-height: 1.45; }
+
+/* ---------- customers table ---------- */
+.cust-table { width: 100%; border-collapse: collapse; font-size: 13.5px; }
+.cust-table th, .cust-table td { text-align: left; padding: 10px 12px; border-bottom: 1px solid var(--line); white-space: nowrap; }
+.cust-table th { font-size: 12px; letter-spacing: .06em; text-transform: uppercase; color: var(--muted); background: #fbf6ef; }
+.cust-table tr:last-child td { border-bottom: 0; }
+.cust-table a { color: var(--brand); text-decoration: none; font-weight: 600; }
+.cust-table a:hover { text-decoration: underline; }

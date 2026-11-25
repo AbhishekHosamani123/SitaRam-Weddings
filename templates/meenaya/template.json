@@ -1,0 +1,15 @@
+{
+  "id": "meenaya",
+  "name": "Meenaya",
+  "category": "South-Indian",
+  "tagline": "Kasavu elegance — cream & gold with temple-border frames",
+  "accent": "#b98a2f",
+  "colors": [
+    "#faf3e6",
+    "#b98a2f",
+    "#8a2f1d"
+  ],
+  "engine": "placeholder",
+  "order": 3,
+  "disabled": true
+}

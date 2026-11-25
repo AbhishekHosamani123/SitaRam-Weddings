@@ -69,7 +69,8 @@
         "bridePhoto": null,
         "groomPhoto": null,
         "portrait": null
-      }
+      },
+      "template": "ram-mandir"
     },
     {
       "id": 2,
@@ -179,7 +180,8 @@
         "bridePhoto": null,
         "groomPhoto": null,
         "portrait": null
-      }
+      },
+      "template": "ram-mandir"
     },
     {
       "id": 3,
@@ -289,7 +291,8 @@
         "bridePhoto": null,
         "groomPhoto": null,
         "portrait": null
-      }
+      },
+      "template": "ram-mandir"
     },
     {
       "id": 4,
@@ -379,6 +382,126 @@
           "key": "parking",
           "title": "Parking",
           "text": "Valet parking available for all guests."
+        }
+      ],
+      "images": {
+        "hero": null,
+        "bridePhoto": null,
+        "groomPhoto": null,
+        "portrait": null
+      },
+      "template": "ram-mandir"
+    },
+    {
+      "id": 6,
+      "slug": "vivaan-ananya",
+      "demo": false,
+      "active": true,
+      "source": "public",
+      "template": "ram-mandir",
+      "title": "Vivaan & Ananya | Wedding Invitation",
+      "metaDescription": "Join us to celebrate the wedding of Vivaan & Ananya.",
+      "bride": {
+        "firstName": "Vivaan",
+        "fullName": "Vivaan Mehta",
+        "parents": "Shri. Nitin & Smt. Kavita Mehta",
+        "photo": null
+      },
+      "groom": {
+        "firstName": "Ananya",
+        "fullName": "Ananya Sharma",
+        "parents": "Shri. Rajesh & Smt. Meera Sharma",
+        "photo": null
+      },
+      "invitation": {
+        "headline": "{bride} weds {groom}",
+        "intro": "Together with their families, they joyfully invite you to celebrate their wedding",
+        "story": "A chance meeting at a friend’s wedding, a conversation that never ended, and a thousand little moments later — here we are. We would love for you to be part of the next chapter of our story.",
+        "hashtag": "VivaanWedsAnanya",
+        "closing": "Your presence and blessings mean the world to us"
+      },
+      "events": [
+        {
+          "slot": 1,
+          "name": "Mehendi",
+          "day": "Thursday",
+          "time": "11 Am Onwards",
+          "dateLabel": "18th Feb 2027",
+          "city": "Udaipur, Rajasthan",
+          "venueName": "The Fern Lawns",
+          "venueAddress": "Lake Pichola Road",
+          "lat": "24.5711",
+          "lng": "73.6531",
+          "note": "Dress code — shades of green & pink"
+        },
+        {
+          "slot": 1,
+          "name": "Sangeet",
+          "day": "Friday",
+          "time": "7 Pm Onwards",
+          "dateLabel": "19th Feb 2027",
+          "city": "Udaipur, Rajasthan",
+          "venueName": "",
+          "venueAddress": "",
+          "lat": "",
+          "lng": "",
+          "note": "Bring your best dance moves"
+        },
+        {
+          "slot": 1,
+          "name": "Wedding Ceremony",
+          "day": "Saturday",
+          "time": "7:30 Pm Muhurat",
+          "dateLabel": "20th Feb 2027",
+          "city": "Udaipur, Rajasthan",
+          "venueName": "Lakeview Palace",
+          "venueAddress": "Pichola",
+          "lat": "24.5720",
+          "lng": "73.6790",
+          "note": "The big day — we say forever"
+        },
+        {
+          "slot": 1,
+          "name": "Reception",
+          "day": "Sunday",
+          "time": "7 Pm Onwards",
+          "dateLabel": "21st Feb 2027",
+          "city": "Udaipur, Rajasthan",
+          "venueName": "",
+          "venueAddress": "",
+          "lat": "",
+          "lng": "",
+          "note": "Dinner, dancing & celebration"
+        }
+      ],
+      "countdownTarget": "2027-02-20T14:00:00.000Z",
+      "whatsapp": {
+        "display": "98123 45678",
+        "intl": "919812345678"
+      },
+      "gallery": [
+        null,
+        null,
+        null,
+        null,
+        null,
+        null
+      ],
+      "thingsToKnow": [
+        {
+          "key": "weather",
+          "title": "Weather",
+          "text": ""
+        },
+        {
+          "key": "staff",
+          "title": "Staff",
+          "text": ""
+        },
+        {
+          "key": "parking",
+          "title": "Parking",
+          "text": ""
         }
       ],
       "images": {

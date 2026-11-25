@@ -1,0 +1,15 @@
+{
+  "id": "laavan",
+  "name": "Laavan",
+  "category": "Sikh",
+  "tagline": "Warm ivory & gold celebration framed in rounded arches",
+  "accent": "#c49a3c",
+  "colors": [
+    "#f7f1e1",
+    "#c49a3c",
+    "#7a1f2b"
+  ],
+  "engine": "placeholder",
+  "order": 5,
+  "disabled": true
+}

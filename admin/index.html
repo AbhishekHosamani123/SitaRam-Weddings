@@ -38,8 +38,8 @@
     <ul class="couple-list" id="coupleList"></ul>
 
     <div class="side-actions">
-      <button class="btn" id="buildBtn" title="Regenerate all couple pages">⚙ Build</button>
-      <button class="btn accent" id="publishBtn" title="Commit & push to deploy on Vercel">⬆ Publish</button>
+      <button class="btn" id="buildBtn" title="Refresh the live preview">⟳ Refresh</button>
+      <button class="btn accent" id="publishBtn" title="Save — the couple's website updates instantly">💾 Save &amp; Live</button>
     </div>
     <div class="build-log" id="buildLog"></div>
   </aside>
@@ -57,6 +57,7 @@
           <div class="editor-meta">
             <span class="chip" id="demoChip">Demo</span>
             <span class="chip" id="activeChip">Live</span>
+            <span class="chip tpl" id="templateChip" title="Change this couple's template">Template</span>
             <span class="chip link" id="liveLink" title="Open the couple's wedding page"></span>
           </div>
         </div>
@@ -77,6 +78,7 @@
         <button class="tab" data-tab="photos">Photos</button>
         <button class="tab" data-tab="story">Story &amp; Details</button>
         <button class="tab" data-tab="seo">URL &amp; SEO</button>
+        <button class="tab" data-tab="customers">Customers</button>
       </div>
 
       <div id="previewPane" class="preview-pane hidden">
@@ -242,6 +244,24 @@
           </div>
         </section>
 
+        <!-- CUSTOMERS (registrations) -->
+        <section class="pane" data-pane="customers">
+          <div class="card">
+            <div class="card-head">
+              <h3>All customers / registrations</h3>
+              <span class="quiet" id="customerCount"></span>
+            </div>
+            <div style="overflow-x:auto">
+              <table class="cust-table" id="custTable">
+                <thead><tr>
+                  <th>Couple</th><th>Contact</th><th>Template</th><th>Source</th><th>Status</th><th>Created</th><th>Link</th>
+                </tr></thead>
+                <tbody></tbody>
+              </table>
+            </div>
+          </div>
+        </section>
+
       </div>
     </div>
   </main>
@@ -259,6 +279,18 @@
   </div>
 </div>
 
-<script src="/admin/app.js?v=4"></script>
+<!-- ======================= TEMPLATE CHOOSER ======================= -->
+<div id="tplOverlay" class="overlay hidden">
+  <div class="modal tpl-modal">
+    <div class="tpl-modal-head">
+      <h3 id="tplTitle">Choose a template</h3>
+      <button class="btn small" id="tplClose" type="button">✕ Close</button>
+    </div>
+    <p class="tpl-modal-sub" id="tplSub">Pick the design for this couple's website — you can change it later.</p>
+    <div class="tpl-grid" id="tplGrid"></div>
+  </div>
+</div>
+
+<script src="/admin/app.js?v=5"></script>
 </body>
 </html>

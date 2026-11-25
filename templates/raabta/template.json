@@ -1,0 +1,15 @@
+{
+  "id": "raabta",
+  "name": "Raabta",
+  "category": "Muslim",
+  "tagline": "Nikkah elegance — emerald & navy with golden geometric stars",
+  "accent": "#0b3d33",
+  "colors": [
+    "#0b3d33",
+    "#10233f",
+    "#d4b36a"
+  ],
+  "engine": "placeholder",
+  "order": 6,
+  "disabled": true
+}

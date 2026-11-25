@@ -1,0 +1,15 @@
+{
+  "id": "meenaya-2",
+  "name": "Meenaya 2",
+  "category": "South-Indian",
+  "tagline": "Modern editorial take — peacock jewel tones & bold typography",
+  "accent": "#0e5c4a",
+  "colors": [
+    "#0e5c4a",
+    "#0fa3a3",
+    "#d4af37"
+  ],
+  "engine": "placeholder",
+  "order": 4,
+  "disabled": true
+}

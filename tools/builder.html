@@ -1,0 +1,1305 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Create your wedding website — SitaRam Weddings</title>
+<meta name="description" content="Personalise a wedding invitation template and get your own public website link — in minutes. Launch offer: ₹999 for the first 10 customers.">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ctext y='.9em' font-size='90'%3E%F0%9F%92%90%3C/text%3E%3C/svg%3E">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,400;12..96,500;12..96,600;12..96,700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#fff9f3;--bg-2:#fbeede;--paper:#fff;--ink:#3d222a;--ink-soft:#6b4a52;--muted:#9c7a85;
+  --brand:#c2535f;--brand-dark:#a83e4c;--gold:#e8b04b;--rose:#d96c7a;
+  --grad:linear-gradient(120deg,#d96c7a 0%,#e8b04b 100%);
+  --grad-soft:linear-gradient(135deg,rgba(217,108,122,.14),rgba(232,176,75,.18));
+  --tint:#fdf0e6;--line:#f0ddd3;--danger:#b3261e;--ok:#a83e4c;
+  --shadow:0 14px 34px rgba(122,66,58,.12);
+  --f-display:'Bricolage Grotesque',sans-serif;--f-ui:'Inter',sans-serif;
+}
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:var(--f-ui);color:var(--ink);background:var(--bg);font-size:15px;line-height:1.55}
+button{font:inherit;cursor:pointer}
+input,textarea,select{font:inherit;color:var(--ink);background:#fff;border:1.5px solid var(--line);border-radius:14px;padding:11px 14px;width:100%;outline:none;transition:border-color .15s,box-shadow .15s}
+input:focus,textarea:focus{border-color:var(--brand);box-shadow:0 0 0 3px rgba(194,83,95,.12)}
+label{display:block;font-weight:600;font-size:12.5px;margin:0 0 6px;color:var(--ink-soft)}
+.hidden{display:none!important}
+
+/* ---- top bar ---- */
+.topbar{position:sticky;top:0;z-index:40;background:rgba(255,249,243,.92);backdrop-filter:blur(10px);border-bottom:1px solid var(--line)}
+.top-inner{max-width:1280px;margin:0 auto;padding:0 20px;height:64px;display:flex;align-items:center;gap:16px}
+.logo{display:flex;align-items:center;gap:9px;font-family:var(--f-display);font-weight:600;font-size:19px;letter-spacing:-.01em;text-decoration:none;color:var(--ink)}
+.logo .mark{width:34px;height:34px;border-radius:10px;background:var(--grad);color:#fff;display:grid;place-items:center;font-family:var(--f-ui);font-size:14px;font-weight:700;box-shadow:0 6px 14px rgba(200,83,95,.3)}
+.tpl-pills{display:flex;gap:8px;overflow-x:auto;flex:1;padding:6px 0}
+.pill{white-space:nowrap;border:1px solid var(--line);background:var(--paper);border-radius:999px;padding:7px 16px;font-size:13.5px;font-weight:600;color:var(--ink-soft);transition:.2s}
+.pill:hover{border-color:var(--brand);color:var(--brand)}
+.pill.active{background:var(--ink);color:#fff;border-color:var(--ink)}
+.top-cta{margin-left:auto}
+
+/* ---- layout ---- */
+.layout{max-width:1280px;margin:0 auto;padding:24px 20px 60px;display:grid;grid-template-columns:minmax(0,560px) minmax(0,1fr);gap:26px;align-items:start}
+.panel{background:var(--paper);border:1px solid var(--line);border-radius:22px;padding:26px;box-shadow:0 3px 12px rgba(122,66,58,.05)}
+.panel h2{font-family:var(--f-display);font-size:23px;font-weight:500;letter-spacing:-.015em;margin-bottom:4px}
+.panel .sub{color:var(--muted);font-size:13.5px;margin-bottom:18px}
+.card{background:linear-gradient(180deg,#fffdf9,#fdf3ea);border:1px solid var(--line);border-radius:18px;padding:20px;margin-bottom:16px}
+.card h3{font-family:var(--f-display);font-size:17px;font-weight:600;margin-bottom:12px;display:flex;align-items:center;gap:9px}
+.card h3 .no{width:26px;height:26px;flex:none;border-radius:50%;background:var(--grad);color:#fff;font-family:var(--f-ui);font-size:12.5px;font-weight:700;display:grid;place-items:center;box-shadow:0 5px 12px rgba(200,83,95,.3)}
+.row2{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.row3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px}
+.field{margin-bottom:12px}
+.field small{color:var(--muted);font-size:12px;display:block;margin-top:4px}
+textarea{resize:vertical}
+/* events */
+.ev-row{border:1.5px dashed #eccfba;border-radius:14px;padding:14px;margin-bottom:12px;background:#fff}
+.ev-head{display:flex;align-items:center;justify-content:space-between;margin-bottom:10px}
+.ev-head b{font-size:13.5px;color:var(--ink-soft)}
+.ev-head button{background:none;border:none;color:var(--danger);font-size:13px;font-weight:600}
+.add-ev{width:100%;border:1.5px dashed var(--brand);background:var(--tint);border-radius:14px;padding:11px;color:var(--brand-dark);font-weight:700;font-size:13.5px}
+.add-ev:hover{background:#f9e4d4}
+/* photos */
+.photos-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}
+.photo-slot{position:relative;aspect-ratio:1;border-radius:14px;overflow:hidden;border:1.5px dashed #eccfba;background:#fff;display:flex;align-items:center;justify-content:center;cursor:pointer;transition:border-color .2s}
+.photo-slot:hover{border-color:var(--brand)}
+.photo-slot.has{border-style:solid;border-color:var(--brand)}
+.photo-slot img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
+.photo-slot .phint{text-align:center;color:var(--muted);font-size:11.5px;padding:6px;line-height:1.4}
+.photo-slot input{position:absolute;inset:0;opacity:0;cursor:pointer}
+.photo-slot .rm{position:absolute;top:6px;right:6px;background:rgba(61,34,42,.72);color:#fff;border:0;width:24px;height:24px;border-radius:50%;font-size:13px;line-height:1}
+.photo-count{display:inline-flex;align-items:center;gap:8px;background:var(--tint);border:1px solid #f2d4c2;border-radius:999px;padding:6px 14px;font-size:13px;font-weight:600;color:var(--brand-dark)}
+.photo-count b{color:var(--brand)}
+/* review */
+.review-list{background:#fff;border:1px solid var(--line);border-radius:14px;padding:14px 16px;margin-bottom:16px}
+.review-list .rv-row{display:flex;justify-content:space-between;gap:12px;padding:7px 0;font-size:14px;border-bottom:1px dashed var(--line)}
+.review-list .rv-row:last-child{border-bottom:none}
+.review-list .rv-row span{color:var(--muted)}
+.review-list .rv-row b{color:var(--ink);text-align:right;font-weight:600}
+.golive{width:100%;padding:15px;font-size:16px;background:var(--grad);color:#fff;border:none;border-radius:999px;font-weight:700;box-shadow:0 10px 24px rgba(200,83,95,.32);transition:transform .15s,box-shadow .2s}
+.golive:hover{box-shadow:0 14px 30px rgba(200,83,95,.42);transform:translateY(-1px)}
+.golive:disabled{opacity:.55;cursor:not-allowed}
+.price-note{text-align:center;margin-top:10px;font-size:13px;color:var(--muted)}
+.price-note s{color:var(--muted)}
+.price-note b{color:var(--brand)}
+/* preview pane */
+.preview-panel{position:sticky;top:84px}
+.preview-head{display:flex;align-items:center;justify-content:space-between;margin-bottom:14px;gap:10px}
+.preview-head h2{margin:0}
+.preview-stage{position:relative;width:100%;height:72vh;min-height:480px;overflow:auto;border:1px solid var(--line);border-radius:16px;background:var(--bg)}
+.preview-frame{position:absolute;top:0;left:0;width:1280px;height:800px;border:0;transform-origin:0 0;background:#fff;display:block}
+.preview-frame[hidden]{display:none}
+.preview-fallback{display:grid;place-items:center;height:72vh;min-height:480px;border:1px dashed var(--line);border-radius:16px;color:var(--muted);text-align:center;padding:20px}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;border-radius:999px;padding:11px 20px;font-weight:600;font-size:14px;border:1.5px solid transparent;text-decoration:none;transition:.2s;white-space:nowrap}
+.btn-primary{background:var(--grad);color:#fff;box-shadow:0 8px 18px rgba(200,83,95,.28)}
+.btn-primary:hover{box-shadow:0 12px 26px rgba(200,83,95,.38)}
+.btn-ghost{border-color:var(--line);background:#fff;color:var(--ink)}
+.btn-ghost:hover{border-color:var(--brand);color:var(--brand)}
+.btn-sm{padding:8px 14px;font-size:13px}
+.btn:disabled{opacity:.5;cursor:not-allowed}
+/* validation + toast */
+.banner{border-radius:14px;padding:14px 16px;margin-bottom:16px;font-size:14px;display:none}
+.banner.show{display:block}
+.banner.err{background:#fdecec;color:var(--danger);border:1px solid #f3c9c9}
+.banner.ok{background:#fdf0e6;color:var(--brand-dark);border:1px solid #f2d4c2}
+/* result */
+.result{text-align:center;padding:10px 6px}
+.result .big{font-family:var(--f-display);font-size:26px;font-weight:500;letter-spacing:-.015em;margin:6px 0 4px}
+.result .linkbox{display:flex;gap:10px;margin:18px 0;background:#fdf0e6;border:1px solid var(--line);border-radius:14px;padding:8px}
+.result .linkbox input{border:none;background:transparent;font-weight:600;color:var(--brand)}
+.result .actions{display:flex;gap:10px;justify-content:center;flex-wrap:wrap}
+.result .note{margin-top:14px;color:var(--muted);font-size:12.5px}
+@media(max-width:960px){
+  .layout{grid-template-columns:1fr}
+  .preview-panel{position:static}
+  .preview-stage{height:60vh;min-height:420px}
+  .row2,.row3{grid-template-columns:1fr}
+  .photos-grid{grid-template-columns:repeat(2,1fr)}
+}
+@media(max-width:640px){.top-cta .cta-label{display:none}}
+/* mobile preview FAB */
+.mobile-preview-btn{
+  display:none;position:fixed;right:16px;bottom:16px;z-index:80;
+  background:var(--grad);color:#fff;border:0;
+  border-radius:999px;padding:13px 20px;font-weight:700;font-size:14px;
+  box-shadow:0 10px 26px rgba(200,83,95,.4);
+}
+@media(max-width:960px){
+  .preview-panel.collapsed{display:none}
+  .mobile-preview-btn{display:inline-flex;align-items:center;gap:8px}
+}
+</style>
+</head>
+<body>
+
+<!-- ==================== TOP BAR ==================== -->
+<header class="topbar">
+  <div class="top-inner">
+    <a class="logo" href="/"><span class="mark">SR</span> SitaRam Weddings</a>
+    <div class="tpl-pills" id="tplPills"></div>
+    <a class="btn btn-ghost btn-sm top-cta" href="/templates/">← Back to templates</a>
+  </div>
+</header>
+
+<!-- ==================== LAYOUT ==================== -->
+<main class="layout">
+
+  <!-- LEFT: FORM -->
+  <div class="panel">
+    <h2 id="formTitle">Create your wedding website</h2>
+    <p class="sub">Your work is autosaved in this browser. Nothing is published until you press <b>Go live</b>.</p>
+    <div class="banner" id="banner"></div>
+
+    <form id="form">
+      <!-- couple -->
+      <div class="card">
+        <h3><span class="no">1</span> Bride &amp; groom</h3>
+        <div class="row2">
+          <div class="field"><label>Bride first name *</label><input id="f_brideFirst" placeholder="Sita"></div>
+          <div class="field"><label>Groom first name *</label><input id="f_groomFirst" placeholder="Ram"></div>
+        </div>
+        <div class="row2">
+          <div class="field"><label>Bride full name</label><input id="f_brideFull" placeholder="Sita Sharma"></div>
+          <div class="field"><label>Groom full name</label><input id="f_groomFull" placeholder="Ram Mehta"></div>
+        </div>
+        <div class="row2">
+          <div class="field"><label>Bride's parents</label><input id="f_brideParents" placeholder="Shri. & Smt. …"></div>
+          <div class="field"><label>Groom's parents</label><input id="f_groomParents" placeholder="Shri. & Smt. …"></div>
+        </div>
+      </div>
+
+      <!-- invitation -->
+      <div class="card">
+        <h3><span class="no">2</span> Invitation</h3>
+        <div class="field"><label>Headline</label><input id="f_headline" value="{bride} weds {groom}"></div>
+        <div class="field"><label>Invitation line</label><input id="f_intro" placeholder="Together with their families, we invite you…"></div>
+        <div class="field"><label>Your story (shown in 'Meet the Couple')</label><textarea id="f_story" rows="4" placeholder="How did you meet? Write a few warm lines…"></textarea></div>
+        <div class="row2">
+          <div class="field"><label>Hashtag</label><input id="f_hashtag" placeholder="SitaWedsRam"></div>
+          <div class="field"><label>Closing message</label><input id="f_closing" placeholder="Looking forward to see you"></div>
+        </div>
+      </div>
+
+      <!-- events -->
+      <div class="card">
+        <h3><span class="no">3</span> Wedding timeline</h3>
+        <p class="sub" style="margin-bottom:12px">Each event becomes its own card on your website. Up to 6.</p>
+        <div id="eventsBox"></div>
+        <button type="button" class="add-ev" id="addEvent">+ Add event</button>
+        <div class="field" style="margin-top:16px">
+          <label>Countdown target (date &amp; time of the main celebration)</label>
+          <input type="datetime-local" id="f_countdown">
+        </div>
+      </div>
+
+      <!-- venue / whatsapp -->
+      <div class="card">
+        <h3><span class="no">4</span> Venue, map &amp; WhatsApp</h3>
+        <p class="sub" style="margin-bottom:12px">The first event's venue powers the map card. Map pins auto-fill from address, or enter coordinates.</p>
+        <div class="row2">
+          <div class="field"><label>Venue name</label><input id="f_venue" placeholder="Green Palace Hall"></div>
+          <div class="field"><label>City line</label><input id="f_city" placeholder="Udaipur, Rajasthan"></div>
+        </div>
+        <div class="field"><label>Address</label><input id="f_address" placeholder="Full street address"></div>
+        <div class="row2">
+          <div class="field"><label>Latitude (optional)</label><input id="f_lat" placeholder="24.5711"></div>
+          <div class="field"><label>Longitude (optional)</label><input id="f_lng" placeholder="73.6531"></div>
+        </div>
+        <small>Leave both blank — the map pin is created automatically from the address above. Coordinates are only for a precise pin.</small>
+        <div class="row2">
+          <div class="field"><label>WhatsApp number shown on the site</label><input id="f_waDisplay" placeholder="98123 45678"></div>
+          <div class="field"><label>International (with country code) *</label><input id="f_waIntl" placeholder="919812345678"></div>
+        </div>
+      </div>
+
+      <!-- contact -->
+      <div class="card">
+        <h3><span class="no">5</span> Your contact details</h3>
+        <div class="field"><label>Your phone number *</label><input id="f_contact" type="tel" placeholder="98765 43210"></div>
+        <small style="display:block;margin-top:-6px">We use this only to reach you if something needs your attention — it is never shown on your wedding website.</small>
+      </div>
+
+      <!-- photos -->
+      <div class="card">
+        <h3><span class="no">6</span> Photos</h3>
+        <div style="display:flex;align-items:center;justify-content:space-between;gap:10px;flex-wrap:wrap;margin-bottom:12px">
+          <p class="sub" style="margin:0">Tap a slot to upload — images are resized in your browser.</p>
+          <span class="photo-count" id="photoCount"><span>📷</span> Total photos: <b id="photoCountNum">0</b> / 10</span>
+        </div>
+        <div class="photos-grid" id="photosGrid"></div>
+      </div>
+
+      <!-- review & go live -->
+      <div class="card">
+        <h3><span class="no">7</span> Review &amp; Go live</h3>
+        <p class="sub" style="margin-bottom:12px">A quick summary before you publish — you can keep editing after going live.</p>
+        <div class="review-list" id="reviewSummary"></div>
+        <button type="submit" class="golive" id="publishBtn">🚀 Go live — ₹999</button>
+        <p class="price-note">Launch offer for the first 10 customers — <s>₹3,999</s> <b>₹999</b> one-time</p>
+        <p class="sub" style="text-align:center;margin-top:10px">One-time payment via Razorpay (UPI / card / netbanking) — secure, encrypted checkout. Your website opens in a new tab.</p>
+      </div>
+    </form>
+  </div>
+
+  <!-- RIGHT: PREVIEW -->
+  <div class="panel preview-panel">
+    <div class="preview-head">
+      <h2>Live preview</h2>
+      <button type="button" class="btn btn-ghost btn-sm" id="openPreviewBtn">Open in new tab ↗</button>
+    </div>
+    <div class="preview-stage" id="previewStage">
+      <iframe class="preview-frame" id="previewFrame" title="Live preview of your wedding website"></iframe>
+    </div>
+    <div class="preview-fallback hidden" id="previewFallback">
+      <div><p style="font-family:var(--f-display);font-size:20px">Preview is not available for this template here.</p>
+      <p style="margin-top:8px">Open the live demo instead:</p>
+      <p style="margin-top:12px"><a class="btn btn-primary" id="fallbackDemoLink" href="#" target="_blank" rel="noopener">Open template demo ↗</a></p></div>
+    </div>
+  </div>
+</main>
+
+<!-- ==================== RESULT OVERLAY ==================== -->
+<div class="hidden" id="resultWrap" style="position:fixed;inset:0;background:rgba(61,34,42,.55);z-index:100;display:grid;place-items:center;padding:20px">
+  <div class="panel result" style="max-width:520px;width:100%">
+    <div style="font-size:44px">🎉</div>
+    <p class="big">Your wedding website is live!</p>
+    <p class="sub" style="margin-bottom:4px">Share this link with your guests — it has everything.</p>
+    <div class="linkbox">
+      <input id="resultLink" readonly>
+      <button type="button" class="btn btn-ghost btn-sm" id="copyLink">Copy</button>
+    </div>
+    <div class="actions">
+      <a class="btn btn-primary" id="openSite" href="#" target="_blank" rel="noopener">Open my website</a>
+      <a class="btn btn-ghost" id="shareWhats" href="#" target="_blank" rel="noopener">Share on WhatsApp</a>
+    </div>
+    <div class="actions" style="margin-top:10px">
+      <button type="button" class="btn btn-ghost btn-sm" id="editMore">Keep editing</button>
+    </div>
+    <p class="note">You can come back anytime and publish updates — the link stays the same.</p>
+  </div>
+</div>
+
+<!-- mobile preview toggle -->
+<button type="button" class="mobile-preview-btn" id="mobilePreviewBtn">👁 Preview</button>
+
+<script>
+(function () {
+  "use strict";
+
+  /* ---------- template registry injected by build.js ---------- */
+  var TPL_REGISTRY = {{TEMPLATES_JSON}};
+  var CONTACT_INTL = "918431406956";
+
+  var $ = function (id) { return document.getElementById(id); };
+
+  /* ---------- resolve template from ?template= ---------- */
+  var params = new URLSearchParams(location.search);
+  var currentId = params.get("template") || (TPL_REGISTRY[0] && TPL_REGISTRY[0].id) || "ayodhya";
+  function tplMeta(id) {
+    return TPL_REGISTRY.find(function (t) { return t.id === id; }) || TPL_REGISTRY[0];
+  }
+  function isPlaceholder(id) {
+    var t = tplMeta(id);
+    return t && t.engine !== "legacy-framer";
+  }
+
+  /* ---------- state ---------- */
+  var draftKey = "srw_draft_" + currentId;
+  var state = {
+    template: currentId,
+    bride: { firstName: "", fullName: "", parents: "" },
+    groom: { firstName: "", fullName: "", parents: "" },
+    invitation: { headline: "{bride} weds {groom}", intro: "", story: "", hashtag: "", closing: "" },
+    events: [{ name: "", day: "", time: "", dateLabel: "", city: "", venueName: "", venueAddress: "", lat: "", lng: "", note: "" }],
+    countdownTarget: "",
+    whatsapp: { display: "", intl: "" },
+    contact: "",
+    images: { hero: null, bridePhoto: null, groomPhoto: null, portrait: null, gallery1: null, gallery2: null, gallery3: null, gallery4: null, gallery5: null, gallery6: null },
+    slugHint: ""
+  };
+
+  function loadDraft() {
+    try {
+      var raw = localStorage.getItem(draftKey);
+      if (raw) {
+        var d = JSON.parse(raw);
+        for (var k in d) if (k in state) state[k] = d[k];
+      }
+    } catch (e) { /* ignore */ }
+  }
+  function saveDraft() {
+    try { localStorage.setItem(draftKey, JSON.stringify(state)); } catch (e) { /* quota — ignore */ }
+  }
+
+  /* ---------- template pills ---------- */
+  function renderPills() {
+    var box = $("tplPills");
+    box.innerHTML = "";
+    TPL_REGISTRY.forEach(function (t) {
+      var b = document.createElement("button");
+      b.type = "button";
+      b.className = "pill" + (t.id === currentId ? " active" : "");
+      b.textContent = t.name;
+      b.onclick = function () { switchTemplate(t.id); };
+      box.appendChild(b);
+    });
+  }
+  function switchTemplate(id) {
+    draftKey = "srw_draft_" + id;
+    currentId = id;
+    state.template = id;
+    loadDraft();
+    renderPills();
+    renderAll();
+    toast("Switched to " + tplMeta(id).name + " — your draft for this template is restored.", "ok");
+  }
+
+  /* ---------- events ---------- */
+  function renderEvents() {
+    var box = $("eventsBox");
+    box.innerHTML = "";
+    state.events.slice(0, 6).forEach(function (ev, i) {
+      var row = document.createElement("div");
+      row.className = "ev-row";
+      row.innerHTML =
+        '<div class="ev-head"><b>Event ' + (i + 1) + '</b><button type="button" data-i="' + i + '" class="rm-ev">Remove</button></div>' +
+        '<div class="row2">' +
+        '  <div class="field"><label>Event name</label><input class="ev-name" value="' + esc(ev.name) + '" placeholder="Mehendi / Haldi / Shaadi"></div>' +
+        '  <div class="field"><label>Day</label><input class="ev-day" value="' + esc(ev.day) + '" placeholder="Saturday"></div>' +
+        '</div>' +
+        '<div class="row3">' +
+        '  <div class="field"><label>Date label</label><input class="ev-date" value="' + esc(ev.dateLabel) + '" placeholder="14th Feb 2027"></div>' +
+        '  <div class="field"><label>Time</label><input class="ev-time" value="' + esc(ev.time) + '" placeholder="7 Pm Onwards"></div>' +
+        '  <div class="field"><label>City line</label><input class="ev-city" value="' + esc(ev.city) + '" placeholder="Udaipur, Rajasthan"></div>' +
+        '</div>' +
+        '<div class="field"><label>Note on card</label><input class="ev-note" value="' + esc(ev.note) + '" placeholder="Dress code, details…"></div>';
+      box.appendChild(row);
+    });
+    box.querySelectorAll(".rm-ev").forEach(function (btn) {
+      btn.onclick = function () {
+        state.events.splice(Number(btn.dataset.i), 1);
+        if (!state.events.length) state.events.push({ name: "", day: "", time: "", dateLabel: "", city: "", venueName: "", venueAddress: "", lat: "", lng: "", note: "" });
+        saveDraft(); renderEvents(); schedulePreview();
+      };
+    });
+    box.querySelectorAll("input").forEach(function (inp) {
+      inp.addEventListener("focus", function () {
+        lastChangedField = "ev:" + inp.className;
+        requestReveal();
+      });
+      inp.addEventListener("input", function () {
+        lastChangedField = "ev:" + inp.className;
+        var rowEl = inp.closest(".ev-row");
+        var idx = Array.prototype.indexOf.call(rowEl.parentNode.children, rowEl);
+        var ev = state.events[idx];
+        if (!ev) return;
+        var cls = inp.className;
+        if (cls === "ev-name") ev.name = inp.value;
+        else if (cls === "ev-day") ev.day = inp.value;
+        else if (cls === "ev-time") ev.time = inp.value;
+        else if (cls === "ev-date") ev.dateLabel = inp.value;
+        else if (cls === "ev-city") ev.city = inp.value;
+        else if (cls === "ev-note") ev.note = inp.value;
+        saveDraft(); schedulePreview();
+      });
+    });
+  }
+  $("addEvent").onclick = function () {
+    if (state.events.length >= 6) { toast("Maximum 6 events", "err"); return; }
+    state.events.push({ name: "", day: "", time: "", dateLabel: "", city: "", venueName: "", venueAddress: "", lat: "", lng: "", note: "" });
+    renderEvents(); saveDraft();
+  };
+
+  /* ---------- photos ---------- */
+  var PHOTO_SLOTS = [
+    ["hero", "Hero banner"], ["bridePhoto", "Bride portrait"], ["groomPhoto", "Groom portrait"],
+    ["portrait", "Couple portrait"], ["gallery1", "Gallery 1"], ["gallery2", "Gallery 2"],
+    ["gallery3", "Gallery 3"], ["gallery4", "Gallery 4"], ["gallery5", "Gallery 5"], ["gallery6", "Gallery 6"]
+  ];
+  function updatePhotoCount() {
+    var n = 0;
+    for (var i = 0; i < PHOTO_SLOTS.length; i++) if (state.images[PHOTO_SLOTS[i][0]]) n++;
+    var el = $("photoCountNum");
+    if (el) el.textContent = n;
+  }
+  function renderPhotos() {
+    var grid = $("photosGrid");
+    grid.innerHTML = "";
+    PHOTO_SLOTS.forEach(function (pair) {
+      var slot = pair[0], label = pair[1];
+      var div = document.createElement("div");
+      div.className = "photo-slot" + (state.images[slot] ? " has" : "");
+      var src = state.images[slot] || "";
+      div.innerHTML =
+        (src ? '<img src="' + src + '" alt="">' : "") +
+        (src ? '<button type="button" class="rm" data-slot="' + slot + '" title="Remove">✕</button>' : "") +
+        '<div class="phint">📷<br>' + label + '</div>' +
+        '<input type="file" accept="image/*" data-slot="' + slot + '">';
+      grid.appendChild(div);
+    });
+    grid.querySelectorAll("input[type=file]").forEach(function (inp) {
+      inp.addEventListener("change", function () {
+        var f = inp.files && inp.files[0];
+        if (!f) return;
+        downscale(f, function (dataUrl) {
+          state.images[inp.dataset.slot] = dataUrl;
+          saveDraft(); renderPhotos(); schedulePreview();
+        });
+      });
+    });
+    grid.querySelectorAll(".rm").forEach(function (btn) {
+      btn.onclick = function () {
+        state.images[btn.dataset.slot] = null;
+        saveDraft(); renderPhotos(); schedulePreview();
+      };
+    });
+    updatePhotoCount();
+  }
+  function downscale(file, cb) {
+    var img = new Image();
+    var url = URL.createObjectURL(file);
+    img.onload = function () {
+      var MAX = 1000;
+      var w = img.width, h = img.height;
+      if (w > MAX || h > MAX) {
+        var r = Math.min(MAX / w, MAX / h);
+        w = Math.round(w * r); h = Math.round(h * r);
+      }
+      var c = document.createElement("canvas");
+      c.width = w; c.height = h;
+      c.getContext("2d").drawImage(img, 0, 0, w, h);
+      URL.revokeObjectURL(url);
+      cb(c.toDataURL("image/jpeg", 0.82));
+    };
+    img.onerror = function () { URL.revokeObjectURL(url); cb(null); };
+    img.src = url;
+  }
+
+  /* ---------- review summary ---------- */
+  function renderReview() {
+    var box = $("reviewSummary");
+    if (!box) return;
+    var bride = state.bride.firstName.trim() || "Bride";
+    var groom = state.groom.firstName.trim() || "Groom";
+    var named = state.events.filter(function (e) { return e.name.trim(); });
+    var photos = 0;
+    for (var i = 0; i < PHOTO_SLOTS.length; i++) if (state.images[PHOTO_SLOTS[i][0]]) photos++;
+    var rows = [
+      ["Couple", bride + " & " + groom],
+      ["Template", (tplMeta(currentId) || {}).name || currentId],
+      ["Wedding events", named.length ? named.length + " event" + (named.length > 1 ? "s" : "") : "Not added yet"],
+      ["Countdown", state.countdownTarget ? "Set" : "Optional"],
+      ["WhatsApp RSVP", state.whatsapp.intl.trim() ? "Ready" : "Add number"],
+      ["Photos", photos ? photos + " uploaded" : "Optional"],
+      ["Website link", "/" + slugify(bride) + "-" + slugify(groom) + "/"],
+    ];
+    box.innerHTML = rows.map(function (r) {
+      return '<div class="rv-row"><span>' + esc(r[0]) + '</span><b>' + esc(r[1]) + '</b></div>';
+    }).join("");
+  }
+
+  /* ---------- bind simple fields ---------- */
+  var lastChangedField = null;
+  // fields that update the preview instantly in-place (no reload); the rest
+  // (countdown, lat/lng …) re-render structurally via schedulePreview()
+  var LIVE_FIELDS = {
+    f_brideFirst: 1, f_groomFirst: 1, f_brideFull: 1, f_groomFull: 1,
+    f_brideParents: 1, f_groomParents: 1, f_headline: 1, f_intro: 1,
+    f_story: 1, f_closing: 1, f_hashtag: 1, f_waDisplay: 1
+  };
+  var prevFieldVals = {};
+  function pushLiveUpdate(field, oldVal, newVal) {
+    var frame = $("previewFrame");
+    if (!frame || !frame.contentWindow) return;
+    try {
+      frame.contentWindow.postMessage({
+        type: "srw-live",
+        field: field,
+        old: oldVal,
+        value: newVal,
+        headline: headlineFor()
+      }, "*");
+    } catch (e) { /* frame may be navigating */ }
+  }
+  var FIELD_MAP = {
+    f_brideFirst: function (v) { state.bride.firstName = v; },
+    f_brideFull: function (v) { state.bride.fullName = v; },
+    f_brideParents: function (v) { state.bride.parents = v; },
+    f_groomFirst: function (v) { state.groom.firstName = v; },
+    f_groomFull: function (v) { state.groom.fullName = v; },
+    f_groomParents: function (v) { state.groom.parents = v; },
+    f_headline: function (v) { state.invitation.headline = v; },
+    f_intro: function (v) { state.invitation.intro = v; },
+    f_story: function (v) { state.invitation.story = v; },
+    f_hashtag: function (v) { state.invitation.hashtag = v; },
+    f_closing: function (v) { state.invitation.closing = v; },
+    f_countdown: function (v) { state.countdownTarget = v ? new Date(v).toISOString() : ""; },
+    f_venue: function (v) { state.events[0].venueName = v; },
+    f_city: function (v) { state.events[0].city = v; },
+    f_address: function (v) { state.events[0].venueAddress = v; },
+    f_lat: function (v) { state.events[0].lat = v; },
+    f_lng: function (v) { state.events[0].lng = v; },
+    f_waDisplay: function (v) { state.whatsapp.display = v; },
+    f_waIntl: function (v) { state.whatsapp.intl = v; },
+    f_contact: function (v) { state.contact = v; }
+  };
+  function bindFields() {
+    Object.keys(FIELD_MAP).forEach(function (id) {
+      var el = $(id);
+      if (!el) return;
+      el.addEventListener("focus", function () {
+        lastChangedField = id;
+        requestReveal();
+      });
+      el.addEventListener("input", function () {
+        lastChangedField = id;
+        if (id === "f_headline") {
+          // the preview shows the computed headline, not the raw placeholder
+          var oldHead = prevFieldVals.f_headline || headlineFor();
+          FIELD_MAP[id](el.value);
+          saveDraft();
+          var newHead = headlineFor();
+          pushLiveUpdate(id, oldHead, newHead);
+          prevFieldVals.f_headline = newHead;
+        } else {
+          FIELD_MAP[id](el.value);
+          saveDraft();
+          if (LIVE_FIELDS[id]) {
+            pushLiveUpdate(id, prevFieldVals[id] || "", el.value);
+            prevFieldVals[id] = el.value;
+          }
+        }
+        // always schedule the fresh render too — the live patch is a fast
+        // first paint; the render is the source of truth (latest wins)
+        schedulePreview();
+      });
+    });
+  }
+  function fillFields() {
+    $("f_brideFirst").value = state.bride.firstName;
+    $("f_brideFull").value = state.bride.fullName;
+    $("f_brideParents").value = state.bride.parents;
+    $("f_groomFirst").value = state.groom.firstName;
+    $("f_groomFull").value = state.groom.fullName;
+    $("f_groomParents").value = state.groom.parents;
+    $("f_headline").value = state.invitation.headline;
+    $("f_intro").value = state.invitation.intro;
+    $("f_story").value = state.invitation.story;
+    $("f_hashtag").value = state.invitation.hashtag;
+    $("f_closing").value = state.invitation.closing;
+    $("f_countdown").value = state.countdownTarget ? toLocalInput(state.countdownTarget) : "";
+    var e0 = state.events[0] || {};
+    $("f_venue").value = e0.venueName || "";
+    $("f_city").value = e0.city || "";
+    $("f_address").value = e0.venueAddress || "";
+    $("f_lat").value = e0.lat || "";
+    $("f_lng").value = e0.lng || "";
+    $("f_waDisplay").value = state.whatsapp.display;
+    $("f_waIntl").value = state.whatsapp.intl;
+    $("f_contact").value = state.contact;
+    // remember initial values so the first live preview update knows the old text
+    for (var id in LIVE_FIELDS) {
+      var el = $(id);
+      if (el) prevFieldVals[id] = el.value;
+    }
+  }
+  function toLocalInput(iso) {
+    var d = new Date(iso);
+    if (isNaN(d)) return "";
+    var pad = function (n) { return String(n).padStart(2, "0"); };
+    return d.getFullYear() + "-" + pad(d.getMonth() + 1) + "-" + pad(d.getDate()) + "T" + pad(d.getHours()) + ":" + pad(d.getMinutes());
+  }
+
+  /* ---------- scroll preview to the edited section ---------- */
+  // candidate needles for a field, best-first — the first one actually present
+  // in the preview document is used to scroll
+  function needlesForField(field) {
+    if (String(field).indexOf("ev:") === 0) {
+      var cls = field.slice(3);
+      var map = { "ev-name": "name", "ev-day": "day", "ev-time": "time", "ev-date": "dateLabel", "ev-city": "city", "ev-venue": "venueName", "ev-address": "venueAddress", "ev-note": "note" };
+      var row = state.events[0] || {};
+      var v = map[cls] ? String(row[map[cls]] || "").trim() : "";
+      return [v, "Wedding Timeline", cls === "ev-note" ? "More details below" : "", "Venue"];
+    }
+    if (String(field).indexOf("photo:") === 0) {
+      var slot = field.slice(6);
+      if (slot === "hero") return [state.bride.firstName || "Sita", state.groom.firstName || "Ram"];
+      if (slot.indexOf("gallery") === 0) return ["Gallery", "Photo"];
+      return ["Meet the Bride", "Meet the Groom", "Bride", "Groom"];
+    }
+    switch (field) {
+      case "f_brideFirst": return [state.bride.firstName, "Bride"];
+      case "f_groomFirst": return [state.groom.firstName, "Groom"];
+      case "f_brideFull": return [state.bride.fullName, state.bride.firstName, "Bride"];
+      case "f_groomFull": return [state.groom.fullName, state.groom.firstName, "Groom"];
+      case "f_brideParents": return [state.bride.parents, "Bride", "parents"];
+      case "f_groomParents": return [state.groom.parents, "Groom", "parents"];
+      case "f_headline": return [headlineFor(), state.bride.firstName || "Bride", state.groom.firstName || "Groom"];
+      case "f_intro": return [state.invitation.intro, "wedding celebration of", "Cordially"];
+      case "f_story": return [state.invitation.story, "hearts", "Meet the Couple"];
+      case "f_closing": return [state.invitation.closing, "looking forward"];
+      case "f_hashtag": return [state.invitation.hashtag ? "#" + state.invitation.hashtag : "", "#"];
+      case "f_countdown": return ["Counting down", "The countdown begins", "countdown"];
+      case "f_venue": return [state.events[0].venueName, "Venue", "Open in Google Maps"];
+      case "f_city": return [state.events[0].city, "Venue", "Open in Google Maps"];
+      case "f_address": return [state.events[0].venueAddress, "Venue", "Open in Google Maps"];
+      case "f_lat": case "f_lng": return ["Venue", "Open in Google Maps"];
+      case "f_waDisplay": return [state.whatsapp.display, "RSVP", "WhatsApp"];
+      case "f_waIntl": return [state.whatsapp.intl, "RSVP", "WhatsApp"];
+      default: return [];
+    }
+  }
+  // first candidate that exists in the preview document
+  function pickNeedle(doc, needles) {
+    for (var i = 0; i < needles.length; i++) {
+      if (needles[i] && findSmallElementContaining(doc, needles[i])) return needles[i];
+    }
+    return null;
+  }
+  function needleForField(field) {
+    if (String(field).indexOf("ev:") === 0) {
+      var cls = field.slice(3);
+      var map = { "ev-name": "name", "ev-day": "day", "ev-time": "time", "ev-date": "dateLabel", "ev-city": "city", "ev-venue": "venueName", "ev-address": "venueAddress", "ev-note": "note" };
+      var row = state.events[0] || {};
+      var v = map[cls] ? String(row[map[cls]] || "").trim() : "";
+      return v || (cls === "ev-name" ? "Wedding Timeline" : "");
+    }
+    switch (field) {
+      case "f_brideFirst": return state.bride.firstName.trim();
+      case "f_groomFirst": return state.groom.firstName.trim();
+      case "f_headline": return headlineFor();
+      case "f_intro": return state.invitation.intro.trim();
+      case "f_story": return state.invitation.story.trim().slice(0, 24);
+      case "f_closing": return state.invitation.closing.trim();
+      case "f_hashtag": return state.invitation.hashtag.trim() ? "#" + state.invitation.hashtag.trim() : "";
+      case "f_venue": return (state.events[0] || {}).venueName.trim();
+      case "f_city": return (state.events[0] || {}).city.trim();
+      case "f_address": return (state.events[0] || {}).venueAddress.trim();
+      case "f_waDisplay": return state.whatsapp.display.trim();
+      case "f_waIntl": return state.whatsapp.intl.trim();
+      case "f_contact": return "";
+      default: return "";
+    }
+  }
+  function keywordForField(field) {
+    switch (field) {
+      case "f_intro": return "wedding celebration of";
+      case "f_story": return "hearts";
+      case "f_closing": return "looking forward";
+      case "f_hashtag": return "#";
+      case "f_countdown": return "Counting down";
+      case "f_venue": case "f_city": case "f_address": return "Venue";
+      case "f_waDisplay": case "f_waIntl": return "RSVP";
+      default: return "";
+    }
+  }
+  function findSmallElementContaining(doc, needle) {
+    if (!needle) return null;
+    var best = null, bestLen = Infinity;
+    var els = doc.querySelectorAll("p, h1, h2, h3, span, div, a");
+    var vw = (doc.defaultView && doc.defaultView.innerWidth) || 1280;
+    for (var i = 0; i < els.length; i++) {
+      var el = els[i];
+      var t = (el.textContent || "").trim();
+      if (!t || t.length >= bestLen || t.indexOf(needle) === -1) continue;
+      var cs = getComputedStyle(el);
+      if (cs.display === "none" || cs.visibility === "hidden" || el.getClientRects().length === 0) continue;
+      var r = el.getBoundingClientRect();
+      if (r.right < -20 || r.left > vw + 20 || r.bottom < -20) continue;
+      best = el; bestLen = t.length;
+    }
+    return best;
+  }
+  function flashEl(el) {
+    var old = el.style.outline || "";
+    el.style.outline = "3px solid #d96c7a";
+    el.style.outlineOffset = "3px";
+    setTimeout(function () { el.style.outline = old; }, 2200);
+  }
+  function scrollPreviewToSection() {
+    var field = lastChangedField;
+    if (!field) return { ok: false };
+    var frame = $("previewFrame");
+    var doc;
+    try { doc = frame.contentDocument; } catch (e) { return { ok: false }; }
+    if (!doc) return { ok: false };
+    var needle = needleForField(field);
+    var target = needle ? findSmallElementContaining(doc, needle) : null;
+    if (!target) {
+      var kw = keywordForField(field);
+      if (kw) target = findSmallElementContaining(doc, kw);
+    }
+    if (!target) return { ok: false };
+    try {
+      var win = frame.contentWindow;
+      target.scrollIntoView({ block: "center", behavior: "instant" });
+      var rect = target.getBoundingClientRect();
+      var centered = Math.abs((rect.top + rect.height / 2) - win.innerHeight / 2) < 280;
+      flashEl(target);
+      return { ok: centered };
+    } catch (e) { return { ok: false }; }
+  }
+  var revealIv = null;
+  var revealOkCount = 0;
+  function requestReveal() {
+    var field = lastChangedField;
+    if (!field) return;
+    var needles = needlesForField(field).filter(Boolean);
+    if (!needles.length) return;
+    clearInterval(revealIv);
+    revealOkCount = 0;
+    var tries = 0;
+    revealIv = setInterval(function () {
+      tries++;
+      var frame = $("previewFrame");
+      if (!frame || !frame.contentWindow) { if (tries > 10) clearInterval(revealIv); return; }
+      // pick the first candidate actually present in the preview document
+      var needle = null;
+      try {
+        var doc = frame.contentDocument;
+        if (doc) needle = pickNeedle(doc, needles);
+      } catch (e) { }
+      if (!needle) { if (tries > 30) clearInterval(revealIv); return; }
+      try {
+        frame.contentWindow.postMessage({ type: "srw-reveal", needle: needle }, "*");
+      } catch (e) { }
+      if (tries > 30) clearInterval(revealIv);
+    }, 600);
+  }
+  window.addEventListener("message", function (e) {
+    if (!e.data || e.data.type !== "srw-reveal-done") return;
+    if (e.data.ok) { revealOkCount++; } else { revealOkCount = 0; }
+    if (revealOkCount >= 2) clearInterval(revealIv);
+  });
+  // collect preview runtime errors (reported by the injected helper)
+  window.addEventListener("message", function (e) {
+    if (!e.data || e.data.type !== "srw-err") return;
+    (window.__prevErrors = window.__prevErrors || []).push(e.data.msg);
+  });
+  function afterPreviewLoad() {
+    fitPreview();
+    requestReveal();
+  }
+
+  // show the desktop layout of the template (1280px) scaled to fit the
+  // preview pane — a narrow iframe triggers the template's mobile variant,
+  // which looks "broken" in a side-by-side editor
+  function fitPreview() {
+    var stage = $("previewStage");
+    var f = $("previewFrame");
+    if (!stage || !f) return;
+    var s = Math.max(0.15, Math.min(1, (stage.clientWidth - 2) / 1280));
+    f.style.transform = "scale(" + s + ")";
+    f.style.width = "1280px";
+    f.style.height = "800px";
+  }
+  window.addEventListener("resize", function () { fitPreview(); });
+  $("previewFrame").addEventListener("load", function () {
+    setTimeout(fitPreview, 60);
+  });
+
+  /* ---------- preview ---------- */
+  var previewTimer = null;
+  var templateHtmlCache = {};
+  function schedulePreview() {
+    renderReview();
+    clearTimeout(previewTimer);
+    previewTimer = setTimeout(renderPreview, 350);
+  }
+  function isLegacy(id) {
+    var t = tplMeta(id);
+    return t && t.engine === "legacy-framer";
+  }
+  var REVEAL_HELPER = "\n<script>\n" +
+    "(function(){\n" +
+    "  function findTxt(needle){\n" +
+    "    if(!needle) return null;\n" +
+    "    var best=null, bestLen=Infinity;\n" +
+    "    var els=document.querySelectorAll('p,h1,h2,h3,span,div,a');\n" +
+    "    for(var i=0;i<els.length;i++){\n" +
+    "      var el=els[i], t=(el.textContent||'').trim();\n" +
+    "      if(!t||t.length>=bestLen||t.indexOf(needle)===-1) continue;\n" +
+    "      var cs=getComputedStyle(el);\n" +
+    "      if(cs.display==='none'||cs.visibility==='hidden'||el.getClientRects().length===0) continue;\n" +
+    "      var r=el.getBoundingClientRect();\n" +
+    "      if(r.right<-20||r.left>innerWidth+20||r.bottom<-20) continue;\n" +
+    "      best=el; bestLen=t.length;\n" +
+    "    }\n" +
+    "    return best;\n" +
+    "  }\n" +
+    "  addEventListener('message',function(e){\n" +
+    "    if(!e.data||e.data.type!=='srw-reveal') return;\n" +
+    "    var el=findTxt(String(e.data.needle||''));\n" +
+    "    var ok=false;\n" +
+    "    if(el){\n" +
+    "      try{ el.scrollIntoView({block:'center',behavior:'instant'}); }catch(_){}\n" +
+    "      var r=el.getBoundingClientRect();\n" +
+    "      ok=Math.abs((r.top+r.height/2)-innerHeight/2)<300;\n" +
+    "    }\n" +
+    "    try{ parent.postMessage({type:'srw-reveal-done',ok:ok},'*'); }catch(_){}\n" +
+    "  });\n" +
+    "  addEventListener('error',function(e){ try{ parent.postMessage({type:'srw-err',msg:String(e.message||e)},'*'); }catch(_){ } });\n" +
+    "  addEventListener('unhandledrejection',function(e){ try{ parent.postMessage({type:'srw-err',msg:'rej:'+String(e.reason)},'*'); }catch(_){ } });\n" +
+    "  // live in-place text sync (no page reload) — mirrors the dashboard bridge\n" +
+    "  addEventListener('message',function(e){\n" +
+    "    if(!e.data||e.data.type!=='srw-live') return;\n" +
+    "    var f=e.data.field, old=String(e.data.old||''), val=String(e.data.value||'');\n" +
+    "    if(!old||old===val) return;\n" +
+    "    var els=document.querySelectorAll('p,h1,h2,h3,span,div,a,li');\n" +
+    "    var EXACT=(f==='f_brideFirst'||f==='f_groomFirst'||f==='f_brideFull'||f==='f_groomFull'||f==='f_brideParents'||f==='f_groomParents');\n" +
+    "    var n=0;\n" +
+    "    for(var i=0;i<els.length;i++){\n" +
+    "      var el=els[i], t=(el.textContent||''), nt=t;\n" +
+    "      if(EXACT){ if(t.trim()===old) nt=val; }\n" +
+    "      else if(f==='f_hashtag'){ nt=t.split('#'+old).join('#'+val); }\n" +
+    "      else if(f==='f_headline'){ if(e.data.headline) nt=t.split(old).join(e.data.headline); }\n" +
+    "      else { nt=t.split(old).join(val); }\n" +
+    "      if(nt!==t){ el.textContent=nt; n++; }\n" +
+    "    }\n" +
+    "    if(n>0){ try{ parent.postMessage({type:'srw-live-done',n:n},'*'); }catch(_){}\n" +
+    "  });\n" +
+    "})();\n" +
+    "<\/script>\n";
+
+  // The preview is loaded from a blob: URL, which cannot resolve root-relative
+  // paths like "/mirror/...". Without a <base>, every image, font, stylesheet
+  // and script of the template fails to load and the preview looks broken.
+  function withBase(html) {
+    html = html || "";
+    if (/<base\s/i.test(html)) return html;
+    var tag = '<base href="' + location.origin + '/">';
+    if (/<head[^>]*>/i.test(html)) return html.replace(/<head[^>]*>/i, function (h) { return h + tag; });
+    return tag + html;
+  }
+
+  function withRevealHelper(html) {
+    html = withBase(html);
+    if ((html || "").indexOf("srw-reveal-done") !== -1) return html;
+    if ((html || "").indexOf("</body>") !== -1) return html.replace("</body>", REVEAL_HELPER + "</body>");
+    return html + REVEAL_HELPER;
+  }
+
+  function renderPreview() {
+    if (isLegacy(currentId)) { serverPreview(); return; }
+    $("previewFrame").hidden = false;
+    $("previewFallback").classList.add("hidden");
+    var url = "/tpl/" + currentId + "/index.html";
+    var getHtml = templateHtmlCache[currentId]
+      ? Promise.resolve(templateHtmlCache[currentId])
+      : fetch(url).then(function (r) { return r.text(); }).then(function (t) {
+          templateHtmlCache[currentId] = t; return t;
+        }).catch(function () { return null; });
+    getHtml.then(function (html) {
+      if (!html) { serverPreview(); return; }
+      var out = applyTokens(html);
+      var frame = $("previewFrame");
+      // load via a blob URL: srcdoc pages have an opaque "null" origin, which
+      // crashes scripts (localStorage, history, …) in heavier templates
+      try {
+        frame.src = URL.createObjectURL(new Blob([withRevealHelper(out)], { type: "text/html" }));
+      } catch (e) {
+        frame.srcdoc = withRevealHelper(out);
+      }
+      frame.onload = function () {
+        try {
+          var win = frame.contentWindow;
+          if (win && win.__WD_APPLY__) win.__WD_APPLY__(eventsPayload());
+        } catch (e) { /* ignore */ }
+        afterPreviewLoad();
+      };
+    });
+  }
+  // Latest-response-wins guard: when typing fast, several /api/preview
+  // requests overlap; the frame must never be overwritten by a stale one.
+  var previewSeq = 0;
+  var previewCtrl = null;
+  function serverPreview() {
+    $("previewFrame").hidden = false;
+    $("previewFallback").classList.add("hidden");
+    var frame = $("previewFrame");
+    var mySeq = ++previewSeq;
+    if (previewCtrl) { try { previewCtrl.abort(); } catch (e) { } }
+    previewCtrl = window.AbortController ? new AbortController() : null;
+
+    var payload = {
+      template: currentId,
+      couple: {
+        bride: { firstName: state.bride.firstName, fullName: state.bride.fullName, parents: state.bride.parents },
+        groom: { firstName: state.groom.firstName, fullName: state.groom.fullName, parents: state.groom.parents },
+        invitation: {
+          headline: state.invitation.headline || "{bride} weds {groom}",
+          intro: state.invitation.intro, story: state.invitation.story,
+          hashtag: state.invitation.hashtag, closing: state.invitation.closing
+        },
+        events: state.events.slice(0, 6).filter(function (e) { return e.name.trim(); }),
+        countdownTarget: state.countdownTarget,
+        whatsapp: state.whatsapp
+      }
+    };
+    // keep the current frame visible until the fresh render arrives — no
+    // "Loading…" flicker on every keystroke
+    fetch("/api/preview", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(payload),
+      signal: previewCtrl ? previewCtrl.signal : undefined
+    }).then(function (r) { return r.json(); }).then(function (data) {
+      if (mySeq !== previewSeq) return; // a newer preview superseded this one
+      if (data.html) {
+        // blob URL keeps a real origin (srcdoc's "null" origin crashes scripts)
+        try {
+          frame.src = URL.createObjectURL(new Blob([withRevealHelper(data.html)], { type: "text/html" }));
+        } catch (e) {
+          frame.srcdoc = withRevealHelper(data.html);
+        }
+        frame.onload = afterPreviewLoad;
+      }
+      else {
+        $("previewFrame").hidden = true;
+        $("previewFallback").classList.remove("hidden");
+        $("fallbackDemoLink").href = "/templates/" + currentId + "/";
+      }
+    }).catch(function (err) {
+      if (mySeq !== previewSeq) return;
+      if (err && err.name === "AbortError") return;
+      $("previewFrame").hidden = true;
+      $("previewFallback").classList.remove("hidden");
+      $("fallbackDemoLink").href = "/templates/" + currentId + "/";
+    });
+  }
+  function eventsPayload() {
+    return (state.events || []).slice(0, 6).map(function (e) {
+      return { name: e.name, day: e.day, time: e.time, dateLabel: e.dateLabel, city: e.city, note: e.note };
+    });
+  }
+  function headlineFor() {
+    return String(state.invitation.headline || "{bride} weds {groom}")
+      .replace(/\{bride\}/g, state.bride.firstName || "Bride")
+      .replace(/\{groom\}/g, state.groom.firstName || "Groom");
+  }
+  function mapsFor() {
+    var e0 = state.events[0] || {};
+    var lat = String(e0.lat || "").trim(), lng = String(e0.lng || "").trim();
+    if (lat && lng) {
+      return {
+        link: "https://www.google.com/maps/search/?api=1&query=" + encodeURIComponent(lat + "," + lng),
+        embed: "https://maps.google.com/maps?q=" + encodeURIComponent(lat + "," + lng) + "&z=15&output=embed"
+      };
+    }
+    var q = [e0.venueName, e0.venueAddress, e0.city].filter(Boolean).join(", ").trim();
+    if (q) {
+      return {
+        link: "https://www.google.com/maps/search/?api=1&query=" + encodeURIComponent(q),
+        embed: "https://maps.google.com/maps?q=" + encodeURIComponent(q) + "&z=15&output=embed"
+      };
+    }
+    return { link: "#", embed: "" };
+  }
+  function waLink() {
+    var intl = String((state.whatsapp || {}).intl || "").replace(/\D/g, "");
+    if (!intl) return "#";
+    var text = "Namaste! We would love to attend the wedding of " + (state.bride.firstName || "") + " & " + (state.groom.firstName || "") + ".";
+    return "https://wa.me/" + intl + "?text=" + encodeURIComponent(text);
+  }
+  function applyTokens(html) {
+    var e0 = state.events[0] || {};
+    var maps = mapsFor();
+    var names = (state.bride.firstName || "Bride") + " & " + (state.groom.firstName || "Groom");
+    var gallery = [];
+    for (var i = 1; i <= 6; i++) gallery.push(state.images["gallery" + i] || null);
+    var tokens = {
+      PAGE_TITLE: esc(state.invitation.hashtag ? names + " | Wedding Invitation" : names + " | Wedding Invitation"),
+      META_DESCRIPTION: esc("Join us to celebrate the wedding of " + names + "."),
+      PAGE_URL: esc("/" + slugify(state.bride.firstName) + "-" + slugify(state.groom.firstName)),
+      BRIDE_FIRST: esc(state.bride.firstName),
+      GROOM_FIRST: esc(state.groom.firstName),
+      BRIDE_FULL: esc(state.bride.fullName || state.bride.firstName),
+      GROOM_FULL: esc(state.groom.fullName || state.groom.firstName),
+      BRIDE_PARENTS: esc(state.bride.parents),
+      GROOM_PARENTS: esc(state.groom.parents),
+      HEADLINE: esc(headlineFor()),
+      INTRO: esc(state.invitation.intro),
+      STORY: esc(state.invitation.story),
+      CLOSING: esc(state.invitation.closing),
+      HASHTAG: esc(state.invitation.hashtag),
+      COUNTDOWN_ISO: esc(state.countdownTarget || ""),
+      WA_DISPLAY: esc(state.whatsapp.display),
+      WA_INTL: esc(state.whatsapp.intl),
+      WHATSAPP_LINK: esc(waLink()),
+      MAIN_EVENT_NAME: esc(e0.name),
+      MAIN_EVENT_DAY: esc(e0.day),
+      MAIN_EVENT_DATE: esc(e0.dateLabel),
+      MAIN_EVENT_TIME: esc(e0.time),
+      MAIN_VENUE: esc(e0.venueName),
+      MAIN_ADDRESS: esc(e0.venueAddress),
+      MAIN_CITY: esc(e0.city),
+      MAPS_LINK: esc(maps.link),
+      MAPS_EMBED: esc(maps.embed),
+      TTK_WEATHER: esc(""),
+      TTK_STAFF: esc(""),
+      TTK_PARKING: esc(""),
+      HERO_IMG: esc(state.images.hero || ""),
+      BRIDE_IMG: esc(state.images.bridePhoto || ""),
+      GROOM_IMG: esc(state.images.groomPhoto || ""),
+      PORTRAIT_IMG: esc(state.images.portrait || ""),
+      EVENTS_JSON: JSON.stringify(eventsPayload()).replace(/</g, "\\u003c"),
+      GALLERY_JSON: JSON.stringify(gallery).replace(/</g, "\\u003c")
+    };
+    return html.replace(/\{\{([A-Z_]+)\}\}/g, function (m, key) {
+      return Object.prototype.hasOwnProperty.call(tokens, key) ? tokens[key] : m;
+    });
+  }
+  function esc(s) {
+    return String(s == null ? "" : s)
+      .replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;");
+  }
+  function slugify(s) {
+    return String(s || "").toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/^-+|-+$/g, "").slice(0, 40);
+  }
+
+  /* ---------- publish ---------- */
+  function validate() {
+    var errs = [];
+    if (!state.bride.firstName.trim() || !state.groom.firstName.trim()) errs.push("Enter both bride and groom first names.");
+    if (!state.whatsapp.intl.trim()) errs.push("Add the international WhatsApp number (with country code) for RSVP.");
+    var contactDigits = String(state.contact || "").replace(/\D/g, "");
+    if (contactDigits.length < 10) errs.push("Add your 10-digit contact number (we need it to reach you).");
+    var named = state.events.filter(function (e) { return e.name.trim(); });
+    if (!named.length) errs.push("Add at least one wedding event with a name.");
+    return errs;
+  }
+  /* ---------- Razorpay checkout (pay first, then publish) ---------- */
+  var WEBSITE_PRICE = 99900; // paise — must match WEBSITE_PRICE_PAISE on the server
+  var PRICE_INR = WEBSITE_PRICE / 100;
+  var PRICE_LABEL = "🚀 Go live — ₹" + PRICE_INR;
+  var PUBLISHING_LABEL = "Publishing…";
+
+  // popup opened while the user is still on the submit gesture (to dodge
+  // popup blockers after the async payment completes)
+  var PUB_WINDOW = null;
+
+  function readPayload() {
+    return {
+      template: currentId,
+      couple: {
+        contact: String(state.contact || "").replace(/\D/g, "").slice(0, 15),
+        bride: { firstName: state.bride.firstName.trim(), fullName: state.bride.fullName.trim(), parents: state.bride.parents.trim() },
+        groom: { firstName: state.groom.firstName.trim(), fullName: state.groom.fullName.trim(), parents: state.groom.parents.trim() },
+        invitation: {
+          headline: state.invitation.headline.trim() || "{bride} weds {groom}",
+          intro: state.invitation.intro.trim(),
+          story: state.invitation.story.trim(),
+          hashtag: state.invitation.hashtag.trim(),
+          closing: state.invitation.closing.trim()
+        },
+        events: state.events.slice(0, 6).filter(function (e) { return e.name.trim(); }).map(function (e) {
+          return { name: e.name.trim(), day: e.day.trim(), time: e.time.trim(), dateLabel: e.dateLabel.trim(), city: e.city.trim(), venueName: e.venueName.trim(), venueAddress: e.venueAddress.trim(), lat: e.lat.trim(), lng: e.lng.trim(), note: e.note.trim() };
+        }),
+        countdownTarget: state.countdownTarget,
+        whatsapp: { display: state.whatsapp.display.trim(), intl: state.whatsapp.intl.trim() },
+        images: {
+          hero: state.images.hero, bridePhoto: state.images.bridePhoto, groomPhoto: state.images.groomPhoto, portrait: state.images.portrait,
+          gallery1: state.images.gallery1, gallery2: state.images.gallery2, gallery3: state.images.gallery3,
+          gallery4: state.images.gallery4, gallery5: state.images.gallery5, gallery6: state.images.gallery6
+        }
+      }
+    };
+  }
+
+  async function publishNow(payload) {
+    var btn = $("publishBtn");
+    btn.disabled = true; btn.textContent = PUBLISHING_LABEL;
+    try {
+      var res = await fetch("/api/public-website", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(payload)
+      });
+      var data = await res.json().catch(function () { return {}; });
+      if (!res.ok) throw new Error(data.error || "Could not publish right now. Try again in a moment.");
+      showResult(data);
+    } catch (err) {
+      toast(err.message || "Publishing failed", "err");
+    } finally {
+      btn.disabled = false; btn.textContent = PRICE_LABEL;
+    }
+  }
+
+  function setPublishBusy(busy, label) {
+    var btn = $("publishBtn");
+    btn.disabled = busy;
+    if (label) btn.textContent = label;
+  }
+
+  function loadCheckoutJs(cb) {
+    if (window.Razorpay) return cb();
+    var s = document.createElement("script");
+    s.src = "https://checkout.razorpay.com/v1/checkout.js";
+    s.onload = cb;
+    s.onerror = function () {
+      setPublishBusy(false, PRICE_LABEL);
+      toast("Could not load the payment gateway — check your connection.", "err");
+    };
+    document.head.appendChild(s);
+  }
+
+  function closePubWindow() {
+    if (PUB_WINDOW && !PUB_WINDOW.closed) { try { PUB_WINDOW.close(); } catch (e) { } }
+    PUB_WINDOW = null;
+  }
+
+  function startCheckout(payload) {
+    setPublishBusy(true, "Opening secure payment…");
+    // open a blank tab now (inside the click gesture) — it becomes the live site
+    try { PUB_WINDOW = window.open("", "srw_publish"); } catch (e) { PUB_WINDOW = null; }
+    fetch("/api/razorpay/order", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ amount: WEBSITE_PRICE })
+    })
+    .then(function (r) { return r.json(); })
+    .then(function (o) {
+      if (!o.order_id) throw new Error(o.error || "Could not start the payment.");
+      loadCheckoutJs(function () {
+        var rzp = new Razorpay({
+          key: o.key_id,
+          amount: o.amount,
+          currency: o.currency || "INR",
+          name: "SitaRam Weddings",
+          description: "Wedding website · ₹" + PRICE_INR,
+          order_id: o.order_id,
+          prefill: {
+            name: (state.bride.firstName.trim() || "") + " & " + (state.groom.firstName.trim() || ""),
+            contact: String(state.contact || "").replace(/\D/g, "").slice(0, 10)
+          },
+          theme: { color: "#c2535f" },
+          handler: function (resp) {
+            fetch("/api/razorpay/verify", {
+              method: "POST",
+              headers: { "Content-Type": "application/json" },
+              body: JSON.stringify({
+                order_id: resp.razorpay_order_id,
+                payment_id: resp.razorpay_payment_id,
+                signature: resp.razorpay_signature
+              })
+            })
+            .then(function (r) { return r.json(); })
+            .then(function (v) {
+              if (!v.ok) throw new Error(v.error || "Payment could not be verified.");
+              payload.payment = {
+                order_id: resp.razorpay_order_id,
+                payment_id: resp.razorpay_payment_id,
+                signature: resp.razorpay_signature
+              };
+              toast("Payment received 🎉 Publishing your website…", "ok");
+              publishNow(payload);
+            })
+            .catch(function (err) {
+              closePubWindow();
+              toast(err.message || "Payment could not be verified.", "err");
+            });
+          },
+          modal: {
+            ondismiss: function () {
+              closePubWindow();
+              setPublishBusy(false, PRICE_LABEL);
+              toast("Payment cancelled — your website was not published.", "err");
+            }
+          }
+        });
+        rzp.open();
+      });
+    })
+    .catch(function (err) {
+      closePubWindow();
+      setPublishBusy(false, PRICE_LABEL);
+      toast(err.message || "Could not reach the payment gateway.", "err");
+    });
+  }
+
+  $("form").addEventListener("submit", async function (e) {
+    e.preventDefault();
+    var errs = validate();
+    if (errs.length) { toast(errs.join(" "), "err"); return; }
+    startCheckout(readPayload());
+  });
+
+  function showOverlay(link) {
+    $("resultLink").value = link;
+    $("openSite").href = link;
+    var msg = "Join us at our wedding! 💍 " + link;
+    $("shareWhats").href = "https://wa.me/?text=" + encodeURIComponent(msg);
+    $("resultWrap").classList.remove("hidden");
+  }
+  function showResult(data) {
+    var link = data.url || (location.origin + "/" + data.slug + "/");
+    if (PUB_WINDOW && !PUB_WINDOW.closed) {
+      try {
+        PUB_WINDOW.location = link;
+        PUB_WINDOW = null;
+        return; // the website opens in the new tab
+      } catch (e) { /* fall through to overlay */ }
+    }
+    showOverlay(link);
+  }
+  $("copyLink").onclick = function () {
+    var input = $("resultLink");
+    input.select();
+    try { document.execCommand("copy"); } catch (e) { }
+    toast("Link copied ✔", "ok");
+  };
+  $("editMore").onclick = function () { $("resultWrap").classList.add("hidden"); };
+  $("mobilePreviewBtn").onclick = function () {
+    var p = document.querySelector(".preview-panel");
+    var collapsed = p.classList.toggle("collapsed");
+    this.textContent = collapsed ? "👁 Preview" : "✕ Close preview";
+    if (!collapsed) { setTimeout(function () { p.scrollIntoView({ behavior: "smooth", block: "start" }); }, 60); }
+  };
+  $("openPreviewBtn").onclick = function () {
+    var url = "/tpl/" + currentId + "/index.html";
+    fetch(url).then(function (r) { return r.text(); }).then(function (html) {
+      var blob = new Blob([applyTokens(html)], { type: "text/html" });
+      window.open(URL.createObjectURL(blob), "_blank");
+    });
+  };
+
+  /* ---------- toast ---------- */
+  var toastTimer = null;
+  function toast(msg, kind) {
+    var b = $("banner");
+    b.textContent = msg;
+    b.className = "banner show " + (kind || "");
+    clearTimeout(toastTimer);
+    toastTimer = setTimeout(function () { b.className = "banner"; }, 4200);
+  }
+
+  /* ---------- render all ---------- */
+  var fieldsBound = false;
+  var photosBound = false;
+  function renderAll() {
+    renderPills();
+    if (!fieldsBound) { bindFields(); fieldsBound = true; }
+    if (!photosBound) {
+      // clicking/ focusing a photo slot scrolls the preview to where the
+      // photo appears (hero, portraits or gallery)
+      $("photosGrid").addEventListener("focusin", function (e) {
+        var inp = e.target.closest("input[type=file]");
+        if (inp && inp.dataset.slot) {
+          lastChangedField = "photo:" + inp.dataset.slot;
+          requestReveal();
+        }
+      });
+      photosBound = true;
+    }
+    fillFields();
+    renderEvents();
+    renderPhotos();
+    renderReview();
+    renderPreview();
+  }
+
+  loadDraft();
+  renderAll();
+})();
+</script>
+</body>
+</html>

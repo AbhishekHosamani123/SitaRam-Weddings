@@ -1,0 +1,15 @@
+{
+  "id": "beach",
+  "name": "Beach",
+  "category": "Destination",
+  "tagline": "Sun, sand & sea — breezy waves for destination weddings",
+  "accent": "#1f8a8f",
+  "colors": [
+    "#f7ead7",
+    "#1f8a8f",
+    "#ef7b5e"
+  ],
+  "engine": "placeholder",
+  "order": 7,
+  "disabled": true
+}

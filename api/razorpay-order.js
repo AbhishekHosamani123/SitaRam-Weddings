@@ -1,0 +1,38 @@
+/**
+ * Vercel serverless function — create a Razorpay order (production).
+ * Mirrors POST /api/razorpay/order on the local server (server.js).
+ * Requires RZP_KEY_ID / RZP_KEY_SECRET env vars in the Vercel project.
+ */
+const { createOrder, websitePricePaise } = require("../lib/razorpay");
+
+function parseBody(req) {
+  const raw = req.body;
+  if (!raw) return {};
+  if (typeof raw === "object" && !Buffer.isBuffer(raw)) return raw;
+  try { return JSON.parse(Buffer.isBuffer(raw) ? raw.toString("utf8") : raw); } catch { return {}; }
+}
+
+module.exports = async function handler(req, res) {
+  if (req.method !== "POST") {
+    res.status(405).json({ error: "method not allowed" });
+    return;
+  }
+  const b = parseBody(req);
+  const amt = Number(b.amount);
+  const price = websitePricePaise();
+  if (!Number.isInteger(amt) || amt !== price) {
+    res.status(400).json({ error: "Invalid amount." });
+    return;
+  }
+  try {
+    const order = await createOrder(amt, "weds-" + Date.now());
+    res.status(200).json({
+      order_id: order.id,
+      key_id: process.env.RZP_KEY_ID,
+      amount: order.amount,
+      currency: order.currency || "INR",
+    });
+  } catch (e) {
+    res.status(502).json({ error: "Payment provider unavailable — try again in a moment.", detail: String(e && e.message || e) });
+  }
+};

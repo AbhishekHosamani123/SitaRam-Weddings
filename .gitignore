@@ -5,3 +5,9 @@ _tools/server_static.log
 .vercel/
 *.log
 data/couples.json.tmp
+public/mirror/framerusercontent.com/sites/*/pv-*.mjs
+
+# secrets — never commit
+.env
+.env.local
+.env.*.local
