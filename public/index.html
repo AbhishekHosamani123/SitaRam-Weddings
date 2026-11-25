@@ -156,9 +156,12 @@ button{font:inherit;cursor:pointer}
 .grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:26px}
 .tpl-card{background:var(--paper);border:1px solid var(--line);border-radius:22px;overflow:hidden;display:flex;flex-direction:column;box-shadow:0 4px 16px rgba(122,66,58,.06);transition:transform .25s,box-shadow .25s}
 .tpl-card:hover{transform:translateY(-4px);box-shadow:var(--shadow)}
-.tpl-preview{position:relative;aspect-ratio:16/10;overflow:hidden;background:linear-gradient(135deg,var(--c1,#fbeede),var(--c2,#f0a6ae));border-bottom:1px solid var(--line)}
-.tpl-preview iframe{width:1280px;height:800px;border:0;transform-origin:0 0;pointer-events:none;display:block}
-.tpl-preview .open-full{position:absolute;right:12px;top:12px;background:rgba(61,34,42,.72);color:#fff;border:0;border-radius:999px;padding:7px 14px;font-size:12.5px;font-weight:700;letter-spacing:.04em;opacity:0;transition:.25s;backdrop-filter:blur(4px)}
+.tpl-preview{position:relative;height:300px;overflow:hidden;background:radial-gradient(circle at 50% 35%,rgba(255,255,255,.16),transparent 65%),linear-gradient(135deg,var(--c1,#fbeede),var(--c2,#f0a6ae));border-bottom:1px solid var(--line);display:flex;align-items:center;justify-content:center}
+.tpl-phone{position:relative;width:417px;height:880px;padding:14px 12px;border-radius:52px;background:linear-gradient(145deg,#2c2c30,#141416);border:2.5px solid #4a4a50;box-shadow:0 18px 42px rgba(24,14,18,.38);transform:scale(.315);transform-origin:center center;flex:none}
+.tpl-phone-screen{position:relative;width:393px;height:852px;border-radius:40px;overflow:hidden;background:#fff}
+.tpl-phone-island{position:absolute;top:10px;left:50%;transform:translateX(-50%);width:112px;height:28px;border-radius:999px;background:#09090b;z-index:20;pointer-events:none}
+.tpl-preview iframe{width:393px;height:100%;border:0;pointer-events:none;display:block;background:#fff}
+.tpl-preview .open-full{position:absolute;right:12px;top:12px;background:rgba(61,34,42,.72);color:#fff;border:0;border-radius:999px;padding:7px 14px;font-size:12.5px;font-weight:700;letter-spacing:.04em;opacity:0;transition:.25s;backdrop-filter:blur(4px);z-index:30;text-decoration:none}
 .tpl-card:hover .open-full{opacity:1}
 .tpl-body{padding:20px 22px 22px;display:flex;flex-direction:column;gap:8px;flex:1}
 .tpl-cat{font-size:11px;letter-spacing:.18em;text-transform:uppercase;font-weight:700;color:var(--ac,#c2535f)}
@@ -376,7 +379,12 @@ details[open] summary::after{transform:rotate(45deg)}
       
       <article class="tpl-card" data-cat="Hindu" style="--ac:#b3541e;--c1:#7b2d26;--c2:#d9a441">
         <div class="tpl-preview">
-          <iframe src="/templates/ram-mandir/" loading="lazy" title="Ram Mandir preview"></iframe>
+          <div class="tpl-phone">
+            <div class="tpl-phone-screen">
+              <div class="tpl-phone-island" aria-hidden="true"></div>
+              <iframe src="/templates/ram-mandir/" title="Ram Mandir preview"></iframe>
+            </div>
+          </div>
           <a class="open-full" href="/templates/ram-mandir/" target="_blank" rel="noopener">Full preview ↗</a>
         </div>
         <div class="tpl-body">
@@ -623,25 +631,24 @@ details[open] summary::after{transform:rotate(45deg)}
     if (io) io.observe(el); else el.classList.add("in-view");
   });
 
-  /* hero iPhone auto-scroll walkthrough (plays like a video demo, pauses on hover) */
-  var heroFrame = document.getElementById("heroDemoFrame");
-  var heroPhone = document.getElementById("heroPhone");
-  if (heroFrame) {
+  /* auto-scroll walkthrough for iPhone demo iframes (hero + template cards) */
+  function attachAutoScroll(frame, hoverTarget) {
+    if (!frame) return;
     var paused = false;
     var scrollTimer = null;
-    if (heroPhone) {
-      heroPhone.addEventListener("mouseenter", function () { paused = true; });
-      heroPhone.addEventListener("mouseleave", function () { paused = false; });
+    if (hoverTarget) {
+      hoverTarget.addEventListener("mouseenter", function () { paused = true; });
+      hoverTarget.addEventListener("mouseleave", function () { paused = false; });
     }
-    heroFrame.addEventListener("load", function () {
+    frame.addEventListener("load", function () {
       clearInterval(scrollTimer);
       var y = 0;
-      var hold = 50; // pause briefly on the hero before scrolling
+      var hold = 50;
       scrollTimer = setInterval(function () {
         if (paused) return;
         try {
-          var win = heroFrame.contentWindow;
-          var doc = heroFrame.contentDocument;
+          var win = frame.contentWindow;
+          var doc = frame.contentDocument;
           if (!win || !doc || !doc.documentElement) return;
           if (hold > 0) { hold--; return; }
           var maxY = Math.max(0, doc.documentElement.scrollHeight - win.innerHeight);
@@ -653,6 +660,10 @@ details[open] summary::after{transform:rotate(45deg)}
       }, 30);
     });
   }
+  attachAutoScroll(document.getElementById("heroDemoFrame"), document.getElementById("heroPhone"));
+  document.querySelectorAll(".tpl-preview iframe").forEach(function (f) {
+    attachAutoScroll(f, f.closest(".tpl-card"));
+  });
 })();
 </script>
 </body>
