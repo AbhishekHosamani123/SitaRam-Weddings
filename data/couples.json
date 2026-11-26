@@ -10,19 +10,19 @@
       "bride": {
         "firstName": "Sita",
         "fullName": "Sita",
-        "parents": "Shri. Rajmani Pathak & Smt. Ambika Pathak",
+        "parents": "Sample Bride's Family",
         "photo": null
       },
       "groom": {
         "firstName": "Ram",
         "fullName": "Ram",
-        "parents": "Shri. Rajmani Pathak & Smt. Ambika Pathak",
+        "parents": "Sample Groom's Family",
         "photo": null
       },
       "invitation": {
         "headline": "{bride} weds {groom}",
         "intro": "Cordially request the honor of your presence at the wedding celebration of",
-        "story": "Our hearts are full and our smiles wide, we can hardly believe our dreamy eyed teen selves made it here! Weâ€™re ready to make memories that last a lifetime, and theyâ€™ll be incomplete without you by our side. Come celebrate with us and let's fill the air with joy and laughter.",
+        "story": "Our hearts are full and our smiles wide, we can hardly believe our dreamy eyed teen selves made it here! We're ready to make memories that last a lifetime, and they'll be incomplete without you by our side. Come celebrate with us and let's fill the air with joy and laughter.",
         "hashtag": "abkan",
         "closing": "Looking forward to see you"
       },
@@ -30,21 +30,21 @@
         {
           "slot": 1,
           "name": "Shaadi",
-          "day": "Friday",
+          "day": "Saturday",
           "time": "6 Pm Onwards",
-          "dateLabel": "29th Aug 2026",
-          "venueName": "Venue Name",
-          "venueAddress": "Full street address, city, state, ZIP",
-          "city": "Pune, Maharashtra",
-          "lat": "19.2183",
-          "lng": "72.9781",
+          "dateLabel": "20th Mar 2027",
+          "venueName": "Sample Wedding Venue",
+          "venueAddress": "Sample Road, Example City",
+          "city": "Example City, India",
+          "lat": "",
+          "lng": "",
           "note": "More details below"
         }
       ],
-      "countdownTarget": "2026-09-28T00:00:00.000Z",
+      "countdownTarget": "2027-03-20T12:30:00.000Z",
       "whatsapp": {
-        "display": "9819200906",
-        "intl": "919819200906"
+        "display": "00000 00000",
+        "intl": "910000000000"
       },
       "gallery": [],
       "thingsToKnow": [

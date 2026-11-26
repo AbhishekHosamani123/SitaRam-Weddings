@@ -74,6 +74,41 @@ function jsonForScript(v) {
   return JSON.stringify(v).replace(/</g, "\\u003c");
 }
 
+function deferImageLoading(html) {
+  return html.replace(/<img\b[^>]*>/gi, (tag) =>
+    /\sloading\s*=/.test(tag) ? tag : tag.replace(/<img\b/i, '$& loading="lazy"')
+  );
+}
+
+function normalizeFramerText(source) {
+  return source.replaceAll("â€”", "—").replaceAll("â€™", "’");
+}
+
+function nextDemoWeddingDate(now = new Date()) {
+  const date = new Date(now.getTime() + 115 * 864e5);
+  date.setUTCHours(12, 30, 0, 0);
+  date.setUTCDate(date.getUTCDate() + ((6 - date.getUTCDay() + 7) % 7));
+  return date;
+}
+
+function formatDemoDate(date) {
+  const day = date.getUTCDate();
+  const suffix = day % 100 >= 11 && day % 100 <= 13
+    ? "th"
+    : ({ 1: "st", 2: "nd", 3: "rd" }[day % 10] || "th");
+  const month = new Intl.DateTimeFormat("en-US", { month: "short", timeZone: "UTC" }).format(date);
+  return `${day}${suffix} ${month} ${date.getUTCFullYear()}`;
+}
+
+function demoEventDate(weddingDate, offsetDays) {
+  const date = new Date(weddingDate);
+  date.setUTCDate(date.getUTCDate() + offsetDays);
+  return {
+    day: new Intl.DateTimeFormat("en-US", { weekday: "long", timeZone: "UTC" }).format(date),
+    dateLabel: formatDemoDate(date),
+  };
+}
+
 // ---------------------------------------------------------------------------
 // template registry (auto-discovered from templates/*/template.json)
 // ---------------------------------------------------------------------------
@@ -143,8 +178,7 @@ const CARD_MAX_LEN = 7000;
 
 /**
  * Fill the six timeline-card slots with the couple's events (slot 1..N).
- * Cards beyond N are hidden (desktop: the whole standalone block; mobile:
- * the card div itself). Returns the updated HTML.
+ * Cards beyond N are hidden before Framer hydration. Returns the updated HTML.
  */
 function applyEventSlots(html, events) {
   const slots = (events || []).slice(0, 6);
@@ -160,21 +194,8 @@ function applyEventSlots(html, events) {
     const end = Math.min(html.length, start + CARD_MAX_LEN);
     let seg = html.slice(start, end);
 
-    const before = html.slice(Math.max(0, start - 4000), start);
-    const isMobile = before.includes("Pillars Row") || before.includes(`data-framer-name="Event Pillars"`);
-
     if (!ev) {
-      if (isMobile) {
-        seg = seg.replace("style=\"will-change:transform", "style=\"display:none!important;will-change:transform");
-      } else {
-        const blockStart = html.lastIndexOf('<div class="ssr-variant hidden-7902is', start);
-        if (blockStart !== -1 && start - blockStart < 4000) {
-          const gt = html.indexOf(">", blockStart);
-          if (gt !== -1 && gt - blockStart < 120) {
-            html = html.slice(0, gt) + ' style="display:none!important"' + html.slice(gt);
-          }
-        }
-      }
+      seg = seg.replace("style=\"will-change:transform", "style=\"display:none!important;will-change:transform");
     } else {
       const pairs = [
         ["Shaadi", ev.name || "Shaadi"],
@@ -338,6 +359,7 @@ function buildLegacyCouplePage(couple, templateHtml, pageBundleSrc, mainBundleSr
     const re = new RegExp("text:`[^`]*?" + esc + "[^`]*`", "g");
     pageBundle = pageBundle.replace(re, "text:`" + c.invitation.story + "`");
   }
+  pageBundle = normalizeFramerText(pageBundle);
 
   // 3) sharing script + per-couple event config
   const eventsJson = JSON.stringify((c.events || []).slice(0, 6).map((e) => ({
@@ -371,7 +393,7 @@ function buildLegacyCouplePage(couple, templateHtml, pageBundleSrc, mainBundleSr
     htmlOut = htmlOut.replace("</body>", `<script>(()=>{const t=${JSON.stringify(escaped)};const set=()=>{document.title=t;const tt=document.querySelector("title");if(tt&&tt.textContent!==t)tt.textContent=t};[0,500,1500,3000,5000,8000].forEach(d=>setTimeout(set,d));window.addEventListener("load",set)})()</script></body>`);
   }
 
-  return { html: htmlOut, c, warnings, bundles };
+  return { html: deferImageLoading(htmlOut), c, warnings, bundles };
 }
 
 // ---------------------------------------------------------------------------
@@ -501,15 +523,18 @@ function buildPlaceholderPage(couple, tplHtml, tpl, opts = {}) {
   const html = tplHtml.replace(/\{\{([A-Z_]+)\}\}/g, (m, key) =>
     Object.prototype.hasOwnProperty.call(tokens, key) ? tokens[key] : m
   );
-  return { html, c };
+  return { html: deferImageLoading(html), c };
 }
 
 // ---------------------------------------------------------------------------
 // sample data for template demo pages
 // ---------------------------------------------------------------------------
 function sampleCouple() {
-  // keep the countdown alive: ~115 days out from build time
-  const future = new Date(Date.now() + 115 * 864e5 + 12 * 36e5);
+  const future = nextDemoWeddingDate();
+  const haldi = demoEventDate(future, -2);
+  const mehendi = demoEventDate(future, -1);
+  const wedding = demoEventDate(future, 0);
+  const reception = demoEventDate(future, 1);
   return {
     id: 0, slug: "ananya-vivaan", demo: true, active: true,
     title: "Ananya & Vivaan | Wedding Invitation",
@@ -524,14 +549,14 @@ function sampleCouple() {
       closing: "Your blessings mean the world to us",
     },
     events: [
-      { slot: 1, name: "Haldi", day: "Thursday", dateLabel: "12th Mar 2027", time: "10 Am Onwards", city: "Udaipur, Rajasthan", note: "Dress code — shades of yellow", venueName: "The Fern Lawns", venueAddress: "Lake Pichola Road", lat: "24.5711", lng: "73.6531" },
-      { slot: 2, name: "Mehendi", day: "Friday", dateLabel: "13th Mar 2027", time: "4 Pm Onwards", city: "Udaipur, Rajasthan", note: "Wear something comfortable & green" },
-      { slot: 3, name: "Sangeet", day: "Friday", dateLabel: "13th Mar 2027", time: "7 Pm Onwards", city: "Udaipur, Rajasthan", note: "Bring your best dance moves" },
-      { slot: 4, name: "Wedding Ceremony", day: "Saturday", dateLabel: "14th Mar 2027", time: "7:30 Pm Muhurat", city: "Udaipur, Rajasthan", note: "The big day — we say forever" },
-      { slot: 5, name: "Reception", day: "Sunday", dateLabel: "15th Mar 2027", time: "7 Pm Onwards", city: "Udaipur, Rajasthan", note: "Dinner, dancing & celebration" },
+      { slot: 1, name: "Haldi", ...haldi, time: "10 Am Onwards", city: "Udaipur, Rajasthan", note: "Dress code — shades of yellow", venueName: "The Fern Lawns", venueAddress: "Lake Pichola Road", lat: "24.5711", lng: "73.6531" },
+      { slot: 2, name: "Mehendi", ...mehendi, time: "4 Pm Onwards", city: "Udaipur, Rajasthan", note: "Wear something comfortable & green" },
+      { slot: 3, name: "Sangeet", ...mehendi, time: "7 Pm Onwards", city: "Udaipur, Rajasthan", note: "Bring your best dance moves" },
+      { slot: 4, name: "Wedding Ceremony", ...wedding, time: "7:30 Pm Muhurat", city: "Udaipur, Rajasthan", note: "The big day — we say forever" },
+      { slot: 5, name: "Reception", ...reception, time: "7 Pm Onwards", city: "Udaipur, Rajasthan", note: "Dinner, dancing & celebration" },
     ],
     countdownTarget: future.toISOString(),
-    whatsapp: { display: "98765 43210", intl: "919876543210" },
+    whatsapp: { display: "00000 00000", intl: "910000000000" },
     gallery: [],
     thingsToKnow: [
       { key: "weather", title: "Weather", text: "Pleasant March evenings — carry a light shawl for the open-air venues" },
@@ -540,6 +565,58 @@ function sampleCouple() {
     ],
     images: { hero: null, bridePhoto: null, groomPhoto: null, portrait: null },
   };
+}
+
+function weddingEventsScript() {
+  return `(() => {
+  const E = (self.__WEDDING_EVENTS__ || []);
+  const LEGACY = {
+    name: ["Shaadi"], day: ["Friday"], time: ["6 Pm Onwards"],
+    dateLabel: ["29th Aug 2026"], city: ["Pune, Maharashtra"], note: ["More details below"],
+  };
+  function assign() {
+    const cards = [...document.querySelectorAll('[data-framer-name]')]
+      .filter((timeline) => /Wedding Timeline$/.test(timeline.getAttribute('data-framer-name') || ''))
+      .flatMap((timeline) => [...timeline.querySelectorAll('div[data-framer-name]')])
+      .filter((el) => /^[1-6]$/.test(el.getAttribute('data-framer-name')) && el.querySelector('p'));
+    let changed = 0;
+    for (const card of cards) {
+      const n = +card.getAttribute('data-framer-name');
+      const ev = E[n - 1];
+      if (!ev) { if (card.style.display !== 'none') { card.style.display = 'none'; changed++; } continue; }
+      if (card.style.display === 'none') { card.style.display = ''; changed++; }
+      const ps = [...card.querySelectorAll('p')];
+      for (const p of ps) {
+        const t = (p.textContent || '').trim();
+        for (const key of Object.keys(LEGACY)) {
+          if (!LEGACY[key].includes(t)) continue;
+          const value = ev[key];
+          if (typeof value === 'string' && p.textContent !== value) { p.textContent = value; changed++; }
+          break;
+        }
+      }
+    }
+    return changed;
+  }
+  function run() { assign(); }
+  const delays = [0, 400, 1200, 2500, 4000, 6000, 8000, 10000];
+  delays.forEach((d) => setTimeout(run, d));
+  if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', run);
+  else run();
+  window.addEventListener('load', run);
+  const stop = Date.now() + 12000;
+  const observer = new MutationObserver(() => {
+    if (Date.now() > stop) { observer.disconnect(); return; }
+    run();
+  });
+  const main = document.getElementById('main') || document.body;
+  if (main) observer.observe(main, { childList: true, subtree: true, characterData: true });
+  self.__WD_APPLY__ = function (events) {
+    if (Array.isArray(events)) self.__WEDDING_EVENTS__ = events;
+    return assign();
+  };
+})();
+`;
 }
 
 // ---------------------------------------------------------------------------
@@ -707,14 +784,26 @@ function main() {
   const tpls = discoverTemplates();
   const tplById = Object.fromEntries(tpls.map((t) => [t.id, t]));
   report.templates = tpls.map((t) => t.id);
+  const demoRecord = couples.find((x) => x.demo);
+  const weddingDate = nextDemoWeddingDate();
+  const demo = demoRecord && {
+    ...demoRecord,
+    countdownTarget: weddingDate.toISOString(),
+    events: (demoRecord.events || []).map((event, index) => index === 0
+      ? { ...event, ...demoEventDate(weddingDate, 0) }
+      : event),
+  };
 
   // legacy resources — loaded only when something actually needs them
   let legacy = null;
   function getLegacy() {
     if (legacy) return legacy;
+    const pageBundlePath = path.join(SITES_DIR, PAGE_BUNDLE);
+    const pageBundle = normalizeFramerText(read(pageBundlePath));
+    write(pageBundlePath, pageBundle);
     legacy = {
       html: read(TEMPLATE),
-      pageBundle: read(path.join(SITES_DIR, PAGE_BUNDLE)),
+      pageBundle,
       mainBundle: read(path.join(SITES_DIR, MAIN_BUNDLE)),
     };
     return legacy;
@@ -729,58 +818,7 @@ function main() {
     return buildPlaceholderPage(couple, read(tpl.htmlPath), tpl, opts);
   }
 
-  // 0) shared post-hydration events script for the legacy template.
-  // It re-applies the slot→event mapping repeatedly (Framer's hydration may
-  // overwrite our SSR text), watching for mutations until stable.
-  write(EVENTS_JS, `(() => {
-  const E = (self.__WEDDING_EVENTS__ || []);
-  if (!E.length) return;
-  const LEGACY = {
-    name: ["Shaadi"], day: ["Friday"], time: ["6 Pm Onwards"],
-    date: ["29th Aug 2026"], city: ["Pune, Maharashtra"], note: ["More details below"],
-  };
-  function assign() {
-    const cards = [...document.querySelectorAll('div[data-framer-name]')].filter((el) =>
-      /^[1-6]$/.test(el.getAttribute('data-framer-name')) && el.querySelector('p'));
-    let changed = 0;
-    for (const card of cards) {
-      const n = +card.getAttribute('data-framer-name');
-      const ev = E[n - 1];
-      if (!ev) { if (card.style.display !== 'none') { card.style.display = 'none'; changed++; } continue; }
-      if (card.style.display === 'none') { card.style.display = ''; changed++; }
-      const ps = [...card.querySelectorAll('p')];
-      for (const p of ps) {
-        const t = (p.textContent || '').trim();
-        for (const key of Object.keys(LEGACY)) {
-          if (!LEGACY[key].includes(t)) continue;
-          if (p.textContent !== ev[key]) { p.textContent = ev[key]; changed++; }
-          break;
-        }
-      }
-    }
-    return changed;
-  }
-  function run() { try { assign(); } catch (e) {} }
-  const delays = [0, 400, 1200, 2500, 4000, 6000, 8000, 10000];
-  delays.forEach((d) => setTimeout(run, d));
-  if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', run);
-  else run();
-  window.addEventListener('load', run);
-  // keep re-applying while Framer keeps reconciling
-  const stop = Date.now() + 12000;
-  const observer = new MutationObserver(() => {
-    if (Date.now() > stop) { observer.disconnect(); return; }
-    run();
-  });
-  const main = document.getElementById('main') || document.body;
-  if (main) observer.observe(main, { childList: true, subtree: true, characterData: true });
-  // live-edit hook (Dashboard preview) — update events and re-apply now
-  self.__WD_APPLY__ = function (events) {
-    if (Array.isArray(events)) self.__WEDDING_EVENTS__ = events;
-    return assign();
-  };
-})();
-`);
+  write(EVENTS_JS, weddingEventsScript());
 
   // 1) homepage = the landing page (sales page), generated from template registry
   write(path.join(PUBLIC, "index.html"), buildLandingPage(tpls));
@@ -791,7 +829,6 @@ function main() {
   // 2) demo couple page — still generated statically as a fallback
   // (live couple pages are now rendered dynamically from Supabase at request
   // time; this demo copy just guarantees /sita-ram/ works even offline).
-  const demo = couples.find((x) => x.demo);
   if (demo && demo.active) {
     const demoCopy = JSON.parse(JSON.stringify(demo));
     const page = buildWithEngine(demoCopy, tplById[demoCopy.template || DEFAULT_TEMPLATE], { demo: false });
@@ -836,7 +873,7 @@ function main() {
       const page = buildWithEngine(source, tpl, { rootOnly: true, demo: true });
       write(path.join(PUBLIC, "templates", tpl.id, "index.html"), page.html);
       // raw template source for the public builder's live preview (/tpl/<id>/)
-      write(path.join(PUBLIC, "tpl", tpl.id, "index.html"), read(tpl.htmlPath));
+      write(path.join(PUBLIC, "tpl", tpl.id, "index.html"), deferImageLoading(read(tpl.htmlPath)));
       report.templates_demos = report.templates_demos || [];
       report.templates_demos.push(tpl.id);
     } catch (e) {
@@ -852,10 +889,17 @@ if (require.main === module) main();
 
 module.exports = {
   discoverTemplates,
+  applyEventSlots,
+  deferImageLoading,
+  demoEventDate,
+  formatDemoDate,
+  normalizeFramerText,
   buildPlaceholderPage,
   buildLegacyCouplePage,
   buildLandingPage,
   buildBuilderPage,
+  nextDemoWeddingDate,
+  weddingEventsScript,
   TEMPLATE,
   SITES_DIR,
   PAGE_BUNDLE,
