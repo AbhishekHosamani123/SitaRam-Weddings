@@ -4,7 +4,7 @@
 
   const SITE_URL = "https://sitaram-weddings.vercel.app";
   const $ = (id) => document.getElementById(id);
-  const state = { token: localStorage.getItem("wd_token") || "", couples: [], templates: [], selected: null, readonly: false, previewOpen: false };
+  const state = { token: localStorage.getItem("wd_token") || "", couples: [], leads: [], templates: [], selected: null, readonly: false, previewOpen: false };
 
   // ---------------------------------------------------------------- api
   async function api(path, opts = {}) {
@@ -77,7 +77,7 @@
     if (session && session.ok) {
       $("loginView").classList.add("hidden");
       $("appView").classList.remove("hidden");
-      await Promise.all([loadCouples(), loadTemplates()]);
+      await Promise.all([loadCouples(), loadTemplates(), loadLeads()]);
     } else {
       $("appView").classList.add("hidden");
       $("loginView").classList.remove("hidden");
@@ -97,7 +97,7 @@
       localStorage.setItem("wd_token", data.token);
       $("loginView").classList.add("hidden");
       $("appView").classList.remove("hidden");
-      await Promise.all([loadCouples(), loadTemplates()]);
+      await Promise.all([loadCouples(), loadTemplates(), loadLeads()]);
     } catch (err) {
       $("loginError").textContent = err.message || "Sign-in failed";
     }
@@ -157,6 +157,53 @@
       tbody.appendChild(tr);
     }
   }
+
+  async function loadLeads() {
+    try {
+      const data = await apiJson("/api/leads");
+      state.leads = data.leads || [];
+      renderLeads();
+    } catch (err) {
+      state.leads = [];
+      renderLeads();
+      toast("Could not load preview leads: " + (err.message || "request failed"), true);
+    }
+  }
+
+  function renderLeads() {
+    const tbody = document.querySelector("#leadTable tbody");
+    if (!tbody) return;
+    const leads = [...state.leads].sort((a, b) => Date.parse(b.created_at || "") - Date.parse(a.created_at || ""));
+    $("leadCount").textContent = leads.length + " total";
+    tbody.innerHTML = "";
+    for (const lead of leads) {
+      const tr = document.createElement("tr");
+      const created = lead.created_at ? new Date(lead.created_at).toLocaleString() : "—";
+      tr.innerHTML = `
+        <td><strong>${esc(lead.couple_names || "—")}</strong></td>
+        <td><a href="tel:${esc(lead.phone || "")}">${esc(lead.phone || "—")}</a></td>
+        <td>${lead.payment_status === "paid" ? "Paid" : "Unpaid"}</td>
+        <td>${esc(created)}</td>
+        <td><button class="btn small danger" type="button" data-delete-lead="${esc(lead.id)}">Delete</button></td>`;
+      tbody.appendChild(tr);
+    }
+  }
+
+  document.querySelector("#leadTable tbody").addEventListener("click", (event) => {
+    const button = event.target.closest("[data-delete-lead]");
+    if (!button) return;
+    const lead = state.leads.find((item) => item.id === button.dataset.deleteLead);
+    if (!lead) return;
+    confirmBox("Delete preview lead?", `Delete ${lead.couple_names || "this lead"} and its associated preview records?`, async () => {
+      try {
+        await apiJson("/api/leads/" + encodeURIComponent(lead.id), { method: "DELETE" });
+        await loadLeads();
+        toast("Preview lead deleted.");
+      } catch (err) {
+        toast(err.message || "Could not delete the lead.", true);
+      }
+    });
+  });
 
   function selectCouple(id) {
     state.selected = state.couples.find((c) => c.id === id);

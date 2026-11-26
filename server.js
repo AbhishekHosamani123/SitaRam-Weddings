@@ -44,6 +44,10 @@ const SITE_URL = "https://sitaram-weddings.vercel.app";
 const RZP = require("./lib/razorpay");
 const SB = require("./lib/supabase");
 const RENDER = require("./lib/render-couple");
+const DRAFTS = require("./lib/preview-drafts");
+const { renderPreviewShell } = require("./lib/preview-page");
+const { renderDraftPage, originFor } = require("./lib/render-draft");
+const { publishPreview } = require("./lib/publish-preview");
 
 // template registry — auto-discovered from templates/<id>/template.json
 function listTemplates() {
@@ -325,6 +329,31 @@ async function apiCouples(res) {
   res.writeHead(200, { "Content-Type": "application/json" }).end(JSON.stringify({ couples }));
 }
 
+async function apiLeads(res) {
+  if (!SB.enabled()) {
+    res.writeHead(503, { "Content-Type": "application/json" }).end(JSON.stringify({ error: "Preview leads require the configured Supabase database." }));
+    return;
+  }
+  const { json } = await SB.select("leads", {
+    select: "id,couple_names,phone,payment_status,created_at,updated_at,paid_at",
+    order: "created_at.desc",
+  });
+  res.writeHead(200, { "Content-Type": "application/json", "Cache-Control": "no-store" }).end(JSON.stringify({ leads: json || [] }));
+}
+
+async function apiDeleteLead(res, id) {
+  if (!SB.enabled()) {
+    res.writeHead(503, { "Content-Type": "application/json" }).end(JSON.stringify({ error: "Preview leads require the configured Supabase database." }));
+    return;
+  }
+  if (!/^[0-9a-f]{8}-[0-9a-f]{4}-[1-8][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i.test(id)) {
+    res.writeHead(400, { "Content-Type": "application/json" }).end(JSON.stringify({ error: "Invalid lead id." }));
+    return;
+  }
+  await SB.remove("leads", { id });
+  res.writeHead(200, { "Content-Type": "application/json" }).end(JSON.stringify({ ok: true }));
+}
+
 async function apiCreateCouple(res, body) {
   let b = {};
   try { b = JSON.parse(body.toString()); } catch { b = {}; }
@@ -435,7 +464,7 @@ async function apiUpload(req, res, body, ct) {
 // ---------------------------------------------------------------------------
 // Razorpay payment gateway — public endpoints used by the builder checkout
 // ---------------------------------------------------------------------------
-async function apiRazorpayOrder(res, body) {
+async function apiRazorpayOrder(req, res, body) {
   let b;
   try { b = JSON.parse(body.toString()); } catch { b = {}; }
   const amt = Number(b.amount);
@@ -445,7 +474,20 @@ async function apiRazorpayOrder(res, body) {
     return;
   }
   try {
+    let draft = null;
+    if (b.draft_token) {
+      if (!RZP.previewPaymentsEnabled()) {
+        res.writeHead(503, { "Content-Type": "application/json" }).end(JSON.stringify({ error: "Preview checkout requires Razorpay test credentials. Explicitly enable live preview payments only after testing." }));
+        return;
+      }
+      draft = await DRAFTS.getDraft(String(b.draft_token));
+      if (!draft || DRAFTS.isExpired(draft) || draft.status !== "unpaid") {
+        res.writeHead(410, { "Content-Type": "application/json" }).end(JSON.stringify({ error: "This preview has expired or is already unlocked." }));
+        return;
+      }
+    }
     const order = await RZP.createOrder(amt, "weds-" + Date.now());
+    if (draft) await DRAFTS.createPaymentOrder(draft, order.id);
     res.writeHead(200, { "Content-Type": "application/json" }).end(JSON.stringify({
       order_id: order.id,
       key_id: process.env.RZP_KEY_ID,
@@ -471,11 +513,33 @@ async function recordOrder(orderId, paymentId, signature, slug) {
   } catch { /* non-fatal — payment flow must not depend on this */ }
 }
 
-async function apiRazorpayVerify(res, body) {
+async function apiRazorpayVerify(req, res, body) {
   let b;
   try { b = JSON.parse(body.toString()); } catch { b = {}; }
+  if (b.draft_token && !RZP.previewPaymentsEnabled()) {
+    res.writeHead(503, { "Content-Type": "application/json" }).end(JSON.stringify({ error: "Preview checkout requires Razorpay test credentials. Explicitly enable live preview payments only after testing." }));
+    return;
+  }
   if (!RZP.verifyPayment(b.order_id, b.payment_id, b.signature)) {
     res.writeHead(400, { "Content-Type": "application/json" }).end(JSON.stringify({ error: "Invalid payment signature." }));
+    return;
+  }
+  if (b.draft_token) {
+    try {
+      const draft = await DRAFTS.getDraft(String(b.draft_token));
+      if (!draft || DRAFTS.isExpired(draft) && draft.status === "unpaid" && !DRAFTS.paymentWindowOpen(draft)) {
+        res.writeHead(410, { "Content-Type": "application/json" }).end(JSON.stringify({ error: "This preview has expired." }));
+        return;
+      }
+      await DRAFTS.markPaymentVerified(draft, {
+        order_id: String(b.order_id),
+        payment_id: String(b.payment_id),
+        signature: String(b.signature),
+      });
+      res.writeHead(200, { "Content-Type": "application/json" }).end(JSON.stringify({ ok: true, payment_status: "paid" }));
+    } catch (e) {
+      res.writeHead(e.status || 409, { "Content-Type": "application/json" }).end(JSON.stringify({ error: String(e && e.message || "Payment could not be linked to this preview.") }));
+    }
     return;
   }
   await recordOrder(b.order_id, b.payment_id, b.signature, null);
@@ -877,12 +941,114 @@ function sweepPreviewBundles() {
   } catch { /* ignore */ }
 }
 
+function previewExpiredPage() {
+  return "<!doctype html><meta charset=\"utf-8\"><meta name=\"viewport\" content=\"width=device-width\"><title>Preview expired</title><main style=\"font:16px system-ui;max-width:560px;margin:12vh auto;padding:24px;text-align:center\"><h1>This wedding preview has expired</h1><p>Unpaid preview data is removed after 24 hours. Return to the builder to create a new preview.</p><a href=\"/create\">Back to the builder</a></main>";
+}
+
+async function servePreview(req, res, token) {
+  res.setHeader("Cache-Control", "no-store");
+  res.setHeader("X-Robots-Tag", "noindex, nofollow, noarchive");
+  try {
+    const draft = await DRAFTS.getDraft(token);
+    if (!draft) {
+      res.writeHead(410, { "Content-Type": "text/html; charset=utf-8" }).end(previewExpiredPage());
+      return;
+    }
+    if (draft.status === "published" && draft.couple_slug) {
+      res.writeHead(302, { Location: `/${encodeURIComponent(draft.couple_slug)}/` }).end();
+      return;
+    }
+    if (draft.status === "unpaid" && DRAFTS.isExpired(draft)) {
+      if (!DRAFTS.paymentWindowOpen(draft)) await DRAFTS.deleteDraft(draft.id);
+      res.writeHead(410, { "Content-Type": "text/html; charset=utf-8" }).end(previewExpiredPage());
+      return;
+    }
+    res.setHeader("Referrer-Policy", "no-referrer");
+    res.writeHead(200, { "Content-Type": "text/html; charset=utf-8" }).end(renderPreviewShell({
+      token,
+      expiresAt: draft.expires_at,
+      paid: draft.status === "paid",
+    }));
+  } catch (error) {
+    res.writeHead(503, { "Content-Type": "text/html; charset=utf-8" }).end("Could not load this preview right now.");
+  }
+}
+
+async function apiCreatePreview(req, res, body) {
+  let b;
+  try { b = JSON.parse(body.toString()); } catch { b = {}; }
+  const template = String(b.template || "");
+  if (!listTemplates().some((item) => item.id === template)) {
+    res.writeHead(400, { "Content-Type": "application/json" }).end(JSON.stringify({ error: "Choose an available wedding template." }));
+    return;
+  }
+  try {
+    const saved = await DRAFTS.createOrUpdateDraft(template, b.couple, String(b.draft_token || ""));
+    const base = originFor(req);
+    res.writeHead(201, { "Content-Type": "application/json", "Cache-Control": "no-store" }).end(JSON.stringify({
+      draft_token: saved.token,
+      preview_url: `${base}/preview/${saved.token}`,
+      expires_at: saved.expiresAt,
+    }));
+  } catch (error) {
+    const message = String(error && error.message || error);
+    const status = error.status || (message.includes("Supabase must be configured") ? 503 : 400);
+    res.writeHead(status, { "Content-Type": "application/json" }).end(JSON.stringify({ error: message }));
+  }
+}
+
+async function apiDraftSite(req, res, token) {
+  try {
+    const draft = await DRAFTS.getDraft(token);
+    if (!draft || (draft.status === "unpaid" && DRAFTS.isExpired(draft))) {
+      res.writeHead(410, { "Content-Type": "text/html; charset=utf-8", "Cache-Control": "no-store" }).end("Preview expired.");
+      return;
+    }
+    if (draft.status === "published" && draft.couple_slug) {
+      res.writeHead(302, { Location: `/${encodeURIComponent(draft.couple_slug)}/`, "Cache-Control": "no-store" }).end();
+      return;
+    }
+    if (!["unpaid", "paid"].includes(draft.status) || !draft.draft_data) {
+      res.writeHead(410, { "Content-Type": "text/html; charset=utf-8", "Cache-Control": "no-store" }).end("Preview unavailable.");
+      return;
+    }
+    res.writeHead(200, {
+      "Content-Type": "text/html; charset=utf-8",
+      "Cache-Control": "no-store",
+      "X-Robots-Tag": "noindex, nofollow, noarchive",
+      "Referrer-Policy": "no-referrer",
+    }).end(renderDraftPage(draft, req));
+  } catch {
+    res.writeHead(500, { "Content-Type": "text/html; charset=utf-8" }).end("Could not render this wedding preview.");
+  }
+}
+
+async function apiPublishPreview(req, res, body) {
+  let b;
+  try { b = JSON.parse(body.toString()); } catch { b = {}; }
+  try {
+    const result = await publishPreview(String(b.draft_token || ""));
+    res.writeHead(200, { "Content-Type": "application/json", "Cache-Control": "no-store" }).end(JSON.stringify({
+      ok: true,
+      slug: result.slug,
+      url: `${originFor(req)}/${encodeURIComponent(result.slug)}/`,
+    }));
+  } catch (error) {
+    res.writeHead(error.status || 500, { "Content-Type": "application/json" }).end(JSON.stringify({
+      error: String(error && error.message || "Could not publish the wedding website."),
+    }));
+  }
+}
+
 // ---------------------------------------------------------------------------
 // router
 // ---------------------------------------------------------------------------
 const server = http.createServer(async (req, res) => {
   const url = new URL(req.url, `http://${req.headers.host || "localhost"}`);
   const p = url.pathname;
+
+  const previewMatch = /^\/preview\/([a-f0-9]{64})$/i.exec(p);
+  if (previewMatch) return servePreview(req, res, previewMatch[1]);
 
   // dynamic legacy Framer bundles (/mirror/framerusercontent.com/sites/...)
   // Skip temporary preview bundles (pv-*), which are written to disk and served statically.
@@ -929,13 +1095,24 @@ const server = http.createServer(async (req, res) => {
       const body = await readBody(req, 8e6).catch(() => Buffer.alloc(0));
       return apiPublicWebSite(req, res, body);
     }
+    if (route === "create-preview" && req.method === "POST") {
+      const body = await readBody(req, 8e6).catch(() => Buffer.alloc(0));
+      return apiCreatePreview(req, res, body);
+    }
+    if (route === "draft-site" && req.method === "GET") {
+      return apiDraftSite(req, res, String(url.searchParams.get("token") || ""));
+    }
+    if (route === "publish-preview" && req.method === "POST") {
+      const body = await readBody(req, 1e6).catch(() => Buffer.alloc(0));
+      return apiPublishPreview(req, res, body);
+    }
     if (route === "razorpay" && rest[1] === "order" && req.method === "POST") {
       const body = await readBody(req, 1e6).catch(() => Buffer.alloc(0));
-      return apiRazorpayOrder(res, body);
+      return apiRazorpayOrder(req, res, body);
     }
     if (route === "razorpay" && rest[1] === "verify" && req.method === "POST") {
       const body = await readBody(req, 1e6).catch(() => Buffer.alloc(0));
-      return apiRazorpayVerify(res, body);
+      return apiRazorpayVerify(req, res, body);
     }
     if (route === "preview" && req.method === "POST") {
       const body = await readBody(req, 8e6).catch(() => Buffer.alloc(0));
@@ -953,6 +1130,8 @@ const server = http.createServer(async (req, res) => {
     if (!isAuthed(req)) { res.writeHead(401, { "Content-Type": "application/json" }).end(JSON.stringify({ error: "unauthorized" })); return; }
 
     if (route === "couples" && req.method === "GET") return apiCouples(res);
+    if (route === "leads" && req.method === "GET") return apiLeads(res);
+    if (route === "leads" && req.method === "DELETE" && rest[1]) return apiDeleteLead(res, decodeURIComponent(rest[1]));
     if (route === "couples" && req.method === "POST") {
       const body = await readBody(req, 1e6).catch(() => Buffer.alloc(0));
       return apiCreateCouple(res, body);

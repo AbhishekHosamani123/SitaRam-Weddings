@@ -22,6 +22,10 @@
       "destination": "/api/razorpay-verify"
     },
     {
+      "source": "/preview/:token",
+      "destination": "/api/serve-preview?token=:token"
+    },
+    {
       "source": "/:slug",
       "destination": "/api/serve-couple?slug=:slug"
     },

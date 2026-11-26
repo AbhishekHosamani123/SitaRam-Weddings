@@ -51,6 +51,8 @@
 .layout{max-width:1280px;margin:0 auto;padding:24px 20px 60px;display:grid;grid-template-columns:minmax(0,560px) minmax(0,1fr);gap:26px;align-items:start}
 .panel{background:var(--paper);border:1px solid var(--line);border-radius:22px;padding:26px;box-shadow:0 3px 12px rgba(122,66,58,.05)}
 .panel h2{font-family:var(--f-display);font-size:23px;font-weight:500;letter-spacing:-.015em;margin-bottom:4px}
+.builder-title-row{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:4px}
+.builder-title-row h2{margin:0}
 .panel .sub{color:var(--muted);font-size:13.5px;margin-bottom:18px}
 .card{background:linear-gradient(180deg,#fffdf9,#fdf3ea);border:1px solid var(--line);border-radius:18px;padding:20px;margin-bottom:16px}
 .card h3{font-family:var(--f-display);font-size:17px;font-weight:600;margin-bottom:12px;display:flex;align-items:center;gap:9px}
@@ -104,6 +106,12 @@ textarea{resize:vertical}
 .phone-bar{position:absolute;bottom:8px;left:50%;transform:translateX(-50%);width:126px;height:4.5px;border-radius:999px;background:rgba(24,24,27,.38);z-index:20;pointer-events:none}
 .preview-frame{width:393px;height:100%;border:0;background:#fff;display:block}
 .preview-frame[hidden]{display:none}
+.preview-placeholder{width:min(520px,100%);padding:24px}
+.preview-placeholder-card{padding:32px;background:#fffdf9;border:1px solid var(--line);border-radius:20px;box-shadow:var(--shadow);text-align:center}
+.preview-placeholder-mark{display:grid;place-items:center;width:52px;height:52px;margin:0 auto 18px;border-radius:17px;background:var(--grad);color:#fff;font-family:var(--f-display);font-weight:700;font-size:20px}
+.preview-placeholder-card h3{font-family:var(--f-display);font-size:23px;margin-bottom:10px}
+.preview-placeholder-card p{color:var(--muted);font-size:14px;line-height:1.6;margin:0 auto 14px;max-width:390px}
+.preview-placeholder-card .preview-placeholder-url{overflow-wrap:anywhere;padding:10px 12px;border:1px solid var(--line);border-radius:10px;background:#fff;font-size:12px}
 .preview-fallback{display:grid;place-items:center;height:72vh;min-height:480px;border:1px dashed var(--line);border-radius:16px;color:var(--muted);text-align:center;padding:20px}
 .btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;border-radius:999px;padding:11px 20px;font-weight:600;font-size:14px;border:1.5px solid transparent;text-decoration:none;transition:.2s;white-space:nowrap}
 .btn-primary{background:var(--grad);color:#fff;box-shadow:0 8px 18px rgba(200,83,95,.28)}
@@ -162,8 +170,11 @@ textarea{resize:vertical}
 
     <!-- LEFT: FORM -->
     <div class="panel">
-      <h2 id="formTitle">Create your wedding website</h2>
-      <p class="sub">Your work is autosaved in this browser. Nothing is published until you press <b>Go live</b>.</p>
+      <div class="builder-title-row">
+        <h2 id="formTitle">Create your wedding website</h2>
+        <button type="button" class="btn btn-ghost btn-sm" id="demoFillBtn">Fill sample data</button>
+      </div>
+      <p class="sub">Your work is autosaved in this browser. Sample data replaces text and events but keeps uploaded photos.</p>
       <div class="banner" id="banner"></div>
 
       <form id="form">
@@ -171,8 +182,8 @@ textarea{resize:vertical}
         <div class="card">
           <h3><span class="no">1</span> Bride &amp; groom</h3>
           <div class="row2">
-            <div class="field"><label>Bride first name *</label><input id="f_brideFirst" placeholder="Sita"></div>
-            <div class="field"><label>Groom first name *</label><input id="f_groomFirst" placeholder="Ram"></div>
+            <div class="field"><label for="f_brideFirst">Bride first name *</label><input id="f_brideFirst" placeholder="Sita" required></div>
+            <div class="field"><label for="f_groomFirst">Groom first name *</label><input id="f_groomFirst" placeholder="Ram" required></div>
           </div>
           <div class="row2">
             <div class="field"><label>Bride full name</label><input id="f_brideFull" placeholder="Sita Sharma"></div>
@@ -240,10 +251,9 @@ textarea{resize:vertical}
         <!-- contact -->
         <div class="card">
           <h3><span class="no">5</span> Your contact details</h3>
-          <div class="field"><label>Your phone number *</label><input id="f_contact" type="tel"
-              placeholder="98765 43210"></div>
-          <small style="display:block;margin-top:-6px">We use this only to reach you if something needs your attention —
-            it is never shown on your wedding website.</small>
+          <div class="field"><label for="f_contact">Phone number *</label><input id="f_contact" type="tel"
+              placeholder="98765 43210" autocomplete="tel" inputmode="tel" required></div>
+          <small style="display:block;margin-top:-6px">We use your phone number only to contact you about your preview and payment. It is not shown on your wedding website.</small>
         </div>
 
         <!-- photos -->
@@ -260,14 +270,12 @@ textarea{resize:vertical}
 
         <!-- review & go live -->
         <div class="card">
-          <h3><span class="no">7</span> Review &amp; Go live</h3>
-          <p class="sub" style="margin-bottom:12px">A quick summary before you publish — you can keep editing after
-            going live.</p>
+          <h3><span class="no">7</span> Review &amp; Create preview</h3>
+          <p class="sub" style="margin-bottom:12px">Create a private preview link to review and share for 24 hours.</p>
           <div class="review-list" id="reviewSummary"></div>
-          <button type="submit" class="golive" id="publishBtn">🚀 Go live — ₹999</button>
-          <p class="price-note">Launch offer for the first 10 customers — <s>₹3,999</s> <b>₹999</b> one-time</p>
-          <p class="sub" style="text-align:center;margin-top:10px">One-time payment via Razorpay (UPI / card /
-            netbanking) — secure, encrypted checkout. Your website opens in a new tab.</p>
+          <button type="submit" class="golive" id="publishBtn">Create preview link</button>
+          <p class="price-note">3 free watermarked previews · ₹999 one-time to unlock and publish</p>
+          <p class="sub" style="text-align:center;margin-top:10px">Pay securely with Razorpay from the preview page. The full site and permanent link unlock after payment is verified.</p>
         </div>
       </form>
     </div>
@@ -275,44 +283,19 @@ textarea{resize:vertical}
     <!-- RIGHT: PREVIEW -->
     <div class="panel preview-panel">
       <div class="preview-head">
-        <h2>Live preview</h2>
-        <button type="button" class="btn btn-ghost btn-sm" id="openPreviewBtn">Open in new tab ↗</button>
+        <h2>Shareable preview</h2>
+        <button type="button" class="btn btn-ghost btn-sm" id="openPreviewBtn" disabled>Open preview link ↗</button>
       </div>
       <div class="preview-stage" id="previewStage">
-        <div class="phone-bezel" id="phoneBezel" aria-label="Pixel 9 mobile preview frame">
-          <div class="phone-screen">
-            <div class="phone-cam" aria-hidden="true"></div>
-            <iframe class="preview-frame" id="previewFrame" title="Live preview of your wedding website"></iframe>
-            <div class="phone-bar" aria-hidden="true"></div>
+        <div class="preview-placeholder" id="previewPlaceholder">
+          <div class="preview-placeholder-card">
+            <span class="preview-placeholder-mark" aria-hidden="true">SR</span>
+            <h3>Your wedding preview link</h3>
+            <p>Fill in your details, then create a private 24-hour preview. It includes a visible watermark and three free opens per browser.</p>
+            <p class="preview-placeholder-url" id="previewUrlLabel">Your link will appear here.</p>
           </div>
         </div>
-      </div>
-
-      <!-- review & go live -->
-      <div class="card">
-        <h3><span class="no">7</span> Review &amp; Go live</h3>
-        <p class="sub" style="margin-bottom:12px">A quick summary before you publish — you can keep editing after going live.</p>
-        <div class="review-list" id="reviewSummary"></div>
-        <button type="submit" class="golive" id="publishBtn">🚀 Go live — ₹999</button>
-        <p class="price-note">Launch offer for the first 10 customers — <s>₹3,999</s> <b>₹999</b> one-time</p>
-        <p class="sub" style="text-align:center;margin-top:10px">One-time payment via Razorpay (UPI / card / netbanking) — secure, encrypted checkout. Your website opens in a new tab.</p>
-      </div>
-    </form>
-  </div>
-
-  <!-- RIGHT: PREVIEW -->
-  <div class="panel preview-panel">
-    <div class="preview-head">
-      <h2>Live preview</h2>
-      <button type="button" class="btn btn-ghost btn-sm" id="openPreviewBtn">Open in new tab ↗</button>
-    </div>
-    <div class="preview-stage" id="previewStage">
-      <div class="phone-bezel" id="phoneBezel" aria-label="iPhone mobile preview frame">
-        <div class="phone-screen">
-          <div class="phone-island" aria-hidden="true"></div>
-          <iframe class="preview-frame" id="previewFrame" title="Live preview of your wedding website"></iframe>
-          <div class="phone-bar" aria-hidden="true"></div>
-        </div>
+        <iframe class="preview-frame" id="previewFrame" title="Wedding preview link" hidden></iframe>
       </div>
     </div>
   </main>
@@ -322,20 +305,20 @@ textarea{resize:vertical}
     style="position:fixed;inset:0;background:rgba(61,34,42,.55);z-index:100;display:grid;place-items:center;padding:20px">
     <div class="panel result" style="max-width:520px;width:100%">
       <div style="font-size:44px">🎉</div>
-      <p class="big">Your wedding website is live!</p>
-      <p class="sub" style="margin-bottom:4px">Share this link with your guests — it has everything.</p>
+      <p class="big" id="resultTitle">Your preview is ready!</p>
+      <p class="sub" id="resultDescription" style="margin-bottom:4px">Share this watermarked preview link. It expires in 24 hours.</p>
       <div class="linkbox">
         <input id="resultLink" readonly>
         <button type="button" class="btn btn-ghost btn-sm" id="copyLink">Copy</button>
       </div>
       <div class="actions">
-        <a class="btn btn-primary" id="openSite" href="#" target="_blank" rel="noopener">Open my website</a>
-        <a class="btn btn-ghost" id="shareWhats" href="#" target="_blank" rel="noopener">Share on WhatsApp</a>
+        <a class="btn btn-primary" id="openSite" href="#" target="_blank" rel="noopener">Open preview</a>
+        <a class="btn btn-ghost" id="shareWhats" href="#" target="_blank" rel="noopener">Share preview</a>
       </div>
       <div class="actions" style="margin-top:10px">
         <button type="button" class="btn btn-ghost btn-sm" id="editMore">Keep editing</button>
       </div>
-      <p class="note">You can come back anytime and publish updates — the link stays the same.</p>
+      <p class="note">The full website is unlocked after ₹999 payment is verified. Unpaid wedding details are removed when the preview expires.</p>
     </div>
   </div>
 
@@ -375,7 +358,9 @@ textarea{resize:vertical}
         whatsapp: { display: "", intl: "" },
         contact: "",
         images: { hero: null, bridePhoto: null, groomPhoto: null, portrait: null, gallery1: null, gallery2: null, gallery3: null, gallery4: null, gallery5: null, gallery6: null },
-        slugHint: ""
+        slugHint: "",
+        previewToken: "",
+        previewUrl: ""
       };
 
       function loadDraft() {
@@ -389,6 +374,10 @@ textarea{resize:vertical}
       }
       function saveDraft() {
         try { localStorage.setItem(draftKey, JSON.stringify(state)); } catch (e) { /* quota — ignore */ }
+      }
+      function schedulePreview() {
+        saveDraft();
+        renderPreview();
       }
 
       /* ---------- template pills ---------- */
@@ -408,6 +397,8 @@ textarea{resize:vertical}
         draftKey = "srw_draft_" + id;
         currentId = id;
         state.template = id;
+        state.previewToken = "";
+        state.previewUrl = "";
         loadDraft();
         renderPills();
         renderAll();
@@ -560,7 +551,7 @@ textarea{resize:vertical}
           ["Countdown", state.countdownTarget ? "Set" : "Optional"],
           ["WhatsApp RSVP", state.whatsapp.intl.trim() ? "Ready" : "Add number"],
           ["Photos", photos ? photos + " uploaded" : "Optional"],
-          ["Website link", location.origin + "/" + (slugify(bride) || "bride") + "-" + (slugify(groom) || "groom") + "/"],
+          ["Preview link", state.previewUrl ? "Ready · expires in 24 hours" : "Create after completing details"],
         ];
         box.innerHTML = rows.map(function (r) {
           return '<div class="rv-row"><span>' + esc(r[0]) + '</span><b>' + esc(r[1]) + '</b></div>';
@@ -578,17 +569,7 @@ textarea{resize:vertical}
       };
       var prevFieldVals = {};
       function pushLiveUpdate(field, oldVal, newVal) {
-        var frame = $("previewFrame");
-        if (!frame || !frame.contentWindow) return;
-        try {
-          frame.contentWindow.postMessage({
-            type: "srw-live",
-            field: field,
-            old: oldVal,
-            value: newVal,
-            headline: headlineFor()
-          }, "*");
-        } catch (e) { /* frame may be navigating */ }
+        return;
       }
       var FIELD_MAP = {
         f_brideFirst: function (v) { state.bride.firstName = v; },
@@ -815,29 +796,7 @@ textarea{resize:vertical}
       var revealIv = null;
       var revealOkCount = 0;
       function requestReveal() {
-        var field = lastChangedField;
-        if (!field) return;
-        var needles = needlesForField(field).filter(Boolean);
-        if (!needles.length) return;
-        clearInterval(revealIv);
-        revealOkCount = 0;
-        var tries = 0;
-        revealIv = setInterval(function () {
-          tries++;
-          var frame = $("previewFrame");
-          if (!frame || !frame.contentWindow) { if (tries > 10) clearInterval(revealIv); return; }
-          // pick the first candidate actually present in the preview document
-          var needle = null;
-          try {
-            var doc = frame.contentDocument;
-            if (doc) needle = pickNeedle(doc, needles);
-          } catch (e) { }
-          if (!needle) { if (tries > 30) clearInterval(revealIv); return; }
-          try {
-            frame.contentWindow.postMessage({ type: "srw-reveal", needle: needle }, "*");
-          } catch (e) { }
-          if (tries > 30) clearInterval(revealIv);
-        }, 600);
+        return;
       }
       window.addEventListener("message", function (e) {
         if (!e.data || e.data.type !== "srw-reveal-done") return;
@@ -907,92 +866,14 @@ textarea{resize:vertical}
       }
 
       function renderPreview() {
-        if (isLegacy(currentId)) { serverPreview(); return; }
-        $("previewFrame").hidden = false;
-        $("previewFallback").classList.add("hidden");
-        var url = "/tpl/" + currentId + "/index.html";
-        var getHtml = templateHtmlCache[currentId]
-          ? Promise.resolve(templateHtmlCache[currentId])
-          : fetch(url).then(function (r) { return r.text(); }).then(function (t) {
-            templateHtmlCache[currentId] = t; return t;
-          }).catch(function () { return null; });
-        getHtml.then(function (html) {
-          if (!html) { serverPreview(); return; }
-          var out = applyTokens(html);
-          var frame = $("previewFrame");
-          // load via a blob URL: srcdoc pages have an opaque "null" origin, which
-          // crashes scripts (localStorage, history, …) in heavier templates
-          try {
-            frame.src = URL.createObjectURL(new Blob([withRevealHelper(out)], { type: "text/html" }));
-          } catch (e) {
-            frame.srcdoc = withRevealHelper(out);
-          }
-          frame.onload = function () {
-            try {
-              var win = frame.contentWindow;
-              if (win && win.__WD_APPLY__) win.__WD_APPLY__(eventsPayload());
-            } catch (e) { /* ignore */ }
-            afterPreviewLoad();
-          };
-        });
-      }
-      // Latest-response-wins guard: when typing fast, several /api/preview
-      // requests overlap; the frame must never be overwritten by a stale one.
-      var previewSeq = 0;
-      var previewCtrl = null;
-      function serverPreview() {
-        $("previewFrame").hidden = false;
-        $("previewFallback").classList.add("hidden");
-        var frame = $("previewFrame");
-        var mySeq = ++previewSeq;
-        if (previewCtrl) { try { previewCtrl.abort(); } catch (e) { } }
-        previewCtrl = window.AbortController ? new AbortController() : null;
-
-        var payload = {
-          template: currentId,
-          couple: {
-            bride: { firstName: state.bride.firstName, fullName: state.bride.fullName, parents: state.bride.parents },
-            groom: { firstName: state.groom.firstName, fullName: state.groom.fullName, parents: state.groom.parents },
-            invitation: {
-              headline: state.invitation.headline || "{bride} weds {groom}",
-              intro: state.invitation.intro, story: state.invitation.story,
-              hashtag: state.invitation.hashtag, closing: state.invitation.closing
-            },
-            events: state.events.slice(0, 6).filter(function (e) { return e.name.trim(); }),
-            countdownTarget: state.countdownTarget,
-            whatsapp: state.whatsapp
-          }
-        };
-        // keep the current frame visible until the fresh render arrives — no
-        // "Loading…" flicker on every keystroke
-        fetch("/api/preview", {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify(payload),
-          signal: previewCtrl ? previewCtrl.signal : undefined
-        }).then(function (r) { return r.json(); }).then(function (data) {
-          if (mySeq !== previewSeq) return; // a newer preview superseded this one
-          if (data.html) {
-            // blob URL keeps a real origin (srcdoc's "null" origin crashes scripts)
-            try {
-              frame.src = URL.createObjectURL(new Blob([withRevealHelper(data.html)], { type: "text/html" }));
-            } catch (e) {
-              frame.srcdoc = withRevealHelper(data.html);
-            }
-            frame.onload = afterPreviewLoad;
-          }
-          else {
-            $("previewFrame").hidden = true;
-            $("previewFallback").classList.remove("hidden");
-            $("fallbackDemoLink").href = "/templates/" + currentId + "/";
-          }
-        }).catch(function (err) {
-          if (mySeq !== previewSeq) return;
-          if (err && err.name === "AbortError") return;
-          $("previewFrame").hidden = true;
-          $("previewFallback").classList.remove("hidden");
-          $("fallbackDemoLink").href = "/templates/" + currentId + "/";
-        });
+        var placeholder = $("previewPlaceholder");
+        var button = $("openPreviewBtn");
+        var label = $("previewUrlLabel");
+        var createButton = $("publishBtn");
+        if (placeholder) placeholder.hidden = false;
+        if (button) button.disabled = !state.previewUrl;
+        if (label) label.textContent = state.previewUrl || "Your link will appear here.";
+        if (createButton && !createButton.disabled) createButton.textContent = state.previewToken ? "Update preview link" : "Create preview link";
       }
       function eventsPayload() {
         return (state.events || []).slice(0, 6).map(function (e) {
@@ -1095,19 +976,12 @@ textarea{resize:vertical}
         if (!named.length) errs.push("Add at least one wedding event with a name.");
         return errs;
       }
-      /* ---------- Razorpay checkout (pay first, then publish) ---------- */
-      var WEBSITE_PRICE = 99900; // paise — must match WEBSITE_PRICE_PAISE on the server
-      var PRICE_INR = WEBSITE_PRICE / 100;
-      var PRICE_LABEL = "🚀 Go live — ₹" + PRICE_INR;
-      var PUBLISHING_LABEL = "Publishing…";
-
-      // popup opened while the user is still on the submit gesture (to dodge
-      // popup blockers after the async payment completes)
-      var PUB_WINDOW = null;
+      /* ---------- preview link ---------- */
 
       function readPayload() {
         return {
           template: currentId,
+          draft_token: state.previewToken || "",
           couple: {
             contact: String(state.contact || "").replace(/\D/g, "").slice(0, 15),
             bride: { firstName: state.bride.firstName.trim(), fullName: state.bride.fullName.trim(), parents: state.bride.parents.trim() },
@@ -1133,140 +1007,93 @@ textarea{resize:vertical}
         };
       }
 
-      async function publishNow(payload) {
+      async function createPreviewLink(payload) {
         var btn = $("publishBtn");
-        btn.disabled = true; btn.textContent = PUBLISHING_LABEL;
+        btn.disabled = true;
+        btn.textContent = "Creating preview link…";
         try {
-          var res = await fetch("/api/public-website", {
+          var res = await fetch("/api/create-preview", {
             method: "POST",
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify(payload)
           });
           var data = await res.json().catch(function () { return {}; });
-          if (!res.ok) throw new Error(data.error || "Could not publish right now. Try again in a moment.");
-          showResult(data);
+          if (!res.ok) throw new Error(data.error || "Could not create your preview link. Try again in a moment.");
+          if (!data.preview_url || !data.draft_token) throw new Error("The preview service returned an incomplete link. Please try again.");
+          state.previewToken = data.draft_token;
+          state.previewUrl = data.preview_url;
+          saveDraft();
+          renderPreview();
+          showOverlay(data.preview_url);
+          toast("Preview link created. You have 3 free opens per browser.", "ok");
         } catch (err) {
-          toast(err.message || "Publishing failed", "err");
+          toast(err.message || "Could not create preview link", "err");
         } finally {
-          btn.disabled = false; btn.textContent = PRICE_LABEL;
+          btn.disabled = false;
+          btn.textContent = "Update preview link";
         }
       }
 
-      function setPublishBusy(busy, label) {
-        var btn = $("publishBtn");
-        btn.disabled = busy;
-        if (label) btn.textContent = label;
-      }
+      function fillSampleData() {
+        if (state.previewToken && !window.confirm("Load sample details into a new draft? Your existing preview will stay unchanged, but its link will no longer appear in this form. Uploaded photos will be kept.")) return;
+        var weddingDate = new Date();
+        weddingDate.setDate(weddingDate.getDate() + 90);
+        weddingDate.setHours(18, 30, 0, 0);
+        function plusDays(date, days) {
+          var result = new Date(date);
+          result.setDate(result.getDate() + days);
+          return result;
+        }
+        function dateLabel(date) {
+          return date.toLocaleDateString("en-GB", { day: "numeric", month: "long", year: "numeric" });
+        }
+        function weekday(date) {
+          return date.toLocaleDateString("en-US", { weekday: "long" });
+        }
 
-      function loadCheckoutJs(cb) {
-        if (window.Razorpay) return cb();
-        var s = document.createElement("script");
-        s.src = "https://checkout.razorpay.com/v1/checkout.js";
-        s.onload = cb;
-        s.onerror = function () {
-          setPublishBusy(false, PRICE_LABEL);
-          toast("Could not load the payment gateway — check your connection.", "err");
+        var mehendiDate = plusDays(weddingDate, -2);
+        var haldiDate = plusDays(weddingDate, -1);
+        state.bride = { firstName: "Aarohi", fullName: "Aarohi Sharma", parents: "Rajesh & Sunita Sharma" };
+        state.groom = { firstName: "Vihaan", fullName: "Vihaan Mehta", parents: "Amit & Kavita Mehta" };
+        state.invitation = {
+          headline: "{bride} weds {groom}",
+          intro: "Together with our families, we invite you to celebrate our wedding.",
+          story: "We met through friends, became best friends, and are excited to begin this next chapter together.",
+          hashtag: "AarohiWedsVihaan",
+          closing: "With love, we look forward to celebrating with you."
         };
-        document.head.appendChild(s);
+        state.events = [
+          { name: "Mehendi", day: weekday(mehendiDate), dateLabel: dateLabel(mehendiDate), time: "4:00 PM onwards", city: "Bengaluru, Karnataka", venueName: "Garden Pavilion", venueAddress: "Cubbon Road, Bengaluru", lat: "12.9716", lng: "77.5946", note: "Bright colours encouraged" },
+          { name: "Haldi", day: weekday(haldiDate), dateLabel: dateLabel(haldiDate), time: "11:00 AM onwards", city: "Bengaluru, Karnataka", venueName: "Garden Pavilion", venueAddress: "Cubbon Road, Bengaluru", lat: "12.9716", lng: "77.5946", note: "Lunch will follow" },
+          { name: "Wedding", day: weekday(weddingDate), dateLabel: dateLabel(weddingDate), time: "6:30 PM onwards", city: "Bengaluru, Karnataka", venueName: "Garden Pavilion", venueAddress: "Cubbon Road, Bengaluru", lat: "12.9716", lng: "77.5946", note: "Join us for the ceremony and dinner" }
+        ];
+        state.countdownTarget = weddingDate.toISOString();
+        state.whatsapp = { display: "0000000000", intl: "910000000000" };
+        state.contact = "0000000000";
+        state.previewToken = "";
+        state.previewUrl = "";
+        saveDraft();
+        renderAll();
+        toast("Sample wedding details loaded. Review them before creating a preview.", "ok");
       }
 
-      function closePubWindow() {
-        if (PUB_WINDOW && !PUB_WINDOW.closed) { try { PUB_WINDOW.close(); } catch (e) { } }
-        PUB_WINDOW = null;
-      }
-
-      function startCheckout(payload) {
-        setPublishBusy(true, "Opening secure payment…");
-        // open a blank tab now (inside the click gesture) — it becomes the live site
-        try { PUB_WINDOW = window.open("", "srw_publish"); } catch (e) { PUB_WINDOW = null; }
-        fetch("/api/razorpay/order", {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ amount: WEBSITE_PRICE })
-        })
-          .then(function (r) { return r.json(); })
-          .then(function (o) {
-            if (!o.order_id) throw new Error(o.error || "Could not start the payment.");
-            loadCheckoutJs(function () {
-              var rzp = new Razorpay({
-                key: o.key_id,
-                amount: o.amount,
-                currency: o.currency || "INR",
-                name: "SitaRam Weddings",
-                description: "Wedding website · ₹" + PRICE_INR,
-                order_id: o.order_id,
-                prefill: {
-                  name: (state.bride.firstName.trim() || "") + " & " + (state.groom.firstName.trim() || ""),
-                  contact: String(state.contact || "").replace(/\D/g, "").slice(0, 10)
-                },
-                theme: { color: "#c2535f" },
-                handler: function (resp) {
-                  fetch("/api/razorpay/verify", {
-                    method: "POST",
-                    headers: { "Content-Type": "application/json" },
-                    body: JSON.stringify({
-                      order_id: resp.razorpay_order_id,
-                      payment_id: resp.razorpay_payment_id,
-                      signature: resp.razorpay_signature
-                    })
-                  })
-                    .then(function (r) { return r.json(); })
-                    .then(function (v) {
-                      if (!v.ok) throw new Error(v.error || "Payment could not be verified.");
-                      payload.payment = {
-                        order_id: resp.razorpay_order_id,
-                        payment_id: resp.razorpay_payment_id,
-                        signature: resp.razorpay_signature
-                      };
-                      toast("Payment received 🎉 Publishing your website…", "ok");
-                      publishNow(payload);
-                    })
-                    .catch(function (err) {
-                      closePubWindow();
-                      toast(err.message || "Payment could not be verified.", "err");
-                    });
-                },
-                modal: {
-                  ondismiss: function () {
-                    closePubWindow();
-                    setPublishBusy(false, PRICE_LABEL);
-                    toast("Payment cancelled — your website was not published.", "err");
-                  }
-                }
-              });
-              rzp.open();
-            });
-          })
-          .catch(function (err) {
-            closePubWindow();
-            setPublishBusy(false, PRICE_LABEL);
-            toast(err.message || "Could not reach the payment gateway.", "err");
-          });
-      }
+      $("demoFillBtn").addEventListener("click", fillSampleData);
 
       $("form").addEventListener("submit", async function (e) {
         e.preventDefault();
         var errs = validate();
         if (errs.length) { toast(errs.join(" "), "err"); return; }
-        startCheckout(readPayload());
+        await createPreviewLink(readPayload());
       });
 
       function showOverlay(link) {
         $("resultLink").value = link;
         $("openSite").href = link;
+        $("resultTitle").textContent = "Your preview is ready!";
+        $("resultDescription").textContent = "Share this watermarked preview link. It expires in 24 hours.";
         var msg = "Join us at our wedding! 💍 " + link;
         $("shareWhats").href = "https://wa.me/?text=" + encodeURIComponent(msg);
         $("resultWrap").classList.remove("hidden");
-      }
-      function showResult(data) {
-        var link = data.url || (location.origin + "/" + data.slug + "/");
-        showOverlay(link);
-        if (PUB_WINDOW && !PUB_WINDOW.closed) {
-          try {
-            PUB_WINDOW.location = link;
-            PUB_WINDOW = null;
-          } catch (e) { /* ignore */ }
-        }
       }
       $("copyLink").onclick = function () {
         var input = $("resultLink");
@@ -1282,11 +1109,7 @@ textarea{resize:vertical}
         if (!collapsed) { setTimeout(function () { p.scrollIntoView({ behavior: "smooth", block: "start" }); }, 60); }
       };
       $("openPreviewBtn").onclick = function () {
-        var url = "/tpl/" + currentId + "/index.html";
-        fetch(url).then(function (r) { return r.text(); }).then(function (html) {
-          var blob = new Blob([applyTokens(html)], { type: "text/html" });
-          window.open(URL.createObjectURL(blob), "_blank");
-        });
+        if (state.previewUrl) window.open(state.previewUrl, "_blank", "noopener");
       };
 
       /* ---------- toast ---------- */
