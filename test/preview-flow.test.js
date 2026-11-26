@@ -4,6 +4,7 @@ const DRAFTS = require("../lib/preview-drafts");
 const { renderDraftPage } = require("../lib/render-draft");
 const { renderPreviewShell } = require("../lib/preview-page");
 const RAZORPAY = require("../lib/razorpay");
+const draftSite = require("../api/draft-site");
 
 const couple = {
   contact: "9876543210",
@@ -72,5 +73,29 @@ test("draft checkout requires a Razorpay test-mode key", () => {
     else process.env.RZP_KEY_ID = originalKey;
     if (originalLiveFlag === undefined) delete process.env.ALLOW_LIVE_PREVIEW_PAYMENTS;
     else process.env.ALLOW_LIVE_PREVIEW_PAYMENTS = originalLiveFlag;
+  }
+});
+
+test("draft lookup reports unavailable Supabase configuration without caching", async () => {
+  const originalUrl = process.env.SUPABASE_URL;
+  const originalServiceKey = process.env.SUPABASE_SERVICE_ROLE_KEY;
+  const response = {
+    headers: {},
+    setHeader(name, value) { this.headers[name] = value; },
+    status(code) { this.statusCode = code; return this; },
+    end(body) { this.body = body; },
+  };
+  try {
+    delete process.env.SUPABASE_URL;
+    delete process.env.SUPABASE_SERVICE_ROLE_KEY;
+    await draftSite({ method: "GET", query: { token: "a".repeat(64) } }, response);
+    assert.equal(response.statusCode, 503);
+    assert.equal(response.headers["Cache-Control"], "no-store");
+    assert.equal(response.body, "Preview storage is temporarily unavailable.");
+  } finally {
+    if (originalUrl === undefined) delete process.env.SUPABASE_URL;
+    else process.env.SUPABASE_URL = originalUrl;
+    if (originalServiceKey === undefined) delete process.env.SUPABASE_SERVICE_ROLE_KEY;
+    else process.env.SUPABASE_SERVICE_ROLE_KEY = originalServiceKey;
   }
 });

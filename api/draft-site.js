@@ -27,6 +27,12 @@ module.exports = async function handler(req, res) {
     res.setHeader("Referrer-Policy", "no-referrer");
     res.status(200).send(html);
   } catch (error) {
-    res.status(500).end("Could not render this wedding preview.");
+    const status = Number.isInteger(error && error.status) && error.status >= 400 && error.status <= 599
+      ? error.status
+      : 500;
+    res.setHeader("Cache-Control", "no-store");
+    res.status(status).end(
+      status === 503 ? "Preview storage is temporarily unavailable." : "Could not render this wedding preview."
+    );
   }
 };
