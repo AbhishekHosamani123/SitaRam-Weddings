@@ -72,6 +72,15 @@ appears everywhere (dashboard, landing, builder, gallery).
 > a Vercel serverless function backed by a datastore (e.g. Vercel KV) — the
 > local flow is the reference implementation.
 
+### Cloudflare Workers static deployment
+
+`wrangler.jsonc` points the `sita` Worker at the generated `public/` directory,
+so `/` serves the landing page and `/create/` serves the builder. Run
+`npm run build` before deploying with `npx wrangler deploy`. This configuration
+only serves static assets: the existing Vercel-style handlers in `api/` are not
+deployed to Workers, so preview creation, payment, and publishing API requests
+will return 404 until those handlers are implemented for Cloudflare Workers.
+
 ## Common pitfalls (seller runbook)
 
 - **URL slug** must be unique & lowercase (letters, numbers, hyphens). Public submissions auto-append `-2`, `-3`… when taken.
