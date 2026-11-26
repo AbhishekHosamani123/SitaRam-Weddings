@@ -74,12 +74,12 @@ appears everywhere (dashboard, landing, builder, gallery).
 
 ### Cloudflare Workers static deployment
 
-`wrangler.jsonc` points the `sita` Worker at the generated `public/` directory,
-so `/` serves the landing page and `/create/` serves the builder. Run
-`npm run build` before deploying with `npx wrangler deploy`. This configuration
-only serves static assets: the existing Vercel-style handlers in `api/` are not
-deployed to Workers, so preview creation, payment, and publishing API requests
-will return 404 until those handlers are implemented for Cloudflare Workers.
+`wrangler.jsonc` serves the generated `public/` directory and routes API,
+preview, and missing dynamic wedding-page requests to the existing Vercel
+deployment. Run `npm run build` before deploying with `npx wrangler deploy`.
+The Vercel project must have `SUPABASE_URL`, `SUPABASE_SERVICE_ROLE_KEY`,
+`RZP_KEY_ID`, and `RZP_KEY_SECRET` configured privately. Use Razorpay test
+credentials while testing; never put service or payment secrets in this repo.
 
 ## Common pitfalls (seller runbook)
 

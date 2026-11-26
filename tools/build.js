@@ -562,10 +562,12 @@ function buildGalleryPage(tpls) {
         </div>
       </article>`;
   }).join("\n");
+  const categories = [...new Set(tpls.map((t) => t.category).filter(Boolean))];
+  const categoryText = categories.length ? categories.join(", ") : "wedding";
   return `<!doctype html><html lang="en"><head><meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <title>Wedding Website Templates | SitaRam Weddings</title>
-<meta name="description" content="Browse our wedding website templates — Hindu, South-Indian, Sikh, Muslim and destination themes. Pick one, personalise it, and share your wedding with everyone.">
+<meta name="description" content="Browse our ${htmlEsc(categoryText)} wedding website designs. Pick one, personalise it, and share your wedding with everyone.">
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ctext y='.9em' font-size='90'%3E%F0%9F%92%90%3C/text%3E%3C/svg%3E">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -607,7 +609,7 @@ function buildGalleryPage(tpls) {
 ${cards}
 </div>
 <p class="note">Demos use sample content — your website will show your own details, uploaded photos and venues.</p>
-<footer>Every couple gets their own link, e.g. ${SITE_URL}/your-names/</footer>
+<footer>Every couple gets their own link, e.g. /your-names/</footer>
 </main>
 </body></html>`;
 }
@@ -646,6 +648,24 @@ function buildLandingCards(tpls) {
   }).join("\n");
 }
 
+function buildLandingFilters(tpls) {
+  const categories = [...new Set(tpls.map((t) => t.category).filter(Boolean))];
+  return [
+    '<button class="f-btn active" data-f="all">All</button>',
+    ...categories.map((category) => `<button class="f-btn" data-f="${htmlEsc(category)}">${htmlEsc(category)}</button>`),
+  ].join("\n");
+}
+
+function buildLandingSummary(tpls) {
+  if (!tpls.length) return "Wedding website designs are coming soon.";
+  if (tpls.length === 1) {
+    const template = tpls[0];
+    return `Explore our ${htmlEsc(template.category || "wedding")} design, ${htmlEsc(template.name)}, and personalise it with your names, dates, venues and photos.`;
+  }
+  const categories = [...new Set(tpls.map((t) => t.category).filter(Boolean))].map(htmlEsc).join(", ");
+  return `${tpls.length} available designs${categories ? ` across ${categories}` : ""}. Personalise your choice with your names, dates, venues and photos.`;
+}
+
 function buildTemplatesJson(tpls) {
   return tpls.map((t) => ({
     id: t.id,
@@ -661,7 +681,14 @@ function buildTemplatesJson(tpls) {
 function buildLandingPage(tpls) {
   const src = read(LANDING_SRC);
   const cards = buildLandingCards(tpls);
-  return src.split("{{TEMPLATE_CARDS}}").join(cards);
+  const names = tpls.map((t) => htmlEsc(t.name)).join(", ");
+  const links = tpls.map((t) => `<a href="/templates/${encodeURIComponent(t.id)}/">${htmlEsc(t.name)}</a>`).join("\n");
+  return src
+    .split("{{TEMPLATE_CARDS}}").join(cards)
+    .split("{{TEMPLATE_FILTERS}}").join(buildLandingFilters(tpls))
+    .split("{{TEMPLATE_SUMMARY}}").join(buildLandingSummary(tpls))
+    .split("{{AVAILABLE_TEMPLATES}}").join(names || "New designs coming soon")
+    .split("{{TEMPLATE_LINKS}}").join(links);
 }
 
 function buildBuilderPage(tpls) {

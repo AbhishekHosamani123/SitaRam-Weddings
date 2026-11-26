@@ -2,7 +2,13 @@
   "$schema": "node_modules/wrangler/config-schema.json",
   "name": "sita",
   "compatibility_date": "2026-11-26",
+  "main": "./worker.mjs",
   "assets": {
-    "directory": "./public"
+    "directory": "./public",
+    "binding": "ASSETS",
+    "run_worker_first": true
+  },
+  "vars": {
+    "API_ORIGIN": "https://sitaram-weddings.vercel.app"
   }
 }
