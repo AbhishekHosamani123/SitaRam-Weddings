@@ -364,10 +364,11 @@ function buildLegacyCouplePage(couple, templateHtml, pageBundleSrc, mainBundleSr
   // 3) sharing script + per-couple event config
   const eventsJson = JSON.stringify((c.events || []).slice(0, 6).map((e) => ({
     name: e.name, day: e.day, time: e.time, dateLabel: e.dateLabel,
-    city: e.city, note: e.note,
+    city: e.city, note: e.note, venueName: e.venueName, venueAddress: e.venueAddress,
+    lat: e.lat, lng: e.lng,
   }))).replace(/</g, "\\u003c");
   const inline = `<script>window.__WEDDING_EVENTS__=${eventsJson};</script>
-<script src="/mirror/framerusercontent.com/js/wedding-events.js?v=2"></script>`;
+<script src="/mirror/framerusercontent.com/js/wedding-events.js?v=3"></script>`;
   html = html.replace("</body>", inline + "\n</body>");
 
   let htmlOut = html;
@@ -569,12 +570,12 @@ function sampleCouple() {
 
 function weddingEventsScript() {
   return `(() => {
-  const E = (self.__WEDDING_EVENTS__ || []);
   const LEGACY = {
     name: ["Shaadi"], day: ["Friday"], time: ["6 Pm Onwards"],
     dateLabel: ["29th Aug 2026"], city: ["Pune, Maharashtra"], note: ["More details below"],
   };
   function assign() {
+    const events = self.__WEDDING_EVENTS__ || [];
     const cards = [...document.querySelectorAll('[data-framer-name]')]
       .filter((timeline) => /Wedding Timeline$/.test(timeline.getAttribute('data-framer-name') || ''))
       .flatMap((timeline) => [...timeline.querySelectorAll('div[data-framer-name]')])
@@ -582,7 +583,7 @@ function weddingEventsScript() {
     let changed = 0;
     for (const card of cards) {
       const n = +card.getAttribute('data-framer-name');
-      const ev = E[n - 1];
+      const ev = events[n - 1];
       if (!ev) { if (card.style.display !== 'none') { card.style.display = 'none'; changed++; } continue; }
       if (card.style.display === 'none') { card.style.display = ''; changed++; }
       const ps = [...card.querySelectorAll('p')];
@@ -594,6 +595,60 @@ function weddingEventsScript() {
           if (typeof value === 'string' && p.textContent !== value) { p.textContent = value; changed++; }
           break;
         }
+      }
+    }
+    const locationFrame = [...document.querySelectorAll('[data-framer-name]')]
+      .find((el) => el.getAttribute('data-framer-name') === 'Location Map');
+    const map = locationFrame && locationFrame.querySelector(
+      '[role="region"][aria-label^="Map showing"], [role="link"][aria-label^="Open "]'
+    );
+    const mapArea = map && map.parentElement;
+    const venue = events[0];
+    if (map && mapArea && venue) {
+      const locationInfo = mapArea.parentElement && mapArea.parentElement.children[1];
+      const venueCard = locationInfo && locationInfo.children[0];
+      const locationButtons = locationInfo && locationInfo.children[1];
+      const venueName = venue.venueName || venue.name || '';
+      const streetAddress = venue.venueAddress || '';
+      const cityParts = (venue.city || '').split(',').map((part) => part.trim()).filter(Boolean);
+      const venueAddress = [streetAddress, ...cityParts.filter((part) =>
+        !streetAddress.toLowerCase().includes(part.toLowerCase())
+      )].filter(Boolean).join(', ');
+      if (venueName && venueCard && venueCard.children[0]) venueCard.children[0].textContent = venueName;
+      if (venueAddress && venueCard && venueCard.children[1]) venueCard.children[1].textContent = venueAddress;
+      if (locationButtons && [...locationButtons.querySelectorAll('button')].some((button) => /^Location(?:\\s|$)/.test(button.textContent.trim()))) {
+        locationButtons.style.display = 'none';
+        locationInfo.style.justifyContent = 'center';
+        locationInfo.style.flex = '0 1 36%';
+      }
+
+      const query = venue.lat && venue.lng
+        ? venue.lat + ',' + venue.lng
+        : [venueName, venueAddress].filter(Boolean).join(', ');
+      const mapsUrl = 'https://www.google.com/maps/search/?api=1&query=' + encodeURIComponent(query);
+      const mapsLink = locationFrame.querySelector('a[href*="google.com/maps"]');
+      if (mapsLink) {
+        mapsLink.href = mapsUrl;
+        mapsLink.setAttribute('aria-label', 'Open ' + (venueName || 'wedding venue') + ' in Google Maps');
+      }
+      map.setAttribute('role', 'link');
+      map.setAttribute('tabindex', '0');
+      map.setAttribute('aria-label', 'Open ' + (venueName || 'wedding venue') + ' in Google Maps');
+      mapArea.style.cursor = 'pointer';
+      mapArea.dataset.googleMapsUrl = mapsUrl;
+      if (!mapArea.__weddingMapLinkBound) {
+        const openMap = (event) => {
+          if (event.target.closest && event.target.closest('a, button')) return;
+          window.open(mapArea.dataset.googleMapsUrl, '_blank', 'noopener,noreferrer');
+        };
+        mapArea.addEventListener('click', openMap);
+        map.addEventListener('keydown', (event) => {
+          if (event.key === 'Enter' || event.key === ' ') {
+            event.preventDefault();
+            window.open(mapArea.dataset.googleMapsUrl, '_blank', 'noopener,noreferrer');
+          }
+        });
+        mapArea.__weddingMapLinkBound = true;
       }
     }
     return changed;
