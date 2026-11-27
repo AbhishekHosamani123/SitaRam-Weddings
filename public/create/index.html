@@ -1030,7 +1030,7 @@ textarea{resize:vertical}
           toast(err.message || "Could not create preview link", "err");
         } finally {
           btn.disabled = false;
-          btn.textContent = "Update preview link";
+          btn.textContent = state.previewToken ? "Update preview link" : "Create preview link";
         }
       }
 

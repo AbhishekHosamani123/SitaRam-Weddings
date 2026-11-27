@@ -152,6 +152,14 @@ test("generated templates lazy-load images without overriding explicit settings"
   );
 });
 
+test("builder restores the correct create or update action after preview errors", () => {
+  const html = BUILD.buildBuilderPage(BUILD.discoverTemplates());
+  assert.match(
+    html,
+    /btn\.textContent = state\.previewToken \? "Update preview link" : "Create preview link";/
+  );
+});
+
 test("legacy Framer bundles normalize their misencoded punctuation", () => {
   assert.equal(BUILD.normalizeFramerText("Wedding â€” details; We Canâ€™t wait"), "Wedding — details; We Can’t wait");
 });
