@@ -158,6 +158,7 @@ test("builder restores the correct create or update action after preview errors"
     html,
     /btn\.textContent = state\.previewToken \? "Update preview link" : "Create preview link";/
   );
+  assert.match(html, /\.hidden\s*\{\s*display:\s*none\s*!important\s*\}/);
 });
 
 test("legacy Framer bundles normalize their misencoded punctuation", () => {
